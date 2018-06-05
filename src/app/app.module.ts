@@ -15,7 +15,7 @@ import {LoginModule} from '../pages/login/login.module'
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp,{backButtonText:'后退'}),
+    IonicModule.forRoot(MyApp),
     PageOneModule,
     PageTwoModule,
     LoginModule

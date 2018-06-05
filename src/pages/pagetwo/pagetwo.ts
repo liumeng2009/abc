@@ -1,5 +1,5 @@
 import {Component,ViewChild,ElementRef,OnInit} from '@angular/core';
-import {NavController,IonicPage} from 'ionic-angular'
+import {NavController,IonicPage,Navbar} from 'ionic-angular'
 
 @IonicPage({
   name:'detail',
@@ -16,9 +16,9 @@ export class PageTwo{
     public navCtrl:NavController
   ){}
 
-  @ViewChild('nav') navBar:ElementRef
+  @ViewChild('nav') navBar:Navbar
   ngOnInit(){
-    //this.navBar.setBackButtonText('后退')
+    this.navBar.setBackButtonText('后退')
   }
 
 }
