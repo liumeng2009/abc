@@ -5,21 +5,24 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+import {PageOneModule} from '../pages/pageone/pageone.module'
+import {PageTwoModule} from '../pages/pagetwo/pagetwo.module'
+import {LoginModule} from '../pages/login/login.module'
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp,{backButtonText:'后退'}),
+    PageOneModule,
+    PageTwoModule,
+    LoginModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
-    HomePage
+    MyApp
   ],
   providers: [
     StatusBar,
