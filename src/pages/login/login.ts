@@ -1,6 +1,7 @@
 import {Component} from '@angular/core'
-import {IonicPage,NavController} from "ionic-angular";
+import {IonicPage,NavController,ToastController} from "ionic-angular";
 import {User} from '../../bean/user'
+import {LoginService} from "./login.service";
 
 @IonicPage({
   name:'login',
@@ -13,13 +14,31 @@ import {User} from '../../bean/user'
 })
 
 export class LoginComponent{
-  constructor(private navCtrl:NavController){}
+  constructor(
+    private navCtrl:NavController,
+    private toastCtrl:ToastController,
+    private loginService:LoginService
+  ){}
 
   private user:User=new User('','');
 
-  loginSuccess(){
-    this.navCtrl.push('list').then(()=>{
-      console.log('login success');
-    });
+  login(){
+    this.loginService.login(this.user).then(
+      data=>{
+        if(data&&data.status==0){
+          this.navCtrl.push('list');
+        }
+        else{
+          const toast = this.toastCtrl.create({
+            message:data.message,
+            duration: 3000
+          });
+          toast.present();
+        }
+      },
+      error=>{
+        console.log(error);
+      }
+    )
   }
 }
