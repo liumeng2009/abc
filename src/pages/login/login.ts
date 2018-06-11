@@ -25,13 +25,15 @@ export class LoginComponent{
   login(){
     this.loginService.login(this.user).then(
       data=>{
+        console.log(data);
         if(data&&data.status==0){
           this.navCtrl.push('list');
         }
         else{
           const toast = this.toastCtrl.create({
             message:data.message,
-            duration: 3000
+            duration: 3000,
+            position:'top'
           });
           toast.present();
         }
