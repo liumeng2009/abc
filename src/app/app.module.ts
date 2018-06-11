@@ -6,8 +6,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule} from '@angular/http';
 
 import { MyApp } from './app.component';
-import {PageOneModule} from '../pages/pageone/pageone.module'
-import {PageTwoModule} from '../pages/pagetwo/pagetwo.module'
+import {ListModule} from '../pages/main/list.module'
+import {DetailModule} from '../pages/detail/detail.module'
 import {LoginModule} from '../pages/login/login.module'
 
 @NgModule({
@@ -19,8 +19,8 @@ import {LoginModule} from '../pages/login/login.module'
     HttpModule,
     IonicModule.forRoot(MyApp),
 
-    PageOneModule,
-    PageTwoModule,
+    ListModule,
+    DetailModule,
     LoginModule
   ],
   bootstrap: [IonicApp],

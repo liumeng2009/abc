@@ -8,10 +8,10 @@ import {NavController,IonicPage,Navbar} from 'ionic-angular'
 })
 
 @Component({
-  templateUrl:'pagetwo.html'
+  templateUrl:'detail.html'
 })
 
-export class PageTwo{
+export class Detail{
   constructor(
     public navCtrl:NavController
   ){}
