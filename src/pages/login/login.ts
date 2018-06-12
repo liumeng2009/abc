@@ -2,6 +2,8 @@ import {Component} from '@angular/core'
 import {IonicPage,NavController,ToastController} from "ionic-angular";
 import {User} from '../../bean/user'
 import {LoginService} from "./login.service";
+import {ToolService} from "../../util/tool.service";
+import {CookieService} from "angular2-cookie/core";
 
 @IonicPage({
   name:'login',
@@ -16,7 +18,8 @@ import {LoginService} from "./login.service";
 export class LoginComponent{
   constructor(
     private navCtrl:NavController,
-    private toastCtrl:ToastController,
+    private cookieService:CookieService,
+    private toolService:ToolService,
     private loginService:LoginService
   ){}
 
@@ -27,19 +30,15 @@ export class LoginComponent{
       data=>{
         console.log(data);
         if(data&&data.status==0){
+          this.cookieService.put('optAppToken',data.data.token);
           this.navCtrl.push('list');
         }
         else{
-          const toast = this.toastCtrl.create({
-            message:data.message,
-            duration: 3000,
-            position:'top'
-          });
-          toast.present();
+          this.toolService.toast(data.message);
         }
       },
       error=>{
-        console.log(error);
+        this.toolService.toast(error);
       }
     )
   }
