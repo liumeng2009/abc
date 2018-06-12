@@ -26,25 +26,55 @@ export class List{
   private today=new Date();
 
   ngOnInit(){
-    this.checkLogin();
+    this.checkLogin().then(()=>{
+      console.log('绑定数据');
+      this.getData();
+    });
   }
 
   checkLogin(){
-    this.authService.getUserInfo().then(
-      data=>{
-        console.log(data);
-        if(data&&data.status==0){
-          //正常
+    return new Promise((resolve,reject)=>{
+      this.authService.getUserInfo().then(
+        data=>{
+          console.log(data);
+          if(data&&data.status==0){
+            console.log('完成验证');
+            setTimeout(()=>{
+              resolve();
+            },5000)
+
+          }
+          else{
+            reject(()=>{
+              this.toolService.toast(data.message);
+              setTimeout(()=>{
+                this.navCtrl.push('login');
+              })
+            })
+
+          }
+        },
+        error=>{
+          reject(this.toolService.toast(error));
+
         }
-        else{
-          this.toolService.toast(data.message);
-          setTimeout(()=>{
-            this.navCtrl.push('login');
-          })
+      )
+    })
+  }
+
+  private opList:any[];
+  getData(){
+    let date=new Date();
+    this.listService.getOpListDay(parseInt(date.getTime()/1000)).then(
+      data=>{
+        console.log(data.status);
+        if(data.status==0){
+          this.opList=data.data;
+          console.log(this.opList);
         }
       },
       error=>{
-        this.toolService.toast(error);
+        this.toolService.toast(error)
       }
     )
   }

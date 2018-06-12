@@ -16,10 +16,10 @@ export class ListService {
 
   private opListDayUrl=new OptConfig().serverPath+'/api/operation/workerOperationList'
 
-  getOpListDay(): Promise<ResponseData> {
+  getOpListDay(stamp:number): Promise<ResponseData> {
     let token = this.cookieService.get('optAppToken');
-    console.log(token);
-    return this.http.get(this.opListDayUrl + '?token=' + token)
+    console.log(this.opListDayUrl + '?stamp='+stamp+'&token=' + token);
+    return this.http.get(this.opListDayUrl + '?stamp='+stamp+'&token=' + token)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

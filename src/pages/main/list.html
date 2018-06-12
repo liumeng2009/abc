@@ -1,9 +1,25 @@
 <ion-header>
   <ion-navbar hideBackButton >
+    <ion-buttons start>
+      <button ion-button icon-only >
+        <ion-icon name="md-arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+
     <ion-title>{{today|titledate}}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only  end>
+        <ion-icon name="md-arrow-forward"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding >
-
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let op of opList">
+      {{op.no}}
+    </ion-item>
+  </ion-list>
 </ion-content>
