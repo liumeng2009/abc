@@ -1,5 +1,9 @@
 import {Component} from '@angular/core'
-import {IonicPage,NavController,ToastController} from "ionic-angular";
+import {IonicPage,
+  NavController,
+  ToastController,
+  LoadingController
+} from "ionic-angular";
 import {User} from '../../bean/user'
 import {LoginService} from "./login.service";
 import {ToolService} from "../../util/tool.service";
@@ -18,6 +22,7 @@ import {CookieService} from "angular2-cookie/core";
 export class LoginComponent{
   constructor(
     private navCtrl:NavController,
+    private loadingCtrl:LoadingController,
     private cookieService:CookieService,
     private toolService:ToolService,
     private loginService:LoginService
@@ -26,8 +31,14 @@ export class LoginComponent{
   private user:User=new User('','');
 
   login(){
+    let loading=this.loadingCtrl.create({
+      content:'请稍等...',
+      duration: 500
+    });
+    loading.present();
     this.loginService.login(this.user).then(
       data=>{
+        loading.dismiss()
         console.log(data);
         if(data&&data.status==0){
           this.cookieService.put('optAppToken',data.data.token);
@@ -38,6 +49,7 @@ export class LoginComponent{
         }
       },
       error=>{
+        loading.dismiss()
         this.toolService.toast(error);
       }
     )

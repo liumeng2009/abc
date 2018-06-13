@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {NavController,IonicPage} from 'ionic-angular'
 import {ListService} from "./list.service";
-import {ToastController} from "ionic-angular/index";
 import {ToolService} from "../../util/tool.service";
 import {AuthService} from "../../util/auth.service";
 
@@ -27,8 +26,12 @@ export class List{
 
   ngOnInit(){
     this.checkLogin().then(()=>{
-      console.log('绑定数据');
       this.getData();
+    }).catch((e)=>{
+      this.toolService.toast(e.message);
+      if(e.action&&e.action=='login'){
+        this.navCtrl.push('login');
+      }
     });
   }
 
@@ -45,17 +48,17 @@ export class List{
 
           }
           else{
-            reject(()=>{
-              this.toolService.toast(data.message);
-              setTimeout(()=>{
-                this.navCtrl.push('login');
-              })
-            })
-
+            reject({message:data.message,action:'login'})
           }
+          //else{
+          //  reject('123')
+              //
+              //this.navCtrl.push('login')
+
+          //}
         },
         error=>{
-          reject(this.toolService.toast(error));
+          reject({message:error});
 
         }
       )
@@ -65,7 +68,7 @@ export class List{
   private opList:any[];
   getData(){
     let date=new Date();
-    this.listService.getOpListDay(parseInt(date.getTime()/1000)).then(
+    this.listService.getOpListDay(parseInt((date.getTime()/1000).toString())).then(
       data=>{
         console.log(data.status);
         if(data.status==0){
@@ -77,6 +80,33 @@ export class List{
         this.toolService.toast(error)
       }
     )
+  }
+
+  canDateClick(){
+    let date=new Date();
+    let dateComp=new Date(date.getFullYear(),date.getMonth(),date.getDate(),0,0,0);
+    let todayStamp=this.today.getTime();
+    if(todayStamp<dateComp){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  reduceOneDay(){
+    let todayStamp=this.today.getTime();
+    let newStamp=todayStamp-24*60*60*1000;
+    let newDate=new Date(newStamp);
+    this.today=newDate;
+    this.getData();
+  }
+  addOneDay(){
+    let todayStamp=this.today.getTime();
+    let newStamp=todayStamp+24*60*60*1000;
+    let newDate=new Date(newStamp);
+    this.today=newDate;
+    this.getData();
   }
 
 
