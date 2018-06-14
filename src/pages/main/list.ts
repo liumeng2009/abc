@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
-import {NavController,IonicPage} from 'ionic-angular'
+import {NavController,IonicPage,Refresher} from 'ionic-angular'
 import {ListService} from "./list.service";
 import {ToolService} from "../../util/tool.service";
 import {AuthService} from "../../util/auth.service";
+import {ResponseData} from "../../bean/responseData";
 
 @IonicPage({
   name:'list',
@@ -23,10 +24,21 @@ export class List{
   }
 
   private today=new Date();
+  private todayString='';
 
   ngOnInit(){
+    this.getTodayString();
     this.checkLogin().then(()=>{
-      this.getData();
+      this.getData().then((data:ResponseData)=>{
+        if(data.status==0){
+          this.opList=data.data;
+        }
+        else{
+          this.toolService.toast(data.message);
+        }
+      }).catch((e)=>{
+        this.toolService.toast(e);
+      });
     }).catch((e)=>{
       this.toolService.toast(e.message);
       if(e.action&&e.action=='login'){
@@ -35,27 +47,23 @@ export class List{
     });
   }
 
+  private getTodayString(){
+    let year=this.today.getFullYear();
+    let month=this.today.getMonth()+1;
+    let day=this.today.getDate();
+    this.todayString=year+'-'+(month<10?('0'+month):month)+'-'+(day<10?('0'+day):day);
+  }
+
   checkLogin(){
     return new Promise((resolve,reject)=>{
       this.authService.getUserInfo().then(
         data=>{
-          console.log(data);
           if(data&&data.status==0){
-            console.log('完成验证');
-            setTimeout(()=>{
               resolve();
-            },5000)
-
           }
           else{
             reject({message:data.message,action:'login'})
           }
-          //else{
-          //  reject('123')
-              //
-              //this.navCtrl.push('login')
-
-          //}
         },
         error=>{
           reject({message:error});
@@ -65,28 +73,46 @@ export class List{
     })
   }
 
-  private opList:any[];
+  private opList:any[]=[];
   getData(){
-    let date=new Date();
-    this.listService.getOpListDay(parseInt((date.getTime()/1000).toString())).then(
-      data=>{
-        console.log(data.status);
-        if(data.status==0){
-          this.opList=data.data;
-          console.log(this.opList);
+    return new Promise((resolve,reject)=>{
+      this.opList.splice(0,this.opList.length);
+      let now=new Date(this.todayString);
+      this.today=now;
+      let date=this.today;
+      this.listService.getOpListDay(parseInt((date.getTime()/1000).toString())).then(
+        data=>{
+          console.log(data);
+          resolve(data);
+        },
+        error=>{
+          reject(error);
         }
-      },
-      error=>{
-        this.toolService.toast(error)
+      )
+    })
+  }
+
+  doRefresh(refresher:Refresher){
+    this.getData().then((data:ResponseData)=>{
+      if(data.status==0){
+        this.opList=data.data;
+        refresher.complete();
       }
-    )
+      else{
+        this.toolService.toast(data.message);
+        refresher.complete();
+      }
+    }).catch((e)=>{
+      this.toolService.toast(e);
+      refresher.complete();
+    })
   }
 
   canDateClick(){
     let date=new Date();
     let dateComp=new Date(date.getFullYear(),date.getMonth(),date.getDate(),0,0,0);
     let todayStamp=this.today.getTime();
-    if(todayStamp<dateComp){
+    if(todayStamp<dateComp.getTime()){
       return true;
     }
     else{
@@ -99,14 +125,47 @@ export class List{
     let newStamp=todayStamp-24*60*60*1000;
     let newDate=new Date(newStamp);
     this.today=newDate;
-    this.getData();
+    this.getTodayString();
+    this.getData().then((data:ResponseData)=>{
+      if(data.status==0){
+        this.opList=data.data;
+      }
+      else{
+        this.toolService.toast(data.message);
+      }
+    }).catch((e)=>{
+      this.toolService.toast(e)
+    });
   }
   addOneDay(){
     let todayStamp=this.today.getTime();
     let newStamp=todayStamp+24*60*60*1000;
     let newDate=new Date(newStamp);
     this.today=newDate;
-    this.getData();
+    this.getTodayString();
+    this.getData().then((data:ResponseData)=>{
+      if(data.status==0){
+        this.opList=data.data;
+      }
+      else{
+        this.toolService.toast(data.message);
+      }
+    }).catch((e)=>{
+      this.toolService.toast(e)
+    });
+  }
+
+  ok(e){
+    this.getData().then((data:ResponseData)=>{
+      if(data.status==0){
+        this.opList=data.data;
+      }
+      else{
+        this.toolService.toast(data.message);
+      }
+    }).catch((e)=>{
+      this.toolService.toast(e)
+    });
   }
 
 

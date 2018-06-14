@@ -6,7 +6,18 @@
       </button>
     </ion-buttons>
 
-    <ion-title>{{today|titledate}}</ion-title>
+    <ion-title style="display: flex">
+      <div style="display: flex">
+        <ion-datetime displayFormat="YYYY年MM月DD日" pickerFormat="YYYY MM DD"
+                      [(ngModel)]="todayString"
+                      (ngModelChange)="ok($event)"
+                      cancelText="取消"
+                      doneText="确定"
+
+        ></ion-datetime>
+        <span style="line-height: 50px;">{{today|titledate}}</span>
+      </div>
+    </ion-title>
 
     <ion-buttons end>
       <button ion-button icon-only *ngIf="canDateClick()"  (click)="addOneDay()" >
@@ -20,9 +31,19 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="下滑刷新"
+      refreshingSpinner="circles"
+      refreshingText="载入中">
+    </ion-refresher-content>
+  </ion-refresher>
   <ion-list>
     <ion-item *ngFor="let op of opList">
-      {{op.no}}
+      <h2>{{op.no}}</h2>
+      <h3>{{op.create_time|date}}</h3>
     </ion-item>
   </ion-list>
+
 </ion-content>

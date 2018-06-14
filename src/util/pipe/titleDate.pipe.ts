@@ -9,17 +9,18 @@ export class TitleDatePipe implements PipeTransform{
 
   transform(date:Date){
     let dateNow=new Date();
+    let dateMy=date;
 
     let str='';
-    if(this.isToday(date,dateNow)){
+    if(this.isToday(dateMy,dateNow)){
       str='（今天）';
     }
 
-    if(this.isYesterday(date,dateNow)){
+    if(this.isYesterday(dateMy,dateNow)){
       str='（昨天）';
     }
 
-    return date.getFullYear()+'年'+(date.getMonth()+1)+'月'+date.getDate()+'日'+str;
+    return str;
 
   }
 
@@ -33,11 +34,10 @@ export class TitleDatePipe implements PipeTransform{
     let stamp=dateComp.getTime();
     stamp=stamp-24*60*60*1000;
     let newDate=new Date(stamp);
-    let yestodayStart=new Date(newDate.getFullYear(),newDate.getMonth(),newDate.getDate(),0,0,0);
-    let yestodayEnd=new Date(newDate.getFullYear(),newDate.getMonth(),newDate.getDate(),23,59,59,999);
-    if(date.getTime()>=yestodayStart.getTime()&&date.getTime()<=yestodayEnd.getTime()){
+    let yesterdayStart=new Date(newDate.getFullYear(),newDate.getMonth(),newDate.getDate(),0,0,0);
+    let yesterdayEnd=new Date(newDate.getFullYear(),newDate.getMonth(),newDate.getDate(),23,59,59,999);
+    if(date.getTime()>=yesterdayStart.getTime()&&date.getTime()<=yesterdayEnd.getTime()){
       return true;
     }
   }
-
 }
