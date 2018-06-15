@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
 import {NavController,IonicPage,Refresher} from 'ionic-angular'
+
 import {ListService} from "./list.service";
-import {ToolService} from "../../util/tool.service";
-import {AuthService} from "../../util/auth.service";
-import {ResponseData} from "../../bean/responseData";
+import {ToolService} from "../../../util/tool.service";
+import {AuthService} from "../../../util/auth.service";
+import {ResponseData} from "../../../bean/responseData";
 
 @IonicPage({
   name:'list',
@@ -25,10 +26,17 @@ export class List{
 
   private today=new Date();
   private todayString='';
+  private workStatus='working';
+  private statusCount={
+    working:0,
+    done:0,
+    all:0
+  }
 
   ngOnInit(){
     this.getTodayString();
     this.checkLogin().then(()=>{
+      this.getOpCount();
       this.getData().then((data:ResponseData)=>{
         if(data.status==0){
           this.opList=data.data;
@@ -80,16 +88,73 @@ export class List{
       let now=new Date(this.todayString);
       this.today=now;
       let date=this.today;
-      this.listService.getOpListDay(parseInt((date.getTime()/1000).toString())).then(
-        data=>{
-          console.log(data);
-          resolve(data);
-        },
-        error=>{
-          reject(error);
-        }
-      )
+      switch(this.workStatus){
+        case 'working':
+          this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString())).then(
+            data=>{
+              if(data.status==0){
+                this.statusCount.working=data.total;
+              }
+              resolve(data);
+            },
+            error=>{
+              reject(error);
+            }
+          );
+          break;
+        case 'done':
+          this.listService.getDoneOpList(parseInt((date.getTime()/1000).toString())).then(
+            data=>{
+              if(data.status==0){
+                this.statusCount.done=data.total;
+              }
+              resolve(data);
+            },
+            error=>{
+              reject(error);
+            }
+          );
+          break;
+        case 'all':
+          this.listService.getAllOpList(parseInt((date.getTime()/1000).toString())).then(
+            data=>{
+              if(data.status==0){
+                this.statusCount.all=data.total;
+              }
+              resolve(data);
+            },
+            error=>{
+              reject(error);
+            }
+          );
+          break;
+        default:
+          this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString())).then(
+            data=>{
+              resolve(data);
+            },
+            error=>{
+              reject(error);
+            }
+          );
+          break;
+      }
     })
+  }
+  getOpCount(){
+    let now=new Date(this.todayString);
+    this.today=now;
+    let date=this.today;
+    this.listService.getOpCount(parseInt((date.getTime()/1000).toString())).then(
+      data=>{
+        if(data.status==0){
+          this.statusCount=data.data;
+        }
+      },
+      error=>{
+        this.toolService.toast(error);
+      }
+    )
   }
 
   doRefresh(refresher:Refresher){
@@ -168,7 +233,17 @@ export class List{
     });
   }
 
-
-
+  statusChanged(e){
+    this.getData().then((data:ResponseData)=>{
+      if(data.status==0){
+        this.opList=data.data;
+      }
+      else{
+        this.toolService.toast(data.message);
+      }
+    }).catch((e)=>{
+      this.toolService.toast(e)
+    });
+  }
 }
 

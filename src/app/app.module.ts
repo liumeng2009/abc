@@ -8,9 +8,14 @@ import { HttpModule} from '@angular/http';
 import {CookieService} from 'angular2-cookie/core'
 
 import { MyApp } from './app.component';
-import {ListModule} from '../pages/main/list.module'
-import {DetailModule} from '../pages/detail/detail.module'
+
+import {TabModule} from '../pages/tabs/tab.module';
+import {ListModule} from '../pages/workorder/main/list.module'
+import {DetailModule} from '../pages/workorder/detail/detail.module'
 import {LoginModule} from '../pages/login/login.module'
+import {WeChatModule} from '../pages/wechat/wechat.module';
+import {SettingModule} from '../pages/settings/setting.module'
+
 import {ToolService} from "../util/tool.service";
 import {AuthService} from "../util/auth.service";
 
@@ -23,15 +28,16 @@ import {PipesModule} from '../util/pipe/pipe.module';
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp,{
-      monthNames:['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
-    }),
+    IonicModule.forRoot(MyApp),
 
     PipesModule,
 
+    TabModule,
     ListModule,
     DetailModule,
-    LoginModule
+    LoginModule,
+    WeChatModule,
+    SettingModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

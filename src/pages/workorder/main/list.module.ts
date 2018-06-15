@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core'
 import {IonicPageModule} from 'ionic-angular'
 
-import {PipesModule} from '../../util/pipe/pipe.module'
+import {PipesModule} from '../../../util/pipe/pipe.module'
 
 import {List} from './list'
 import {ListService} from "./list.service";

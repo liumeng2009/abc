@@ -1,0 +1,78 @@
+<ion-header>
+  <!--
+  <ion-navbar hideBackButton no-border-bottom >-->
+    <!--
+    <ion-buttons start>
+      <button ion-button icon-only (click)="reduceOneDay()" >
+        <ion-icon name="md-arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>-->
+<!--
+    <ion-title>
+        <ion-datetime displayFormat="YYYY年MM月DD日" pickerFormat="YYYY MM DD"
+                      [(ngModel)]="todayString"
+                      (ngModelChange)="ok($event)"
+                      cancelText="取消"
+                      doneText="确定"
+
+        ></ion-datetime>
+    </ion-title>-->
+<!--
+    <ion-buttons end>
+      <button ion-button icon-only *ngIf="canDateClick()"  (click)="addOneDay()" >
+        <ion-icon name="md-arrow-forward"></ion-icon>
+      </button>
+      <button ion-button icon-only disabled *ngIf="!canDateClick()">
+        <ion-icon name="md-arrow-forward"></ion-icon>
+      </button>
+    </ion-buttons>-->
+  <!--
+  </ion-navbar>-->
+
+
+  <ion-toolbar>
+      <ion-datetime displayFormat="YYYY年MM月DD日" pickerFormat="YYYY MM DD"
+                    [(ngModel)]="todayString"
+                    (ngModelChange)="ok($event)"
+                    cancelText="取消"
+                    doneText="确定"
+      >
+      </ion-datetime>
+
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="workStatus" (ionChange)="statusChanged($event)">
+      <ion-segment-button value="working">
+        未完成
+        <ion-badge item-end *ngIf="statusCount.working!=0">{{statusCount.working}}</ion-badge>
+      </ion-segment-button>
+      <ion-segment-button value="done">
+        已完成
+        <ion-badge item-end *ngIf="statusCount.done!=0">{{statusCount.done}}</ion-badge>
+      </ion-segment-button>
+      <ion-segment-button value="all">
+        全部
+        <ion-badge item-end *ngIf="statusCount.all!=0">{{statusCount.all}}</ion-badge>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="下滑刷新"
+      refreshingSpinner="circles"
+      refreshingText="载入中">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-item *ngFor="let op of opList">
+      <h2>{{op.no}}</h2>
+      <h3>{{op.create_time|dateList}}</h3>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
