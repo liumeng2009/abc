@@ -1,5 +1,10 @@
 import {Component} from '@angular/core'
+import {IonicPage} from "ionic-angular";
 
+@IonicPage({
+  name:'setting',
+  segment:'setting'
+})
 @Component({
   templateUrl:'./setting.html'
 })

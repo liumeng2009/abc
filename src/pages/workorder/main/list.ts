@@ -245,5 +245,9 @@ export class List{
       this.toolService.toast(e)
     });
   }
+
+  onTabSelect(e){
+    console.log(e);
+  }
 }
 

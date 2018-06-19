@@ -5,6 +5,7 @@ import { WeChat } from '../wechat/wechat';
 import { Setting } from '../settings/setting';
 
 @Component({
+  selector: 'lm-tab',
   templateUrl: 'tab.html'
 })
 export class TabsPage {
@@ -15,5 +16,9 @@ export class TabsPage {
 
   constructor() {
 
+  }
+
+  onTabSelect(e){
+    console.log(e);
   }
 }

@@ -38,7 +38,7 @@ export class LoginComponent{
     loading.present();
     this.loginService.login(this.user).then(
       data=>{
-        loading.dismiss()
+        //loading.dismiss()
         console.log(data);
         if(data&&data.status==0){
           this.cookieService.put('optAppToken',data.data.token);
