@@ -1,11 +1,5 @@
-import {Component,ViewChild,ElementRef,OnInit} from '@angular/core';
-import {NavController,IonicPage,Navbar} from 'ionic-angular'
-
-@IonicPage({
-  name:'detail',
-  segment:'detail',
-  defaultHistory:['list']
-})
+import {Component,ViewChild} from '@angular/core';
+import {NavController,Navbar} from 'ionic-angular'
 
 @Component({
   templateUrl:'detail.html'

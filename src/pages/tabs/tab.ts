@@ -3,9 +3,12 @@ import { Component } from '@angular/core';
 import { List } from '../workorder/main/list';
 import { WeChat } from '../wechat/wechat';
 import { Setting } from '../settings/setting';
-
+import {IonicPage} from "ionic-angular";
+@IonicPage({
+  name:'tab',
+  segment:'tab'
+})
 @Component({
-  selector: 'lm-tab',
   templateUrl: 'tab.html'
 })
 export class TabsPage {

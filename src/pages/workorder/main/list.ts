@@ -1,11 +1,10 @@
 import {Component} from '@angular/core';
-import {NavController,IonicPage,Refresher} from 'ionic-angular'
+import {NavController, Refresher, IonicPage} from 'ionic-angular'
 
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
 import {AuthService} from "../../../util/auth.service";
 import {ResponseData} from "../../../bean/responseData";
-
 @IonicPage({
   name:'list',
   segment:'list'

@@ -1,11 +1,15 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Setting
+      {{welcome}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <h1>{{welcome}}</h1>
+  <ion-tabs>
+    <ion-tab  tabTitle="工单" tabIcon="hammer"></ion-tab>
+    <ion-tab  tabTitle="联系人" tabIcon="people"></ion-tab>
+    <ion-tab  tabTitle="设置" tabIcon="settings"></ion-tab>
+  </ion-tabs>
 </ion-content>

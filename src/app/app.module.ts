@@ -11,10 +11,14 @@ import { MyApp } from './app.component';
 
 import {TabModule} from '../pages/tabs/tab.module';
 import {ListModule} from '../pages/workorder/main/list.module'
+import {ListPageModule} from '../pages/workorder/main/list.tab.module'
 import {DetailModule} from '../pages/workorder/detail/detail.module'
+import {DetailPageModule} from '../pages/workorder/detail/detail.tab.module'
 import {LoginModule} from '../pages/login/login.module'
 import {WeChatModule} from '../pages/wechat/wechat.module';
+import {WeChatPageModule} from '../pages/wechat/wechat.tab.module';
 import {SettingModule} from '../pages/settings/setting.module'
+import {SettingPageModule} from '../pages/settings/setting.tab.module'
 
 import {ToolService} from "../util/tool.service";
 import {AuthService} from "../util/auth.service";
@@ -34,10 +38,14 @@ import {PipesModule} from '../util/pipe/pipe.module';
 
     TabModule,
     ListModule,
+    ListPageModule,
     DetailModule,
+    DetailPageModule,
     LoginModule,
     WeChatModule,
-    SettingModule
+    WeChatPageModule,
+    SettingModule,
+    SettingPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
