@@ -59,8 +59,7 @@
 
 </ion-header>
 
-<ion-content>
-
+<ion-content padding>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
       pullingIcon="arrow-dropdown"
@@ -75,7 +74,12 @@
       <h3>{{op.create_time|dateList}}</h3>
     </ion-item>
   </ion-list>
+
+  <button ion-button block (click)="gotoDetail()">跳转到detail页面</button>
+
+
 </ion-content>
+
 
 
 

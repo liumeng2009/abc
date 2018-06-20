@@ -4,7 +4,10 @@ import { List } from './list';
 import {IonicPage, NavController} from "ionic-angular";
 
 
-
+@IonicPage({
+  name:'list',
+  segment:'list'
+})
 @Component({
   templateUrl: 'list.tab.html'
 })

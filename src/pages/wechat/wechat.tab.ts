@@ -3,7 +3,10 @@ import { Component } from '@angular/core';
 import { WeChat } from './wechat';
 import {IonicPage, NavController} from "ionic-angular";
 
-
+@IonicPage({
+  name:'wechat',
+  segment:'wechat'
+})
 
 @Component({
   templateUrl: 'wechat.tab.html'
@@ -20,6 +23,7 @@ export class WeChatPage {
 
   onTabSelect(e){
     let index=e.index;
+    console.log(index);
     switch(index){
       case 0:
         this.navCtrl.push('list');

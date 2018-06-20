@@ -4,6 +4,7 @@ import { List } from '../workorder/main/list';
 import { WeChat } from '../wechat/wechat';
 import { Setting } from '../settings/setting';
 import {IonicPage} from "ionic-angular";
+import {NavParams} from "ionic-angular/index";
 @IonicPage({
   name:'tab',
   segment:'tab'
@@ -17,8 +18,16 @@ export class TabsPage {
   tab2Root = WeChat;
   tab3Root = Setting;
 
-  constructor() {
+  constructor(
+    private navParams:NavParams
+  ) {
 
+  }
+
+  ngOnInit(){
+    let tabaction=this.navParams.get('tabaction');
+    console.log(this.navParams);
+    console.log(tabaction);
   }
 
   onTabSelect(e){

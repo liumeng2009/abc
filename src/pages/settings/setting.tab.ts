@@ -4,7 +4,10 @@ import { Setting } from './setting';
 import {IonicPage, NavController} from "ionic-angular";
 
 
-
+@IonicPage({
+  name:'setting',
+  segment:'setting'
+})
 @Component({
   templateUrl: 'setting.tab.html'
 })
@@ -20,6 +23,7 @@ export class SettingPage {
 
   onTabSelect(e){
     let index=e.index;
+    console.log(index);
     switch(index){
       case 0:
         this.navCtrl.push('list');

@@ -1,14 +1,13 @@
-import {Component} from '@angular/core';
+import {Component,ViewEncapsulation} from '@angular/core';
 import {NavController, Refresher, IonicPage} from 'ionic-angular'
 
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
 import {AuthService} from "../../../util/auth.service";
 import {ResponseData} from "../../../bean/responseData";
-@IonicPage({
-  name:'list',
-  segment:'list'
-})
+
+import {DetailPage} from '../detail/detail.tab'
+
 @Component({
   templateUrl:'list.html'
 })
@@ -247,6 +246,9 @@ export class List{
 
   onTabSelect(e){
     console.log(e);
+  }
+  gotoDetail(){
+    this.navCtrl.push(DetailPage);
   }
 }
 

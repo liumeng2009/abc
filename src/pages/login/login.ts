@@ -42,7 +42,7 @@ export class LoginComponent{
         console.log(data);
         if(data&&data.status==0){
           this.cookieService.put('optAppToken',data.data.token);
-          this.navCtrl.push('list');
+          this.navCtrl.push('./');
         }
         else{
           this.toolService.toast(data.message);
