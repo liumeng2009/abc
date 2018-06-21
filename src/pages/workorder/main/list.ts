@@ -1,23 +1,26 @@
 import {Component,ViewEncapsulation} from '@angular/core';
-import {NavController, Refresher, IonicPage} from 'ionic-angular'
+import {NavController, Refresher, IonicPage,Events} from 'ionic-angular'
 
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
 import {AuthService} from "../../../util/auth.service";
 import {ResponseData} from "../../../bean/responseData";
 
-import {DetailPage} from '../detail/detail.tab'
+import {DetailPage} from '../detail/detail'
+import {LoginPage} from '../../login/login'
+
 
 @Component({
   templateUrl:'list.html'
 })
 
-export class List{
+export class ListPage{
   constructor(
     private navCtrl:NavController,
     private listService:ListService,
     private toolService:ToolService,
-    private authService:AuthService
+    private authService:AuthService,
+    private events:Events
   ){
 
   }
@@ -48,7 +51,10 @@ export class List{
     }).catch((e)=>{
       this.toolService.toast(e.message);
       if(e.action&&e.action=='login'){
-        this.navCtrl.push('login');
+        //this.navCtrl.push(LoginPage);
+        setTimeout(()=>{
+          this.events.publish('user:logout');
+        },0)
       }
     });
   }

@@ -4,7 +4,7 @@ import {IonicPage} from "ionic-angular";
 @Component({
   templateUrl:'./setting.html'
 })
-export class Setting {
+export class SettingPage {
   constructor() {
 
   }

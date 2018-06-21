@@ -9,16 +9,15 @@ import {CookieService} from 'angular2-cookie/core'
 
 import { MyApp } from './app.component';
 
-import {TabModule} from '../pages/tabs/tab.module';
-import {ListModule} from '../pages/workorder/main/list.module'
-import {ListPageModule} from '../pages/workorder/main/list.tab.module'
-import {DetailModule} from '../pages/workorder/detail/detail.module'
-import {DetailPageModule} from '../pages/workorder/detail/detail.tab.module'
-import {LoginModule} from '../pages/login/login.module'
-import {WeChatModule} from '../pages/wechat/wechat.module';
-import {WeChatPageModule} from '../pages/wechat/wechat.tab.module';
-import {SettingModule} from '../pages/settings/setting.module'
-import {SettingPageModule} from '../pages/settings/setting.tab.module'
+import {TabsPage} from '../pages/tabs/tab';
+import {ListPage} from '../pages/workorder/main/list'
+import {DetailPage} from '../pages/workorder/detail/detail'
+import {LoginPage} from '../pages/login/login'
+import {WeChatPage} from '../pages/wechat/wechat';
+import {SettingPage} from '../pages/settings/setting'
+
+import {ListService} from '../pages/workorder/main/list.service'
+import {LoginService} from '../pages/login/login.service'
 
 import {ToolService} from "../util/tool.service";
 import {AuthService} from "../util/auth.service";
@@ -27,35 +26,48 @@ import {PipesModule} from '../util/pipe/pipe.module';
 
 @NgModule({
   declarations: [
-    MyApp
+    MyApp,
+
+    TabsPage,
+    ListPage,
+    DetailPage,
+    LoginPage,
+    WeChatPage,
+    SettingPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp),
-
-    PipesModule,
-
-    TabModule,
-    ListModule,
-    ListPageModule,
-    DetailModule,
-    DetailPageModule,
-    LoginModule,
-    WeChatModule,
-    WeChatPageModule,
-    SettingModule,
-    SettingPageModule
+    IonicModule.forRoot(MyApp,{},{
+      links:[
+        {component:TabsPage,name:'TabsPage',segment:'main'},
+        {component:ListPage,name:'List',segment:'list'},
+        {component:DetailPage,name:'Detail',segment:'detail'},
+        {component:WeChatPage,name:'WeChat',segment:'wechat'},
+        {component:SettingPage,name:'Setting',segment:'setting'},
+        {component:LoginPage,name:'Login',segment:'login'}
+      ]
+    }),
+    PipesModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp
+    MyApp,
+    TabsPage,
+    ListPage,
+    DetailPage,
+    LoginPage,
+    WeChatPage,
+    SettingPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CookieService,
+
+    ListService,
+    LoginService,
 
     AuthService,
     ToolService

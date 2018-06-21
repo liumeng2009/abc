@@ -9,17 +9,14 @@ import {LoginService} from "./login.service";
 import {ToolService} from "../../util/tool.service";
 import {CookieService} from "angular2-cookie/core";
 
-@IonicPage({
-  name:'login',
-  segment:'login'
-})
+import {TabsPage} from '../tabs/tab'
 
 @Component({
   selector:'login',
   templateUrl:'login.html'
 })
 
-export class LoginComponent{
+export class LoginPage{
   constructor(
     private navCtrl:NavController,
     private loadingCtrl:LoadingController,
@@ -42,7 +39,7 @@ export class LoginComponent{
         console.log(data);
         if(data&&data.status==0){
           this.cookieService.put('optAppToken',data.data.token);
-          this.navCtrl.push('./');
+          this.navCtrl.push(TabsPage);
         }
         else{
           this.toolService.toast(data.message);

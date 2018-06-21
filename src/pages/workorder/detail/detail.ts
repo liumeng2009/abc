@@ -7,7 +7,7 @@ import {IonicPage} from "ionic-angular/index";
   templateUrl:'detail.html'
 })
 
-export class Detail{
+export class DetailPage{
   constructor(
     public navCtrl:NavController
   ){}
