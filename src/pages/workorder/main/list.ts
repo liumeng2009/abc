@@ -11,7 +11,8 @@ import {LoginPage} from '../../login/login'
 
 
 @Component({
-  templateUrl:'list.html'
+  templateUrl:'list.html',
+  selector:'list'
 })
 
 export class ListPage{
@@ -248,10 +249,6 @@ export class ListPage{
     }).catch((e)=>{
       this.toolService.toast(e)
     });
-  }
-
-  onTabSelect(e){
-    console.log(e);
   }
   gotoDetail(){
     this.navCtrl.push(DetailPage);

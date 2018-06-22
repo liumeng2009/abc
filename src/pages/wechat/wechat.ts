@@ -2,7 +2,8 @@ import {Component} from '@angular/core'
 import {IonicPage} from "ionic-angular";
 
 @Component({
-  templateUrl:'./wechat.html'
+  templateUrl:'./wechat.html',
+  selector:'wechat'
 })
 export class WeChatPage {
   constructor() {

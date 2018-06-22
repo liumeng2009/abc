@@ -4,6 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule} from '@angular/http';
+import { IonicStorageModule } from '@ionic/storage';
 
 import {CookieService} from 'angular2-cookie/core'
 
@@ -38,16 +39,19 @@ import {PipesModule} from '../util/pipe/pipe.module';
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp,{},{
+    IonicModule.forRoot(MyApp,{
+      tabsHideOnSubPages:true
+    },{
       links:[
         {component:TabsPage,name:'TabsPage',segment:'main'},
         {component:ListPage,name:'List',segment:'list'},
-        {component:DetailPage,name:'Detail',segment:'detail'},
+        {component:DetailPage,name:'Detail',segment:'detail',defaultHistory:[ListPage]},
         {component:WeChatPage,name:'WeChat',segment:'wechat'},
         {component:SettingPage,name:'Setting',segment:'setting'},
         {component:LoginPage,name:'Login',segment:'login'}
       ]
     }),
+    IonicStorageModule.forRoot(),
     PipesModule
   ],
   bootstrap: [IonicApp],

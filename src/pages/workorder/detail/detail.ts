@@ -4,7 +4,8 @@ import {IonicPage} from "ionic-angular/index";
 
 
 @Component({
-  templateUrl:'detail.html'
+  templateUrl:'detail.html',
+  selector:'detail'
 })
 
 export class DetailPage{
@@ -14,7 +15,8 @@ export class DetailPage{
 
   @ViewChild('nav') navBar:Navbar
   ngOnInit(){
-    //this.navBar.setBackButtonText('后退')
+    console.log(123);
+    this.navBar.setBackButtonText('后退')
   }
 
 }
