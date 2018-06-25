@@ -30,16 +30,18 @@ export class LoginPage{
   login(){
     let loading=this.loadingCtrl.create({
       content:'请稍等...',
-      duration: 500
     });
     loading.present();
     this.loginService.login(this.user).then(
       data=>{
-        //loading.dismiss()
+        loading.dismiss()
         console.log(data);
         if(data&&data.status==0){
           this.cookieService.put('optAppToken',data.data.token);
-          this.navCtrl.push(TabsPage);
+          this.toolService.toast(data.data.name+',欢迎您。');
+          setTimeout(()=>{
+            this.navCtrl.push(TabsPage);
+          },1000)
         }
         else{
           this.toolService.toast(data.message);

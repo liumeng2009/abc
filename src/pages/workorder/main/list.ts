@@ -9,6 +9,10 @@ import {ResponseData} from "../../../bean/responseData";
 import {DetailPage} from '../detail/detail'
 import {LoginPage} from '../../login/login'
 
+import * as moment from 'moment'
+import {OperationGroup} from "../../../bean/OpGroup";
+import {Operation} from "../../../bean/operation";
+
 
 @Component({
   templateUrl:'list.html',
@@ -42,6 +46,7 @@ export class ListPage{
       this.getData().then((data:ResponseData)=>{
         if(data.status==0){
           this.opList=data.data;
+          console.log(data.data);
         }
         else{
           this.toolService.toast(data.message);
@@ -99,6 +104,11 @@ export class ListPage{
             data=>{
               if(data.status==0){
                 this.statusCount.working=data.total;
+                //
+                for(let d of data.data){
+                  moment.locale('zh_cn');
+                  d.create_time_show=moment(d.create_time).fromNow();
+                }
               }
               resolve(data);
             },
@@ -146,6 +156,39 @@ export class ListPage{
       }
     })
   }
+
+  listToGroup(data){
+    let groups:OperationGroup[]=[];
+    for(let d of data){
+      let create_time_hour=moment(d.create_time).hour();
+      let ExistResult=this.isHourExistInGroup(create_time_hour,groups);
+      if(ExistResult){
+        let op:Operation=d;
+        ExistResult.opList.push(op)
+      }
+      else{
+        let opList:Operation[]=[];
+        let op=d;
+
+        let g:OperationGroup=new OperationGroup(create_time_hour,,)
+      }
+    }
+  }
+
+  isHourExistInGroup(hour,group:OperationGroup[]){
+    if(group.length==0){
+      return false;
+    }
+    else{
+      for(let g of group){
+        if(g.hour==hour){
+          return g;
+        }
+      }
+    }
+    return false;
+  }
+
   getOpCount(){
     let now=new Date(this.todayString);
     this.today=now;
@@ -249,9 +292,6 @@ export class ListPage{
     }).catch((e)=>{
       this.toolService.toast(e)
     });
-  }
-  gotoDetail(){
-    this.navCtrl.push(DetailPage);
   }
 }
 

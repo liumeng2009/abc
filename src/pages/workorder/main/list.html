@@ -60,24 +60,46 @@
 </ion-header>
 
 <ion-content padding>
+
   <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content
-      pullingIcon="arrow-dropdown"
-      pullingText="下滑刷新"
-      refreshingSpinner="circles"
-      refreshingText="载入中">
-    </ion-refresher-content>
+    <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
+
   <ion-list>
-    <ion-item *ngFor="let op of opList">
-      <h2>{{op.no}}</h2>
-      <h3>{{op.create_time|dateList}}</h3>
-    </ion-item>
+    <ion-item-group *ngFor="let op of opList">
+      <ion-item-divider sticky>
+        <ion-label>
+          {{op.time}}
+        </ion-label>
+      </ion-item-divider>
+
+      <ion-item-sliding *ngFor="let session of group.sessions" #slidingItem [attr.track]="session.tracks[0] | lowercase" [hidden]="session.hide">
+
+        <button ion-item (click)="goToSessionDetail(session)">
+          <h3>{{session.name}}</h3>
+          <p>
+            {{session.timeStart}} &mdash;
+            {{session.timeEnd}}:
+            {{session.location}}
+          </p>
+        </button>
+
+        <ion-item-options>
+          <button ion-button color="favorite" (click)="addFavorite(slidingItem, session)" *ngIf="segment === 'all'">
+            Favorite
+          </button>
+          <button ion-button color="danger" (click)="removeFavorite(slidingItem, session, 'Remove Favorite')" *ngIf="segment === 'favorites'">
+            Remove
+          </button>
+        </ion-item-options>
+
+      </ion-item-sliding>
+
+
+    </ion-item-group>
+
   </ion-list>
-
-  <button ion-button block (click)="gotoDetail()">跳转到detail页面</button>
-
-
 </ion-content>
 
 
