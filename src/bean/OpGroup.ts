@@ -3,6 +3,6 @@ export class OperationGroup {
   constructor(
     public hour: number,
     public hour_name: string,
-    public opList:Operation
+    public opList:Operation[]
   ) {  }
 }

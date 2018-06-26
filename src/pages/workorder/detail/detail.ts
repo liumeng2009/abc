@@ -1,6 +1,5 @@
 import {Component,ViewChild} from '@angular/core';
-import {NavController,Navbar} from 'ionic-angular'
-import {IonicPage} from "ionic-angular/index";
+import {NavController,Navbar,NavParams,IonicPage} from 'ionic-angular'
 
 
 @Component({
@@ -10,13 +9,18 @@ import {IonicPage} from "ionic-angular/index";
 
 export class DetailPage{
   constructor(
-    public navCtrl:NavController
+    public navCtrl:NavController,
+    public navParams: NavParams
   ){}
 
   @ViewChild('nav') navBar:Navbar
   ngOnInit(){
     console.log(123);
-    this.navBar.setBackButtonText('后退')
+    //this.navBar.setBackButtonText('后退')
+  }
+  private id:string;
+  ionViewWillEnter(){
+    this.id=this.navParams.data.id;
   }
 
 }

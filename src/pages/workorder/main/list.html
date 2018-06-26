@@ -1,46 +1,12 @@
 <ion-header>
-  <!--
-  <ion-navbar hideBackButton no-border-bottom >-->
-    <!--
-    <ion-buttons start>
-      <button ion-button icon-only (click)="reduceOneDay()" >
-        <ion-icon name="md-arrow-back"></ion-icon>
-      </button>
-    </ion-buttons>-->
-<!--
-    <ion-title>
-        <ion-datetime displayFormat="YYYY年MM月DD日" pickerFormat="YYYY MM DD"
-                      [(ngModel)]="todayString"
-                      (ngModelChange)="ok($event)"
-                      cancelText="取消"
-                      doneText="确定"
-
-        ></ion-datetime>
-    </ion-title>-->
-<!--
-    <ion-buttons end>
-      <button ion-button icon-only *ngIf="canDateClick()"  (click)="addOneDay()" >
-        <ion-icon name="md-arrow-forward"></ion-icon>
-      </button>
-      <button ion-button icon-only disabled *ngIf="!canDateClick()">
-        <ion-icon name="md-arrow-forward"></ion-icon>
-      </button>
-    </ion-buttons>-->
-  <!--
-  </ion-navbar>-->
-
-
   <ion-toolbar>
-      <ion-datetime displayFormat="YYYY年MM月DD日" pickerFormat="YYYY MM DD"
-                    [(ngModel)]="todayString"
-                    (ngModelChange)="ok($event)"
-                    cancelText="取消"
-                    doneText="确定"
-      >
-      </ion-datetime>
-
-  </ion-toolbar>
-  <ion-toolbar>
+    <ion-datetime displayFormat="YYYY年MM月DD日" pickerFormat="YYYY MM DD"
+                  [(ngModel)]="todayString"
+                  (ngModelChange)="ok($event)"
+                  cancelText="取消"
+                  doneText="确定"
+    >
+    </ion-datetime>
     <ion-segment [(ngModel)]="workStatus" (ionChange)="statusChanged($event)">
       <ion-segment-button value="working">
         未完成
@@ -56,49 +22,32 @@
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
-
 </ion-header>
 
-<ion-content padding>
-
+<ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-
-
   <ion-list>
-    <ion-item-group *ngFor="let op of opList">
+    <ion-item-group *ngFor="let group of groups">
       <ion-item-divider sticky>
         <ion-label>
-          {{op.time}}
+          {{group?.hour_name}}
         </ion-label>
       </ion-item-divider>
 
-      <ion-item-sliding *ngFor="let session of group.sessions" #slidingItem [attr.track]="session.tracks[0] | lowercase" [hidden]="session.hide">
-
-        <button ion-item (click)="goToSessionDetail(session)">
-          <h3>{{session.name}}</h3>
+      <ion-item-sliding *ngFor="let op of group.opList" track="ionic">
+        <button ion-item (click)="goToDetail(op.id)">
+          <h2>{{op.sequelize}}</h2>
+          <h3 *ngIf="op.sequelize!=1">{{op?.businessContent?.equipment}} {{op?.businessContent?.equipOp?.name}}</h3>
+          <h3 *ngIf="op.sequelize==1">{{op.businessContent.equipOp.name}}{{op.businessContent.equipment}} </h3>
           <p>
-            {{session.timeStart}} &mdash;
-            {{session.timeEnd}}:
-            {{session.location}}
+            {{op.create_time|dateList}} &mdash;
+            {{op?.order?.corporation?.name}}
           </p>
         </button>
-
-        <ion-item-options>
-          <button ion-button color="favorite" (click)="addFavorite(slidingItem, session)" *ngIf="segment === 'all'">
-            Favorite
-          </button>
-          <button ion-button color="danger" (click)="removeFavorite(slidingItem, session, 'Remove Favorite')" *ngIf="segment === 'favorites'">
-            Remove
-          </button>
-        </ion-item-options>
-
       </ion-item-sliding>
-
-
     </ion-item-group>
-
   </ion-list>
 </ion-content>
 

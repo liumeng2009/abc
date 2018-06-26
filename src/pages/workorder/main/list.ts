@@ -16,7 +16,8 @@ import {Operation} from "../../../bean/operation";
 
 @Component({
   templateUrl:'list.html',
-  selector:'list'
+  selector:'page-list',
+
 })
 
 export class ListPage{
@@ -45,8 +46,9 @@ export class ListPage{
       this.getOpCount();
       this.getData().then((data:ResponseData)=>{
         if(data.status==0){
-          this.opList=data.data;
+          this.listToGroup(data.data);
           console.log(data.data);
+          console.log(this.groups);
         }
         else{
           this.toolService.toast(data.message);
@@ -91,6 +93,7 @@ export class ListPage{
     })
   }
 
+  private groups:OperationGroup[]=[];
   private opList:any[]=[];
   getData(){
     return new Promise((resolve,reject)=>{
@@ -104,7 +107,6 @@ export class ListPage{
             data=>{
               if(data.status==0){
                 this.statusCount.working=data.total;
-                //
                 for(let d of data.data){
                   moment.locale('zh_cn');
                   d.create_time_show=moment(d.create_time).fromNow();
@@ -158,19 +160,29 @@ export class ListPage{
   }
 
   listToGroup(data){
-    let groups:OperationGroup[]=[];
     for(let d of data){
       let create_time_hour=moment(d.create_time).hour();
-      let ExistResult=this.isHourExistInGroup(create_time_hour,groups);
+      let ExistResult=this.isHourExistInGroup(create_time_hour,this.groups);
       if(ExistResult){
-        let op:Operation=d;
+        let op:Operation={...d};
         ExistResult.opList.push(op)
       }
       else{
         let opList:Operation[]=[];
-        let op=d;
+        let op:Operation={...d};
+        opList.push(op);
+        let create_time_hour_show='上午 '+create_time_hour+':00'
+        if(create_time_hour<12){
 
-        let g:OperationGroup=new OperationGroup(create_time_hour,,)
+        }
+        else if(create_time_hour==12){
+          create_time_hour_show='中午 '+create_time_hour+':00'
+        }
+        else{
+          create_time_hour_show='下午 '+(create_time_hour-12)+':00'
+        }
+        let g:OperationGroup=new OperationGroup(create_time_hour,create_time_hour_show,opList);
+        this.groups.push(g);
       }
     }
   }
@@ -206,9 +218,10 @@ export class ListPage{
   }
 
   doRefresh(refresher:Refresher){
+    this.groups.splice(0,this.groups.length);
     this.getData().then((data:ResponseData)=>{
       if(data.status==0){
-        this.opList=data.data;
+        this.listToGroup(data.data);
         refresher.complete();
       }
       else{
@@ -233,45 +246,11 @@ export class ListPage{
     }
   }
 
-  reduceOneDay(){
-    let todayStamp=this.today.getTime();
-    let newStamp=todayStamp-24*60*60*1000;
-    let newDate=new Date(newStamp);
-    this.today=newDate;
-    this.getTodayString();
-    this.getData().then((data:ResponseData)=>{
-      if(data.status==0){
-        this.opList=data.data;
-      }
-      else{
-        this.toolService.toast(data.message);
-      }
-    }).catch((e)=>{
-      this.toolService.toast(e)
-    });
-  }
-  addOneDay(){
-    let todayStamp=this.today.getTime();
-    let newStamp=todayStamp+24*60*60*1000;
-    let newDate=new Date(newStamp);
-    this.today=newDate;
-    this.getTodayString();
-    this.getData().then((data:ResponseData)=>{
-      if(data.status==0){
-        this.opList=data.data;
-      }
-      else{
-        this.toolService.toast(data.message);
-      }
-    }).catch((e)=>{
-      this.toolService.toast(e)
-    });
-  }
-
   ok(e){
+    this.groups.splice(0,this.groups.length);
     this.getData().then((data:ResponseData)=>{
       if(data.status==0){
-        this.opList=data.data;
+        this.listToGroup(data.data);
       }
       else{
         this.toolService.toast(data.message);
@@ -282,9 +261,10 @@ export class ListPage{
   }
 
   statusChanged(e){
+    this.groups.splice(0,this.groups.length);
     this.getData().then((data:ResponseData)=>{
       if(data.status==0){
-        this.opList=data.data;
+        this.listToGroup(data.data);
       }
       else{
         this.toolService.toast(data.message);
@@ -292,6 +272,12 @@ export class ListPage{
     }).catch((e)=>{
       this.toolService.toast(e)
     });
+  }
+
+  goToDetail(id){
+    this.navCtrl.push(DetailPage,{
+      id:id
+    })
   }
 }
 
