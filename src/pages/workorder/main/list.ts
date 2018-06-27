@@ -42,12 +42,11 @@ export class ListPage{
 
   ngOnInit(){
     this.getTodayString();
-    this.checkLogin().then(()=>{
+    this.authService.checkLogin().then(()=>{
       this.getOpCount();
       this.getData().then((data:ResponseData)=>{
         if(data.status==0){
           this.listToGroup(data.data);
-          console.log(data.data);
           console.log(this.groups);
         }
         else{
@@ -72,25 +71,6 @@ export class ListPage{
     let month=this.today.getMonth()+1;
     let day=this.today.getDate();
     this.todayString=year+'-'+(month<10?('0'+month):month)+'-'+(day<10?('0'+day):day);
-  }
-
-  checkLogin(){
-    return new Promise((resolve,reject)=>{
-      this.authService.getUserInfo().then(
-        data=>{
-          if(data&&data.status==0){
-              resolve();
-          }
-          else{
-            reject({message:data.message,action:'login'})
-          }
-        },
-        error=>{
-          reject({message:error});
-
-        }
-      )
-    })
   }
 
   private groups:OperationGroup[]=[];

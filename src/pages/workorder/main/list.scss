@@ -23,3 +23,14 @@ page-list{
     }
   }
 }
+
+.bar-buttons-md{
+  .datetime-text{
+    color:#fff;
+  }
+}
+.bar-buttons-ios{
+  .datetime-text{
+    color:color($colors, primary)
+  }
+}

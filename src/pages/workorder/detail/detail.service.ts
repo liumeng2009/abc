@@ -5,45 +5,25 @@ import 'rxjs/add/operator/toPromise';
 
 import {CookieService} from 'angular2-cookie/core';
 
-import {ResponseData} from '../bean/responseData';
+import {ResponseData} from '../../../bean/responseData';
 
-import {OptConfig} from '../config/config'
+import {OptConfig} from '../../../config/config'
 
 @Injectable()
-export class AuthService {
-  private loginurl = new OptConfig().serverPath + '/api/user/';
-
+export class DetailService {
   constructor(private http: Http, private cookieService: CookieService) {
   }
 
-  getUserInfo(): Promise<ResponseData> {
+  private operationDetailUrl=new OptConfig().serverPath+'/api/operation/'
+
+  getOperation(id:string): Promise<ResponseData> {
     let token = this.cookieService.get('optAppToken');
-    console.log(token);
-    return this.http.get(this.loginurl + '?token=' + token)
+    console.log(this.operationDetailUrl +id+'?token=' + token);
+    return this.http.get(this.operationDetailUrl +id+'?token=' + token)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
   }
-
-  checkLogin(){
-      return new Promise((resolve,reject)=>{
-        this.getUserInfo().then(
-          data=>{
-            if(data&&data.status==0){
-              resolve(data);
-            }
-            else{
-              reject({message:data.message,action:'login'})
-            }
-          },
-          error=>{
-            reject({message:error});
-
-          }
-        )
-      })
-  }
-
 
   private extractData(res:Response){
     let body=res.json();

@@ -24,6 +24,7 @@ import {ToolService} from "../util/tool.service";
 import {AuthService} from "../util/auth.service";
 
 import {PipesModule} from '../util/pipe/pipe.module';
+import {DetailService} from "../pages/workorder/detail/detail.service";
 
 @NgModule({
   declarations: [
@@ -45,7 +46,7 @@ import {PipesModule} from '../util/pipe/pipe.module';
       links:[
         {component:TabsPage,name:'TabsPage',segment:'main'},
         {component:ListPage,name:'List',segment:'list'},
-        {component:DetailPage,name:'Detail',segment:'detail',defaultHistory:[ListPage]},
+        {component:DetailPage,name:'Detail',segment:'detail/:id',defaultHistory:[ListPage]},
         {component:WeChatPage,name:'WeChat',segment:'wechat'},
         {component:SettingPage,name:'Setting',segment:'setting'},
         {component:LoginPage,name:'Login',segment:'login'}
@@ -71,6 +72,7 @@ import {PipesModule} from '../util/pipe/pipe.module';
     CookieService,
 
     ListService,
+    DetailService,
     LoginService,
 
     AuthService,

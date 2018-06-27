@@ -1,9 +1,21 @@
 <ion-header>
   <ion-navbar #nav>
-    <ion-title>Page</ion-title>
+    <ion-title>{{operation?.no}}</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h1>{{id}}</h1>
+<ion-content>
+  <ion-segment>
+    <ion-segment-button value="working">
+      进度
+    </ion-segment-button>
+    <ion-segment-button value="done">
+      工单信息
+    </ion-segment-button>
+    <ion-segment-button value="all">
+      订单信息
+    </ion-segment-button>
+  </ion-segment>
+
+
 </ion-content>
