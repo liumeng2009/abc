@@ -13,6 +13,7 @@ import { MyApp } from './app.component';
 import {TabsPage} from '../pages/tabs/tab';
 import {ListPage} from '../pages/workorder/main/list'
 import {DetailPage} from '../pages/workorder/detail/detail'
+import {DetailModalPage} from "../pages/workorder/detail/detail-modal"
 import {LoginPage} from '../pages/login/login'
 import {WeChatPage} from '../pages/wechat/wechat';
 import {SettingPage} from '../pages/settings/setting'
@@ -26,6 +27,7 @@ import {AuthService} from "../util/auth.service";
 import {PipesModule} from '../util/pipe/pipe.module';
 import {DetailService} from "../pages/workorder/detail/detail.service";
 
+
 @NgModule({
   declarations: [
     MyApp,
@@ -33,6 +35,7 @@ import {DetailService} from "../pages/workorder/detail/detail.service";
     TabsPage,
     ListPage,
     DetailPage,
+    DetailModalPage,
     LoginPage,
     WeChatPage,
     SettingPage
@@ -61,6 +64,7 @@ import {DetailService} from "../pages/workorder/detail/detail.service";
     TabsPage,
     ListPage,
     DetailPage,
+    DetailModalPage,
     LoginPage,
     WeChatPage,
     SettingPage

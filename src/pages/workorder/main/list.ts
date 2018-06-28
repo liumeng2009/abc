@@ -12,6 +12,7 @@ import {LoginPage} from '../../login/login'
 import * as moment from 'moment'
 import {OperationGroup} from "../../../bean/OpGroup";
 import {Operation} from "../../../bean/operation";
+import {Order} from "../../../bean/order";
 
 
 @Component({
@@ -43,10 +44,11 @@ export class ListPage{
   ngOnInit(){
     this.getTodayString();
     this.authService.checkLogin().then(()=>{
-      this.getOpCount();
+      //this.getOpCount();
       this.getData().then((data:ResponseData)=>{
         if(data.status==0){
-          this.listToGroup(data.data);
+          //this.listToGroup(data.data);
+          this.formatServerData(data.data);
           console.log(this.groups);
         }
         else{
@@ -73,7 +75,7 @@ export class ListPage{
     this.todayString=year+'-'+(month<10?('0'+month):month)+'-'+(day<10?('0'+day):day);
   }
 
-  private groups:OperationGroup[]=[];
+  private groups:Order[]=[];
   private opList:any[]=[];
   getData(){
     return new Promise((resolve,reject)=>{
@@ -86,7 +88,7 @@ export class ListPage{
           this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString())).then(
             data=>{
               if(data.status==0){
-                this.statusCount.working=data.total;
+                //this.statusCount.working=data.total;
                 for(let d of data.data){
                   moment.locale('zh_cn');
                   d.create_time_show=moment(d.create_time).fromNow();
@@ -103,7 +105,7 @@ export class ListPage{
           this.listService.getDoneOpList(parseInt((date.getTime()/1000).toString())).then(
             data=>{
               if(data.status==0){
-                this.statusCount.done=data.total;
+                //this.statusCount.done=data.total;
               }
               resolve(data);
             },
@@ -116,7 +118,7 @@ export class ListPage{
           this.listService.getAllOpList(parseInt((date.getTime()/1000).toString())).then(
             data=>{
               if(data.status==0){
-                this.statusCount.all=data.total;
+                //this.statusCount.all=data.total;
               }
               resolve(data);
             },
@@ -138,6 +140,56 @@ export class ListPage{
       }
     })
   }
+
+  formatServerData(data){
+    for(let d of data){
+      let operations:Operation[]=[];
+      for(let op of d.operations){
+        let operation:Operation={...op};
+        let maxAction=this.maxAction(operation.actions);
+        if(maxAction.start_time){
+          if(maxAction.end_time){
+            operation.progress_name='已收工';
+            operation.progress_time=maxAction.end_time;
+            operation.progress_status_code=2;
+          }
+          else{
+            operation.progress_name='处理中';
+            operation.progress_time=maxAction.start_time;
+            operation.progress_status_code=1;
+          }
+        }
+        else{
+          operation.progress_name='已指派';
+          operation.progress_time=maxAction.call_time;
+          operation.progress_status_code=0;
+        }
+        operations.push(operation);
+      }
+      let groupObj=new Order(d.id,d.incoming_time,d.custom_phone,d.corporation.name,operations);
+      this.groups.push(groupObj);
+    }
+  }
+
+  maxAction(actions){
+    let maxStartTimeStamp=0;
+    let actionReturn;
+    for(let action of actions){
+      if(action.start_time){
+        if(action.start_time>maxStartTimeStamp){
+          maxStartTimeStamp=action.start_time;
+          actionReturn=action;
+        }
+      }
+    }
+    if(maxStartTimeStamp==0){
+      return actions[0]
+    }
+    else{
+      return actionReturn;
+    }
+  }
+
 
   listToGroup(data){
     for(let d of data){
@@ -201,7 +253,8 @@ export class ListPage{
     this.groups.splice(0,this.groups.length);
     this.getData().then((data:ResponseData)=>{
       if(data.status==0){
-        this.listToGroup(data.data);
+        //this.listToGroup(data.data);
+        this.formatServerData(data.data);
         refresher.complete();
       }
       else{
@@ -230,7 +283,8 @@ export class ListPage{
     this.groups.splice(0,this.groups.length);
     this.getData().then((data:ResponseData)=>{
       if(data.status==0){
-        this.listToGroup(data.data);
+        //this.listToGroup(data.data);
+        this.formatServerData(data.data);
       }
       else{
         this.toolService.toast(data.message);
@@ -244,7 +298,8 @@ export class ListPage{
     this.groups.splice(0,this.groups.length);
     this.getData().then((data:ResponseData)=>{
       if(data.status==0){
-        this.listToGroup(data.data);
+        //this.listToGroup(data.data);
+        this.formatServerData(data.data);
       }
       else{
         this.toolService.toast(data.message);
@@ -254,9 +309,10 @@ export class ListPage{
     });
   }
 
-  goToDetail(id){
+  goToDetail(id,no){
     this.navCtrl.push(DetailPage,{
-      id:id
+      id:id,
+      no:no
     })
   }
 }

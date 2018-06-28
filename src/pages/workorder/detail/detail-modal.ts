@@ -1,36 +1,29 @@
-import {Component,ViewChild} from '@angular/core';
-import {NavController,Navbar,NavParams,IonicPage,Events,ModalController} from 'ionic-angular'
+import {Component} from '@angular/core';
+import {NavController,Navbar,NavParams,IonicPage,Events,ViewController} from 'ionic-angular'
 import {AuthService} from "../../../util/auth.service";
 import {Operation} from "../../../bean/operation";
 import {DetailService} from "./detail.service";
 import {ToolService} from "../../../util/tool.service";
-import {DetailModalPage} from "./detail-modal";
 
 
 @Component({
-  templateUrl:'detail.html',
-  selector:'detail'
+  templateUrl:'detail-modal.html',
+  selector:'detail-modal'
 })
 
-export class DetailPage{
+export class DetailModalPage{
   constructor(
-    private navCtrl:NavController,
     private navParams: NavParams,
     private authService:AuthService,
     private detailService:DetailService,
     private toolService:ToolService,
     private events:Events,
-    private modalCtrl:ModalController
+    private viewCtrl:ViewController
   ){}
 
-
   private operation:Operation;
-  private operation_no:string;
   ionViewWillEnter(){
-    let id=this.navParams.data.id;
-    let no=this.navParams.data.no;
-    this.operation_no=no;
-    console.log(id);
+    let id=this.navParams.get('id');
     this.authService.checkLogin().then(()=>{
       this.getData(id);
     }).catch((e)=>{
@@ -58,11 +51,7 @@ export class DetailPage{
       }
     )
   }
-
-  private openModal(){
-    let id=this.navParams.data.id;
-    let infoModal=this.modalCtrl.create(DetailModalPage,{id:id});
-    infoModal.present();
+  dismiss(){
+    this.viewCtrl.dismiss();
   }
-
 }

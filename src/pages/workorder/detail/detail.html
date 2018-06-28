@@ -1,7 +1,16 @@
 <ion-header>
   <ion-navbar #nav>
-    <ion-title>{{operation?.no}}</ion-title>
+    <ion-title>{{operation_no}}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only  (click)="openModal()">
+        <ion-icon name="information-circle"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
+
+
+
 </ion-header>
 
 <ion-content>

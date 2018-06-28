@@ -7,6 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import {TabsPage} from '../pages/tabs/tab'
 import {AuthService} from "../util/auth.service";
 import {User} from "../bean/user";
+import {ResponseData} from "../bean/responseData";
 @Component({
   templateUrl: 'app.html'
 })
@@ -35,7 +36,7 @@ export class MyApp {
         });
       })
 
-      this.authService.checkLogin().then((data)=>{
+      this.authService.checkLogin().then((data:ResponseData)=>{
         if(data.status==0){
           this.user={...data.data};
         }
