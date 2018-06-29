@@ -67,6 +67,7 @@ export class DetailPage{
   }
 
   ionViewWillLeave(){
-    this.events
+    console.log('send');
+    this.events.publish('pop:shutdown');
   }
 }

@@ -20,7 +20,9 @@ export class DetailModalPage{
     private events:Events,
     private viewCtrl:ViewController,
     private popupCtrl:PopoverController
-  ){}
+  ){
+    this.listenToEvents();
+  }
 
   private operation:Operation;
   ionViewWillEnter(){
@@ -35,6 +37,10 @@ export class DetailModalPage{
         },0)
       }
     })
+  }
+  ionViewWillLeave(){
+    console.log('canceled');
+    this.events.unsubscribe('pop:shutdown')
   }
 
 
@@ -53,8 +59,16 @@ export class DetailModalPage{
       }
     )
   }
+
   dismiss(){
     this.viewCtrl.dismiss();
+  }
+
+  listenToEvents(){
+    this.events.subscribe('pop:shutdown',()=>{
+      console.log('received');
+      this.dismiss();
+    })
   }
 
   openCorporationEditPage(opId,corpId){

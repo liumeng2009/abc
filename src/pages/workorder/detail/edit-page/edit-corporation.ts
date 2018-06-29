@@ -16,12 +16,24 @@ export class EditCorporationPage{
     private toolService:ToolService,
     private events:Events,
     private viewCtrl:ViewController
-  ){}
+  ){
+    this.listenToEvents();
+  }
 
   ionViewWillEnter(){
     let operationId=this.navParams.get('operationId');
     let corporationId=this.navParams.get('corporationId');
-    alert(operationId+' '+corporationId);
+    console.log(operationId+' '+corporationId);
   }
-
+  ionViewWillLeave(){
+    // console.log('canceled');
+    this.events.unsubscribe('pop:shutdown')
+  }
+  private subs;
+  listenToEvents(){
+    this.subs=this.events.subscribe('pop:shutdown',()=>{
+      console.log('received');
+      this.viewCtrl.dismiss();
+    })
+  }
 }

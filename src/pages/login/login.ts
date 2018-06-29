@@ -1,7 +1,6 @@
 import {Component} from '@angular/core'
-import {IonicPage,
+import {
   NavController,
-  ToastController,
   LoadingController
 } from "ionic-angular";
 import {User} from '../../bean/user'
