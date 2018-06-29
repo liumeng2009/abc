@@ -4,11 +4,36 @@
     <ion-buttons start>
       <button ion-button (click)="dismiss()">关闭</button>
     </ion-buttons>
-    <ion-title>Modals</ion-title>
+    <ion-title>
+      工单信息
+    </ion-title>
   </ion-navbar>
 
 </ion-header>
 
-<ion-content padding>
-  <h1>{{operation?.id}}</h1>
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+      {{operation?.no}}号工单
+    </ion-list-header>
+    <ion-item>
+      <ion-label fixed>公司：</ion-label>
+      <ion-label (press)="openCorporationEditPage(operation?.id,operation?.order?.corporation?.id)">
+        {{operation?.order?.corporation.name}}
+        <ion-icon name="create" md="md-create" color="primary" style="float:right" (click)="openCorporationEditPage()"></ion-icon>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>来电号码：</ion-label>
+      <ion-label >{{operation?.order?.custom_phone=='15822927208'?'':operation?.order?.custom_phone}}
+        <ion-icon name="create" md="md-create" color="primary" style="float:right"></ion-icon>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>来电客户：</ion-label>
+      <ion-label >{{operation?.order?.custom_name}}
+        <ion-icon name="create" md="md-create" color="primary" style="float:right"></ion-icon>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

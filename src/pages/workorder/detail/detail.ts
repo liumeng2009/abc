@@ -1,5 +1,5 @@
 import {Component,ViewChild} from '@angular/core';
-import {NavController,Navbar,NavParams,IonicPage,Events,ModalController} from 'ionic-angular'
+import {NavController,Navbar,NavParams,IonicPage,Events,ModalController,ViewController} from 'ionic-angular'
 import {AuthService} from "../../../util/auth.service";
 import {Operation} from "../../../bean/operation";
 import {DetailService} from "./detail.service";
@@ -20,7 +20,8 @@ export class DetailPage{
     private detailService:DetailService,
     private toolService:ToolService,
     private events:Events,
-    private modalCtrl:ModalController
+    private modalCtrl:ModalController,
+    private viewCtrl:ViewController
   ){}
 
 
@@ -65,4 +66,7 @@ export class DetailPage{
     infoModal.present();
   }
 
+  ionViewWillLeave(){
+    this.events
+  }
 }

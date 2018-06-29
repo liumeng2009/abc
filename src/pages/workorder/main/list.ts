@@ -190,49 +190,6 @@ export class ListPage{
     }
   }
 
-
-  listToGroup(data){
-    for(let d of data){
-      let create_time_hour=moment(d.create_time).hour();
-      let ExistResult=this.isHourExistInGroup(create_time_hour,this.groups);
-      if(ExistResult){
-        let op:Operation={...d};
-        ExistResult.opList.push(op)
-      }
-      else{
-        let opList:Operation[]=[];
-        let op:Operation={...d};
-        opList.push(op);
-        let create_time_hour_show='上午 '+create_time_hour+':00'
-        if(create_time_hour<12){
-
-        }
-        else if(create_time_hour==12){
-          create_time_hour_show='中午 '+create_time_hour+':00'
-        }
-        else{
-          create_time_hour_show='下午 '+(create_time_hour-12)+':00'
-        }
-        let g:OperationGroup=new OperationGroup(create_time_hour,create_time_hour_show,opList);
-        this.groups.push(g);
-      }
-    }
-  }
-
-  isHourExistInGroup(hour,group:OperationGroup[]){
-    if(group.length==0){
-      return false;
-    }
-    else{
-      for(let g of group){
-        if(g.hour==hour){
-          return g;
-        }
-      }
-    }
-    return false;
-  }
-
   getOpCount(){
     let now=new Date(this.todayString);
     this.today=now;

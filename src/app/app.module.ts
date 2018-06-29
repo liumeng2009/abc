@@ -26,6 +26,7 @@ import {AuthService} from "../util/auth.service";
 
 import {PipesModule} from '../util/pipe/pipe.module';
 import {DetailService} from "../pages/workorder/detail/detail.service";
+import {EditCorporationPage} from "../pages/workorder/detail/edit-page/edit-corporation";
 
 
 @NgModule({
@@ -36,6 +37,9 @@ import {DetailService} from "../pages/workorder/detail/detail.service";
     ListPage,
     DetailPage,
     DetailModalPage,
+
+    EditCorporationPage,
+
     LoginPage,
     WeChatPage,
     SettingPage
@@ -65,6 +69,9 @@ import {DetailService} from "../pages/workorder/detail/detail.service";
     ListPage,
     DetailPage,
     DetailModalPage,
+
+    EditCorporationPage,
+
     LoginPage,
     WeChatPage,
     SettingPage

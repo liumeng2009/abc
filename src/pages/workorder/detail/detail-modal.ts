@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
-import {NavController,Navbar,NavParams,IonicPage,Events,ViewController} from 'ionic-angular'
+import {NavController,Navbar,NavParams,IonicPage,Events,ViewController,PopoverController} from 'ionic-angular'
 import {AuthService} from "../../../util/auth.service";
 import {Operation} from "../../../bean/operation";
 import {DetailService} from "./detail.service";
 import {ToolService} from "../../../util/tool.service";
-
+import {EditCorporationPage} from "./edit-page/edit-corporation";
 
 @Component({
   templateUrl:'detail-modal.html',
@@ -18,7 +18,8 @@ export class DetailModalPage{
     private detailService:DetailService,
     private toolService:ToolService,
     private events:Events,
-    private viewCtrl:ViewController
+    private viewCtrl:ViewController,
+    private popupCtrl:PopoverController
   ){}
 
   private operation:Operation;
@@ -35,6 +36,7 @@ export class DetailModalPage{
       }
     })
   }
+
 
   getData(id){
     this.detailService.getOperation(id).then(
@@ -53,5 +55,13 @@ export class DetailModalPage{
   }
   dismiss(){
     this.viewCtrl.dismiss();
+  }
+
+  openCorporationEditPage(opId,corpId){
+    let popover=this.popupCtrl.create(EditCorporationPage,{
+      operationId:opId,
+      corporationId:corpId
+    });
+    popover.present();
   }
 }
