@@ -2,30 +2,20 @@
   <ion-list>
     <ion-item>
       <ion-label>组织</ion-label>
-      <ion-select [(ngModel)]="gaming">
-        <ion-option value="nes">NES</ion-option>
-        <ion-option value="n64">Nintendo64</ion-option>
-        <ion-option value="ps">PlayStation</ion-option>
-        <ion-option value="genesis">Sega Genesis</ion-option>
-        <ion-option value="saturn">Sega Saturn</ion-option>
-        <ion-option value="snes">SNES</ion-option>
+      <ion-select [(ngModel)]="groupId" (ngModelChange)="groupOk($event)" okText="确定" cancelText="取消">
+        <ion-option [value]="g.id" *ngFor="let g of groups">{{g.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>公司</ion-label>
-      <ion-select [(ngModel)]="gaming">
-        <ion-option value="nes">NES</ion-option>
-        <ion-option value="n64">Nintendo64</ion-option>
-        <ion-option value="ps">PlayStation</ion-option>
-        <ion-option value="genesis">Sega Genesis</ion-option>
-        <ion-option value="saturn">Sega Saturn</ion-option>
-        <ion-option value="snes">SNES</ion-option>
+      <ion-select [(ngModel)]="corporationId">
+        <ion-option [value]="c.id" *ngFor="let c of corporations">{{c.name}}</ion-option>
       </ion-select>
     </ion-item>
   </ion-list>
 
   <div padding>
-    <button ion-button block>保存</button>
+    <button ion-button block (click)="save()">保存</button>
   </div>
 
 </ion-content>

@@ -18,6 +18,7 @@ import {LoginPage} from '../pages/login/login'
 import {WeChatPage} from '../pages/wechat/wechat';
 import {SettingPage} from '../pages/settings/setting'
 
+import {PublicDataService} from '../util/data/public-data.service';
 import {ListService} from '../pages/workorder/main/list.service'
 import {LoginService} from '../pages/login/login.service'
 
@@ -85,6 +86,7 @@ import {EditCorporationPage} from "../pages/workorder/detail/edit-page/edit-corp
     ListService,
     DetailService,
     LoginService,
+    PublicDataService,
 
     AuthService,
     ToolService

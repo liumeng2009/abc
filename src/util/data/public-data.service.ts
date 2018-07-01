@@ -10,8 +10,9 @@ import {ResponseData} from '../../bean/responseData';
 import {OptConfig} from '../../config/config'
 
 @Injectable()
-export class AuthService {
+export class PublicDataService {
   private groupurl = new OptConfig().serverPath + '/api/groups/list';
+  private corporationurl = new OptConfig().serverPath + '/api/corporations/list';
 
   constructor(private http: Http, private cookieService: CookieService) {
   }
@@ -20,6 +21,15 @@ export class AuthService {
     let token = this.cookieService.get('optAppToken');
     console.log(token);
     return this.http.get(this.groupurl + '?token=' + token)
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+
+  getCoporations(groupId): Promise<ResponseData> {
+    let token = this.cookieService.get('optAppToken');
+    console.log(token);
+    return this.http.get(this.corporationurl +'?group='+groupId+ '&token=' + token)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

@@ -27,16 +27,7 @@ export class DetailModalPage{
   private operation:Operation;
   ionViewWillEnter(){
     let id=this.navParams.get('id');
-    this.authService.checkLogin().then(()=>{
-      this.getData(id);
-    }).catch((e)=>{
-      this.toolService.toast(e.message);
-      if(e.action&&e.action=='login'){
-        setTimeout(()=>{
-          this.events.publish('user:logout');
-        },0)
-      }
-    })
+    this.getData(id);
   }
   ionViewWillLeave(){
     console.log('canceled');
@@ -71,10 +62,12 @@ export class DetailModalPage{
     })
   }
 
-  openCorporationEditPage(opId,corpId){
+  openCorporationEditPage(opId,corpId,groupId){
+    console.log(opId+' '+corpId+' '+groupId);
     let popover=this.popupCtrl.create(EditCorporationPage,{
       operationId:opId,
-      corporationId:corpId
+      corporationId:corpId,
+      groupId:groupId
     });
     popover.present();
   }
