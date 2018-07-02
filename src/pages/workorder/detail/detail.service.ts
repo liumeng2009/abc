@@ -16,7 +16,7 @@ export class DetailService {
   private headers = new Headers({'Content-Type': 'application/json'});
 
   private operationDetailUrl=new OptConfig().serverPath+'/api/operation/'
-  private editOperationCorporationUrl=new OptConfig().serverPath+'/api/operation/editSimple'
+  private editOperationUrl=new OptConfig().serverPath+'/api/operation/editSimple'
 
   getOperation(id:string): Promise<ResponseData> {
     let token = this.cookieService.get('optAppToken');
@@ -28,11 +28,11 @@ export class DetailService {
   }
 
   //修改工单的所属公司
-  editOperationCorporation(params:any): Promise<ResponseData> {
+  editOperation(params:any): Promise<ResponseData> {
     let token = this.cookieService.get('optAppToken');
 
     return this.http
-      .post(this.editOperationCorporationUrl+'?token='+token, params, {headers: this.headers})
+      .post(this.editOperationUrl+'?token='+token, params, {headers: this.headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError);

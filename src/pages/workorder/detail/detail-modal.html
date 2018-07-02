@@ -25,15 +25,46 @@
     </ion-item>
     <ion-item>
       <ion-label fixed>来电号码：</ion-label>
-      <ion-label >{{operation?.order?.custom_phone=='15822927208'?'':operation?.order?.custom_phone}}
-        <ion-icon name="create" md="md-create" color="primary" style="float:right"></ion-icon>
+      <ion-label (press)="openPhoneEditPage(operation.id,operation.order.custom_phone)" >
+        {{operation?.order?.custom_phone=='15822927208'?'':operation?.order?.custom_phone}}
+        <ion-icon name="create" md="md-create" color="primary" style="float:right" (click)="openPhoneEditPage(operation.id)"></ion-icon>
       </ion-label>
     </ion-item>
     <ion-item>
       <ion-label fixed>来电客户：</ion-label>
-      <ion-label >{{operation?.order?.custom_name}}
+      <ion-label (press)="openUserEditPage(operation.id,operation.order.custom_name)">{{operation?.order?.custom_name}}
+        <ion-icon name="create" md="md-create" color="primary" style="float:right" (click)="openUserEditPage(operation.id,operation.order.custom_name)"></ion-icon>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-item>
+      <ion-label fixed>加急：</ion-label>
+      <ion-label *ngIf="operation?.important" color="angular" >加急
+        <ion-icon name="create" md="md-create" color="primary" style="float:right"></ion-icon>
+      </ion-label>
+      <ion-label *ngIf="!operation?.important" color="secondary" >不加急
+        <ion-icon name="create" md="md-create" color="primary" style="float:right"></ion-icon>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>内容：</ion-label>
+      <ion-label *ngIf="operation?.businessContent?.sequence==0">
+        {{operation?.businessContent?.equipment}}{{operation?.businessContent?.equipOp?.name}}
+        <ion-icon name="create" md="md-create" color="primary" style="float:right"></ion-icon>
+      </ion-label>
+      <ion-label *ngIf="operation?.businessContent?.sequence==1">
+        {{operation?.businessContent?.equipOp?.name}}{{operation?.businessContent?.equipment}}
+        <ion-icon name="create" md="md-create" color="primary" style="float:right"></ion-icon>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>订单备注：</ion-label>
+      <ion-label >{{operation?.remark}}
         <ion-icon name="create" md="md-create" color="primary" style="float:right"></ion-icon>
       </ion-label>
     </ion-item>
   </ion-list>
+
 </ion-content>

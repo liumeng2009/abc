@@ -5,6 +5,7 @@ import {PublicDataService} from "../../../../util/data/public-data.service";
 import {Group} from "../../../../bean/Group";
 import {Corporation} from "../../../../bean/Corporation";
 import {DetailService} from "../detail.service";
+import {ResponseData} from "../../../../bean/responseData";
 
 
 @Component({
@@ -31,7 +32,7 @@ export class EditCorporationPage{
       this.groupId=groupIdParams;
       this.corporationId=corporationIdParams;
       this.getGroups();
-      this.getCorporation().then((data)=>{
+      this.getCorporation().then((data:ResponseData)=>{
         this.corporations=[...data.data];
       }).catch((e)=>{
         this.toolService.toast(e);
@@ -61,7 +62,7 @@ export class EditCorporationPage{
   }
   groupOk(e){
     this.getCorporation().then(
-      (data)=>{
+      (data:ResponseData)=>{
         this.corporations=[...data.data];
         //group变更的时候，将corps的第一个值，赋值给corporationId
         if(this.corporations.length>0){
@@ -106,7 +107,7 @@ export class EditCorporationPage{
 
   save(){
     let operationId=this.navParams.data.operationId;
-    this.detailService.editOperationCorporation({operationId:operationId,corporationId:this.corporationId,action:'corporation'}).then(
+    this.detailService.editOperation({operationId:operationId,corporationId:this.corporationId,action:'corporation'}).then(
       data=>{
         if(data.status==0){
           this.toolService.toast(data.message);

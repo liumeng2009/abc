@@ -66,8 +66,11 @@ export class DetailPage{
     infoModal.present();
   }
 
-  ionViewWillLeave(){
-    console.log('send');
+/*  ionViewWillLeave(){
+ console.log('send');
+ this.events.publish('pop:shutdown');
+ }*/
+  ngOnDestroy() {
     this.events.publish('pop:shutdown');
   }
 }

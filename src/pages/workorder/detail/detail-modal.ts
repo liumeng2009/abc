@@ -5,6 +5,7 @@ import {Operation} from "../../../bean/operation";
 import {DetailService} from "./detail.service";
 import {ToolService} from "../../../util/tool.service";
 import {EditCorporationPage} from "./edit-page/edit-corporation";
+import {EditSimplePage} from "./edit-page/edit-phone";
 
 @Component({
   templateUrl:'detail-modal.html',
@@ -66,11 +67,28 @@ export class DetailModalPage{
   }
 
   openCorporationEditPage(opId,corpId,groupId){
-    console.log(opId+' '+corpId+' '+groupId);
     let popover=this.popupCtrl.create(EditCorporationPage,{
       operationId:opId,
       corporationId:corpId,
-      groupId:groupId
+      groupId:groupId,
+      action:'corporation'
+    });
+    popover.present();
+  }
+
+  openPhoneEditPage(opId,value){
+    let popover=this.popupCtrl.create(EditSimplePage,{
+      operationId:opId,
+      inputValue:value,
+      action:'phone'
+    });
+    popover.present();
+  }
+  openUserEditPage(opId,value){
+    let popover=this.popupCtrl.create(EditSimplePage,{
+      operationId:opId,
+      inputValue:value,
+      action:'customname'
     });
     popover.present();
   }
