@@ -142,6 +142,8 @@ export class ListPage{
   }
 
   formatServerData(data){
+    let dateNow=new Date();
+    let dateNowStamp=dateNow.getTime();
     for(let d of data){
       let operations:Operation[]=[];
       for(let op of d.operations){
@@ -149,9 +151,17 @@ export class ListPage{
         let maxAction=this.maxAction(operation.actions);
         if(maxAction.start_time){
           if(maxAction.end_time){
-            operation.progress_name='已收工';
-            operation.progress_time=maxAction.end_time;
-            operation.progress_status_code=2;
+            if(maxAction.end_time<=dateNowStamp){
+              operation.progress_name='已收工';
+              operation.progress_time=maxAction.end_time;
+              operation.progress_status_code=2;
+            }
+            else{
+              operation.progress_name='预计';
+              operation.progress_time=maxAction.end_time;
+              operation.progress_status_code=3;
+            }
+
           }
           else{
             operation.progress_name='处理中';

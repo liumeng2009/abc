@@ -4,6 +4,7 @@ import {ToolService} from "../../../../util/tool.service";
 import {PublicDataService} from "../../../../util/data/public-data.service";
 import {Group} from "../../../../bean/Group";
 import {Corporation} from "../../../../bean/Corporation";
+import {DetailService} from "../detail.service";
 
 
 @Component({
@@ -17,21 +18,21 @@ export class EditCorporationPage{
     private toolService:ToolService,
     private events:Events,
     private viewCtrl:ViewController,
-    private publicDataService:PublicDataService
+    private publicDataService:PublicDataService,
+    private detailService:DetailService
   ){
     this.listenToEvents();
   }
 
   ngOnInit(){
     if(this.navParams.data){
-      let operationId=this.navParams.data.operationId;
       let corporationIdParams=this.navParams.data.corporationId;
       let groupIdParams=this.navParams.data.groupId;
       this.groupId=groupIdParams;
       this.corporationId=corporationIdParams;
       this.getGroups();
       this.getCorporation().then((data)=>{
-        this.corporations=[...data];
+        this.corporations=[...data.data];
       }).catch((e)=>{
         this.toolService.toast(e);
       });
@@ -61,7 +62,7 @@ export class EditCorporationPage{
   groupOk(e){
     this.getCorporation().then(
       (data)=>{
-        this.corporations=[...data];
+        this.corporations=[...data.data];
         //group变更的时候，将corps的第一个值，赋值给corporationId
         if(this.corporations.length>0){
           this.corporationId=this.corporations[0].id;
@@ -79,7 +80,7 @@ export class EditCorporationPage{
       this.publicDataService.getCoporations(this.groupId).then(
         data=>{
           if(data.status==0){
-            resolve(data.data)
+            resolve(data)
           }
           else{
             reject(data.message)
@@ -104,6 +105,22 @@ export class EditCorporationPage{
   }
 
   save(){
-    console.log(this.groupId);
+    let operationId=this.navParams.data.operationId;
+    this.detailService.editOperationCorporation({operationId:operationId,corporationId:this.corporationId,action:'corporation'}).then(
+      data=>{
+        if(data.status==0){
+          this.toolService.toast(data.message);
+          //发出通知，告诉modal页面，更新operation
+          this.events.publish('operation:updated');
+          this.viewCtrl.dismiss();
+        }
+        else{
+          this.toolService.toast(data.message);
+        }
+      },
+      error=>{
+        this.toolService.toast(error);
+      }
+    )
   }
 }

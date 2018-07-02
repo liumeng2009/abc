@@ -57,8 +57,11 @@ export class DetailModalPage{
 
   listenToEvents(){
     this.events.subscribe('pop:shutdown',()=>{
-      console.log('received');
       this.dismiss();
+    })
+    this.events.subscribe('operation:updated',()=>{
+      let id=this.navParams.get('id');
+      this.getData(id);
     })
   }
 

@@ -56,7 +56,7 @@
     <ion-item-group *ngFor="let group of groups">
       <ion-item-divider sticky>
         <ion-label>
-          {{group.incoming_time|dateList}} - {{group.custom_corporation}} - {{group.custom_phone}}
+          {{group.incoming_time|dateList}} - {{group.custom_corporation}} {{group.custom_phone=='15822927208'?'':('- '+group.custom_phone)}}
         </ion-label>
       </ion-item-divider>
 
@@ -72,6 +72,9 @@
           </p>
           <p style="color:gray" *ngIf="op?.progress_status_code==0">
             {{op?.progress_time|dateList}} - {{op?.progress_name}}
+          </p>
+          <p style="color:orange" *ngIf="op?.progress_status_code==3">
+            {{op?.progress_name}} - {{op?.progress_time|dateList}} 完成
           </p>
         </button>
       </ion-item-sliding>

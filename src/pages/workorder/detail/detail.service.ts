@@ -13,8 +13,10 @@ import {OptConfig} from '../../../config/config'
 export class DetailService {
   constructor(private http: Http, private cookieService: CookieService) {
   }
+  private headers = new Headers({'Content-Type': 'application/json'});
 
   private operationDetailUrl=new OptConfig().serverPath+'/api/operation/'
+  private editOperationCorporationUrl=new OptConfig().serverPath+'/api/operation/editSimple'
 
   getOperation(id:string): Promise<ResponseData> {
     let token = this.cookieService.get('optAppToken');
@@ -23,6 +25,17 @@ export class DetailService {
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
+  }
+
+  //修改工单的所属公司
+  editOperationCorporation(params:any): Promise<ResponseData> {
+    let token = this.cookieService.get('optAppToken');
+
+    return this.http
+      .post(this.editOperationCorporationUrl+'?token='+token, params, {headers: this.headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
   }
 
   private extractData(res:Response){
