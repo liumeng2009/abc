@@ -1,5 +1,5 @@
 import {Component,ViewEncapsulation} from '@angular/core';
-import {NavController, Refresher, IonicPage,Events} from 'ionic-angular'
+import {NavController, Refresher, IonicPage,Events,NavParams} from 'ionic-angular'
 
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
@@ -27,7 +27,8 @@ export class ListPage{
     private listService:ListService,
     private toolService:ToolService,
     private authService:AuthService,
-    private events:Events
+    private events:Events,
+    private navParams:NavParams
   ){
 
   }
@@ -46,9 +47,9 @@ export class ListPage{
     this.authService.checkLogin().then(()=>{
       //this.getOpCount();
       this.getData().then((data:ResponseData)=>{
-        if(data.status==0){
-          //this.listToGroup(data.data);
-          this.formatServerData(data.data);
+        let result=this.toolService.apiResult(data);
+        if(result&&result.status==0){
+          this.formatServerData(result.data);
           console.log(this.groups);
         }
         else{
@@ -87,9 +88,10 @@ export class ListPage{
         case 'working':
           this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString())).then(
             data=>{
-              if(data.status==0){
+              let result=this.toolService.apiResult(data);
+              if(result&&result.status==0){
                 //this.statusCount.working=data.total;
-                for(let d of data.data){
+                for(let d of result.data){
                   moment.locale('zh_cn');
                   d.create_time_show=moment(d.create_time).fromNow();
                 }

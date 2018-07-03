@@ -5,7 +5,8 @@ import {Operation} from "../../../bean/operation";
 import {DetailService} from "./detail.service";
 import {ToolService} from "../../../util/tool.service";
 import {EditCorporationPage} from "./edit-page/edit-corporation";
-import {EditSimplePage} from "./edit-page/edit-phone";
+import {EditSimplePage} from "./edit-page/edit-simple";
+import {EditContentPage} from "./edit-page/edit-content";
 
 @Component({
   templateUrl:'detail-modal.html',
@@ -90,6 +91,11 @@ export class DetailModalPage{
       inputValue:value,
       action:'customname'
     });
+    popover.present();
+  }
+  openContentEditPage(){
+    alert(123);
+    let popover=this.popupCtrl.create(EditContentPage);
     popover.present();
   }
 }

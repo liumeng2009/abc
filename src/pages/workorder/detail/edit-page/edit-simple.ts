@@ -9,8 +9,8 @@ import {ResponseData} from "../../../../bean/responseData";
 
 
 @Component({
-  templateUrl:'edit-phone.html',
-  selector:'edit-phone'
+  templateUrl:'edit-simple.html',
+  selector:'edit-simple'
 })
 
 export class EditSimplePage{

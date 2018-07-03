@@ -37,10 +37,8 @@ export class LoginPage{
         console.log(data);
         if(data&&data.status==0){
           this.cookieService.put('optAppToken',data.data.token);
-          this.toolService.toast(data.data.name+',欢迎您。');
-          setTimeout(()=>{
-            this.navCtrl.push(TabsPage);
-          },1000)
+          console.log(data.data.name);
+          this.navCtrl.push(TabsPage,{ev:data.data.name});
         }
         else{
           this.toolService.toast(data.message);

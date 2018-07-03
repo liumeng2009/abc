@@ -47,11 +47,12 @@ export class DetailPage{
   getData(id){
     this.detailService.getOperation(id).then(
       data=>{
-        if(data.status==0){
+        let result=this.toolService.apiResult(data);
+        if(result&&result.status==0){
           this.operation={...data.data};
         }
         else{
-          this.toolService.toast(data.message);
+          this.toolService.toast(result.message);
         }
       },
       error=>{

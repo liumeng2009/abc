@@ -1,0 +1,23 @@
+<ion-list>
+  <ion-item>
+    <ion-label>业务类型</ion-label>
+    <ion-select [(ngModel)]="type" (ngModelChange)="groupOk($event)" okText="确定" cancelText="取消">
+      <ion-option [value]="g.id" *ngFor="let g of types">{{g.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>设备名</ion-label>
+    <ion-select [(ngModel)]="equipment"  okText="确定" cancelText="取消">
+      <ion-option [value]="c.id" *ngFor="let c of equipments">{{c.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>操作名</ion-label>
+    <ion-select [(ngModel)]="op"  okText="确定" cancelText="取消">
+      <ion-option [value]="c.id" *ngFor="let c of ops">{{c.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+</ion-list>
+<div padding>
+  <button ion-button block (click)="save()">保存</button>
+</div>
