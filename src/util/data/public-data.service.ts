@@ -13,6 +13,9 @@ import {OptConfig} from '../../config/config'
 export class PublicDataService {
   private groupurl = new OptConfig().serverPath + '/api/groups/list';
   private corporationurl = new OptConfig().serverPath + '/api/corporations/list';
+  private equiptypeurl = new OptConfig().serverPath + '/api/equipType/list';
+  private equipmenturl = new OptConfig().serverPath + '/api/business/getequip/get';
+  private businessurl = new OptConfig().serverPath + '/api/business/list';
 
   constructor(private http: Http, private cookieService: CookieService) {
   }
@@ -30,6 +33,54 @@ export class PublicDataService {
     let token = this.cookieService.get('optAppToken');
     console.log(token);
     return this.http.get(this.corporationurl +'?group='+groupId+ '&token=' + token)
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+
+  getTypes(): Promise<ResponseData> {
+    return this.http.get(this.equiptypeurl)
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+
+  getEquipment(typecode:string): Promise<ResponseData> {
+    console.log(this.equipmenturl+'/'+typecode);
+    if(typecode&&typecode!=''){
+      console.log(this.equipmenturl+'/'+typecode);
+      return this.http
+        .get(this.equipmenturl+'/'+typecode)
+        .toPromise()
+        .then(this.extractData)
+        .catch(this.handleError);
+    }
+    else{
+      return this.http
+        .get(this.equipmenturl)
+        .toPromise()
+        .then(this.extractData)
+        .catch(this.handleError);
+    }
+  }
+
+  getBusinessContents(pageid,type:string,equipment:string):Promise<ResponseData>{
+    let token=this.cookieService.get('optToken');
+    let url='';
+    if(pageid){
+      url=this.businessurl+'/page/'+pageid+'?token='+token
+    }
+    else{
+      url=this.businessurl+'?token='+token
+    }
+    if(type&&type!=''){
+      url=url+'&type='+type
+    }
+    if(equipment&&equipment!=''){
+      url=url+'&equipment='+equipment
+    }
+    console.log(url);
+    return this.http.get(url)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

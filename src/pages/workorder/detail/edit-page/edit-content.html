@@ -1,8 +1,8 @@
 <ion-list>
   <ion-item>
     <ion-label>业务类型</ion-label>
-    <ion-select [(ngModel)]="type" (ngModelChange)="groupOk($event)" okText="确定" cancelText="取消">
-      <ion-option [value]="g.id" *ngFor="let g of types">{{g.name}}</ion-option>
+    <ion-select [(ngModel)]="type" (ngModelChange)="typeOk($event)" okText="确定" cancelText="取消">
+      <ion-option [value]="g.code" *ngFor="let g of types">{{g.name}}</ion-option>
     </ion-select>
   </ion-item>
   <ion-item>
@@ -13,8 +13,8 @@
   </ion-item>
   <ion-item>
     <ion-label>操作名</ion-label>
-    <ion-select [(ngModel)]="op"  okText="确定" cancelText="取消">
-      <ion-option [value]="c.id" *ngFor="let c of ops">{{c.name}}</ion-option>
+    <ion-select [(ngModel)]="business"  okText="确定" cancelText="取消">
+      <ion-option [value]="bc.id" *ngFor="let bc of businessContents">{{bc?.equipOp?.name}}</ion-option>
     </ion-select>
   </ion-item>
 </ion-list>

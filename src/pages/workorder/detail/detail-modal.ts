@@ -93,9 +93,14 @@ export class DetailModalPage{
     });
     popover.present();
   }
-  openContentEditPage(){
-    alert(123);
-    let popover=this.popupCtrl.create(EditContentPage);
+  openContentEditPage(opId,typecode,equipment,opid){
+    let popover=this.popupCtrl.create(EditContentPage,{
+      operationId:opId,
+      typecode:typecode,
+      equipment:equipment,
+      businessId:opid,
+      action:'op'
+    });
     popover.present();
   }
 }

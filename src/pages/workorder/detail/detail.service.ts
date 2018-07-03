@@ -30,7 +30,7 @@ export class DetailService {
   //修改工单的所属公司
   editOperation(params:any): Promise<ResponseData> {
     let token = this.cookieService.get('optAppToken');
-
+    console.log(params);
     return this.http
       .post(this.editOperationUrl+'?token='+token, params, {headers: this.headers})
       .toPromise()
