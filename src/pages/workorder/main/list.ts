@@ -42,11 +42,14 @@ export class ListPage{
     all:0
   }
 
+  private userid;
   ngOnInit(){
     this.getTodayString();
-    this.authService.checkLogin().then(()=>{
+    this.authService.checkLogin().then((data:ResponseData)=>{
       //this.getOpCount();
-      this.getData().then((data:ResponseData)=>{
+      console.log(data);
+      this.userid=data.data.id;
+      this.getData(this.userid).then((data:ResponseData)=>{
         let result=this.toolService.apiResult(data);
         if(result&&result.status==0){
           this.formatServerData(result.data);
@@ -78,7 +81,7 @@ export class ListPage{
 
   private groups:Order[]=[];
   private opList:any[]=[];
-  getData(){
+  getData(userid:string){
     return new Promise((resolve,reject)=>{
       this.opList.splice(0,this.opList.length);
       let now=new Date(this.todayString);
@@ -86,7 +89,7 @@ export class ListPage{
       let date=this.today;
       switch(this.workStatus){
         case 'working':
-          this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString())).then(
+          this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString()),userid).then(
             data=>{
               let result=this.toolService.apiResult(data);
               if(result&&result.status==0){
@@ -104,7 +107,7 @@ export class ListPage{
           );
           break;
         case 'done':
-          this.listService.getDoneOpList(parseInt((date.getTime()/1000).toString())).then(
+          this.listService.getDoneOpList(parseInt((date.getTime()/1000).toString()),userid).then(
             data=>{
               if(data.status==0){
                 //this.statusCount.done=data.total;
@@ -116,21 +119,8 @@ export class ListPage{
             }
           );
           break;
-        case 'all':
-          this.listService.getAllOpList(parseInt((date.getTime()/1000).toString())).then(
-            data=>{
-              if(data.status==0){
-                //this.statusCount.all=data.total;
-              }
-              resolve(data);
-            },
-            error=>{
-              reject(error);
-            }
-          );
-          break;
         default:
-          this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString())).then(
+          this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString()),userid).then(
             data=>{
               resolve(data);
             },
@@ -220,7 +210,7 @@ export class ListPage{
 
   doRefresh(refresher:Refresher){
     this.groups.splice(0,this.groups.length);
-    this.getData().then((data:ResponseData)=>{
+    this.getData(this.userid).then((data:ResponseData)=>{
       if(data.status==0){
         //this.listToGroup(data.data);
         this.formatServerData(data.data);
@@ -250,7 +240,7 @@ export class ListPage{
 
   ok(e){
     this.groups.splice(0,this.groups.length);
-    this.getData().then((data:ResponseData)=>{
+    this.getData(this.userid).then((data:ResponseData)=>{
       if(data.status==0){
         //this.listToGroup(data.data);
         this.formatServerData(data.data);
@@ -265,7 +255,7 @@ export class ListPage{
 
   statusChanged(e){
     this.groups.splice(0,this.groups.length);
-    this.getData().then((data:ResponseData)=>{
+    this.getData(this.userid).then((data:ResponseData)=>{
       if(data.status==0){
         //this.listToGroup(data.data);
         this.formatServerData(data.data);

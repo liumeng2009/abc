@@ -11,15 +11,17 @@ import {OptConfig} from '../config/config'
 
 @Injectable()
 export class AuthService {
+  private headers;
   private loginurl = new OptConfig().serverPath + '/api/user/';
 
   constructor(private http: Http, private cookieService: CookieService) {
+    let token = this.cookieService.get('optAppToken');
+    this.headers=new Headers({authorization:token})
   }
 
   getUserInfo(): Promise<ResponseData> {
-    let token = this.cookieService.get('optAppToken');
-    console.log(token);
-    return this.http.get(this.loginurl + '?token=' + token)
+    console.log(this.headers);
+    return this.http.get(this.loginurl,{headers:this.headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

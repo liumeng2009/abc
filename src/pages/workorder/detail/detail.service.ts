@@ -12,16 +12,16 @@ import {OptConfig} from '../../../config/config'
 @Injectable()
 export class DetailService {
   constructor(private http: Http, private cookieService: CookieService) {
+    let token = this.cookieService.get('optAppToken');
+    this.headers=new Headers({'Content-Type': 'application/json','authorization':token})
   }
-  private headers = new Headers({'Content-Type': 'application/json'});
+  private headers ;
 
   private operationDetailUrl=new OptConfig().serverPath+'/api/operation/'
   private editOperationUrl=new OptConfig().serverPath+'/api/operation/editSimple'
 
   getOperation(id:string): Promise<ResponseData> {
-    let token = this.cookieService.get('optAppToken');
-    console.log(this.operationDetailUrl +id+'?token=' + token);
-    return this.http.get(this.operationDetailUrl +id+'?token=' + token)
+    return this.http.get(this.operationDetailUrl +id,{headers:this.headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
