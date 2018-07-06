@@ -93,13 +93,16 @@ export class ListPage{
             data=>{
               let result=this.toolService.apiResult(data);
               if(result&&result.status==0){
-                //this.statusCount.working=data.total;
                 for(let d of result.data){
                   moment.locale('zh_cn');
                   d.create_time_show=moment(d.create_time).fromNow();
                 }
+                resolve(data);
               }
-              resolve(data);
+              else{
+                reject(data.message)
+              }
+
             },
             error=>{
               reject(error);
@@ -109,10 +112,13 @@ export class ListPage{
         case 'done':
           this.listService.getDoneOpList(parseInt((date.getTime()/1000).toString()),userid).then(
             data=>{
-              if(data.status==0){
-                //this.statusCount.done=data.total;
+              let result=this.toolService.apiResult(data);
+              if(result&&result.status==0){
+                resolve(data);
               }
-              resolve(data);
+              else{
+                reject(data.message)
+              }
             },
             error=>{
               reject(error);
@@ -122,7 +128,17 @@ export class ListPage{
         default:
           this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString()),userid).then(
             data=>{
-              resolve(data);
+              let result=this.toolService.apiResult(data);
+              if(result&&result.status==0){
+                for(let d of result.data){
+                  moment.locale('zh_cn');
+                  d.create_time_show=moment(d.create_time).fromNow();
+                }
+                resolve(data);
+              }
+              else{
+                reject(data.message)
+              }
             },
             error=>{
               reject(error);
@@ -196,7 +212,7 @@ export class ListPage{
     let now=new Date(this.todayString);
     this.today=now;
     let date=this.today;
-    this.listService.getOpCount(parseInt((date.getTime()/1000).toString())).then(
+    this.listService.getOpCount(parseInt((date.getTime()/1000).toString()),this.userid).then(
       data=>{
         if(data.status==0){
           this.statusCount=data.data;

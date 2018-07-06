@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http,Response,Headers,RequestOptions} from '@angular/http';
+import {Http,Response,Headers,RequestOptions,RequestOptionsArgs} from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -12,25 +12,28 @@ import {OptConfig} from '../../../config/config'
 @Injectable()
 export class ListService {
   constructor(private http: Http, private cookieService: CookieService) {
-    let token = this.cookieService.get('optAppToken');
-    this.headers=new Headers({'Content-Type': 'application/json','authorization':token})
+
   }
 
-  private headers;
-
-  private workingOpListDUrl=new OptConfig().serverPath+'/api/operation/workingOperationList'
+  private workingOpListUrl=new OptConfig().serverPath+'/api/operation/workingOperationList'
   private doneOpListUrl=new OptConfig().serverPath+'/api/operation/doneOperationList'
   private allOpListUrl=new OptConfig().serverPath+'/api/operation/allOperationList'
   private opCountUrl=new OptConfig().serverPath+'/api/operation/operationCount'
 
   getWorkingOpList(stamp:number,userid:string): Promise<ResponseData> {
-    return this.http.get(this.workingOpListDUrl + '?stamp='+stamp+'&userid='+userid,{headers:this.headers})
+    let url=this.workingOpListUrl + '?stamp='+stamp+'&userid='+userid;
+    let token = this.cookieService.get('optAppToken');
+    let headers=new Headers({'Content-Type': 'application/json','authorization':token})
+    //return this.http.get(this.workingOpListUrl + '?stamp='+stamp+'&userid='+userid)
+    return this.http.get(url,{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
   }
   getDoneOpList(stamp:number,userid:string): Promise<ResponseData> {
-    return this.http.get(this.doneOpListUrl + '?stamp='+stamp+'&userid='+userid,{headers:this.headers})
+    let token = this.cookieService.get('optAppToken');
+    let headers=new Headers({'Content-Type': 'application/json','authorization':token})
+    return this.http.get(this.doneOpListUrl + '?stamp='+stamp+'&userid='+userid,{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
@@ -45,7 +48,9 @@ export class ListService {
   }*/
 
   getOpCount(stamp:number,userid:string): Promise<ResponseData> {
-    return this.http.get(this.opCountUrl + '?stamp='+stamp+'&userid='+userid,{headers:this.headers})
+    let token = this.cookieService.get('optAppToken');
+    let headers=new Headers({'Content-Type': 'application/json','authorization':token})
+    return this.http.get(this.opCountUrl + '?stamp='+stamp+'&userid='+userid,{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
