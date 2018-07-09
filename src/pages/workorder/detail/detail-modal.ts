@@ -7,6 +7,8 @@ import {ToolService} from "../../../util/tool.service";
 import {EditCorporationPage} from "./edit-page/edit-corporation";
 import {EditSimplePage} from "./edit-page/edit-simple";
 import {EditContentPage} from "./edit-page/edit-content";
+import {EditImportantPage} from "./edit-page/edit-important";
+import {EditMarkPage} from "./edit-page/edit-mark";
 
 @Component({
   templateUrl:'detail-modal.html',
@@ -23,11 +25,13 @@ export class DetailModalPage{
     private viewCtrl:ViewController,
     private popupCtrl:PopoverController
   ){
-    this.listenToEvents();
+
   }
 
   private operation:Operation;
   ionViewWillEnter(){
+    console.log('进入modal');
+    this.listenToEvents();
     let id=this.navParams.get('id');
     this.getData(id);
   }
@@ -58,7 +62,9 @@ export class DetailModalPage{
   }
 
   listenToEvents(){
+    console.log('监听modal');
     this.events.subscribe('pop:shutdown',()=>{
+      console.log('关闭掉自己吧');
       this.dismiss();
     })
     this.events.subscribe('operation:updated',()=>{
@@ -103,4 +109,20 @@ export class DetailModalPage{
     });
     popover.present();
   }
+  openImportantEditPage(opId,important){
+    let popover=this.popupCtrl.create(EditImportantPage,{
+      operationId:opId,
+      inputValue:important
+    });
+    popover.present();
+  }
+
+  openMarkEditPage(opId,value){
+    let popover=this.popupCtrl.create(EditMarkPage,{
+      operationId:opId,
+      inputValue:value,
+    });
+    popover.present();
+  }
+
 }

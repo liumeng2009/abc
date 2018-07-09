@@ -30,6 +30,10 @@ import {DetailService} from "../pages/workorder/detail/detail.service";
 import {EditCorporationPage} from "../pages/workorder/detail/edit-page/edit-corporation";
 import {EditSimplePage} from "../pages/workorder/detail/edit-page/edit-simple";
 import {EditContentPage} from "../pages/workorder/detail/edit-page/edit-content";
+import {EditImportantPage} from "../pages/workorder/detail/edit-page/edit-important";
+import {EditMarkPage} from "../pages/workorder/detail/edit-page/edit-mark";
+
+import { Autosize} from '../util/autosize';
 
 
 @NgModule({
@@ -44,10 +48,14 @@ import {EditContentPage} from "../pages/workorder/detail/edit-page/edit-content"
     EditCorporationPage,
     EditSimplePage,
     EditContentPage,
+    EditImportantPage,
+    EditMarkPage,
 
     LoginPage,
     WeChatPage,
-    SettingPage
+    SettingPage,
+
+    Autosize
   ],
   imports: [
     BrowserModule,
@@ -78,6 +86,8 @@ import {EditContentPage} from "../pages/workorder/detail/edit-page/edit-content"
     EditCorporationPage,
     EditSimplePage,
     EditContentPage,
+    EditImportantPage,
+    EditMarkPage,
 
     LoginPage,
     WeChatPage,

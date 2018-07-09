@@ -11,7 +11,6 @@ import {OptConfig} from '../../config/config'
 
 @Injectable()
 export class PublicDataService {
-  private headers;
   private groupurl = new OptConfig().serverPath + '/api/groups/list';
   private corporationurl = new OptConfig().serverPath + '/api/corporations/list';
   private equiptypeurl = new OptConfig().serverPath + '/api/equipType/list';
@@ -19,41 +18,45 @@ export class PublicDataService {
   private businessurl = new OptConfig().serverPath + '/api/business/list';
 
   constructor(private http: Http, private cookieService: CookieService) {
-    this.headers=new Headers({'Content-Type': 'application/json'})
+
   }
 
   getGroups(): Promise<ResponseData> {
-    return this.http.get(this.groupurl,{headers:this.headers})
+    let headers=new Headers({'Content-Type': 'application/json'})
+    return this.http.get(this.groupurl,{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
   }
 
   getCoporations(groupId): Promise<ResponseData> {
-    return this.http.get(this.corporationurl +'?group='+groupId,{headers:this.headers})
+    let headers=new Headers({'Content-Type': 'application/json'})
+    return this.http.get(this.corporationurl +'?group='+groupId,{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
   }
 
   getTypes(): Promise<ResponseData> {
-    return this.http.get(this.equiptypeurl,{headers:this.headers})
+    let headers=new Headers({'Content-Type': 'application/json'})
+    return this.http.get(this.equiptypeurl,{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
   }
 
   getEquipment(typecode:string): Promise<ResponseData> {
+    let headers=new Headers({'Content-Type': 'application/json'})
     if(typecode&&typecode!=''){
       return this.http
-        .get(this.equipmenturl+'/'+typecode,{headers:this.headers})
+        .get(this.equipmenturl+'/'+typecode,{headers:headers})
         .toPromise()
         .then(this.extractData)
         .catch(this.handleError);
     }
     else{
       return this.http
-        .get(this.equipmenturl,{headers:this.headers})
+        .get(this.equipmenturl,{headers:headers})
         .toPromise()
         .then(this.extractData)
         .catch(this.handleError);
@@ -61,14 +64,17 @@ export class PublicDataService {
   }
 
   getBusinessContents(pageid,type:string,equipment:string):Promise<ResponseData>{
-    let token=this.cookieService.get('optToken');
+    let headers=new Headers({'Content-Type': 'application/json'})
     let url='';
     if(pageid){
-      url=this.businessurl+'/page/'+pageid+'?token='+token
+      url=this.businessurl+'/page/'+pageid
     }
     else{
-      url=this.businessurl+'?token='+token
+      url=this.businessurl
     }
+
+    url=url+'?param=none'
+
     if(type&&type!=''){
       url=url+'&type='+type
     }
@@ -76,7 +82,7 @@ export class PublicDataService {
       url=url+'&equipment='+equipment
     }
     console.log(url);
-    return this.http.get(url,{headers:this.headers})
+    return this.http.get(url,{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

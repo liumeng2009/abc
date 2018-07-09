@@ -119,8 +119,6 @@ export class EditContentPage{
     })
   }
 
-
-
   save(){
     let operationId=this.navParams.data.operationId;
     let action=this.navParams.data.action;
@@ -140,5 +138,36 @@ export class EditContentPage{
         this.toolService.toast(error);
       }
     )
+  }
+
+  typeOk(){
+    this.equipments.splice(0,this.equipments.length);
+    this.getEquipment(this.type).then((data:ResponseData)=>{
+      this.equipments=[...data.data]
+      if(this.equipments.length>0){
+        this.equipment=this.equipments[0].name;
+        this.getBusiness(this.type,this.equipment).then((data:ResponseData)=>{
+          this.businessContents=[...data.data]
+          if(this.businessContents.length>0){
+            this.business=this.businessContents[0].id;
+          }
+        }).catch((e)=>{
+          this.toolService.toast(e);
+        })
+      }
+    }).catch((e)=>{
+      this.toolService.toast(e);
+    })
+  }
+
+  equipmentOk(e){
+    this.getBusiness(this.type,this.equipment).then((data:ResponseData)=>{
+      this.businessContents=[...data.data]
+      if(this.businessContents.length>0){
+        this.business=this.businessContents[0].id;
+      }
+    }).catch((e)=>{
+      this.toolService.toast(e);
+    })
   }
 }

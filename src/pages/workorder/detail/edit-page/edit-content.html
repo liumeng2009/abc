@@ -7,7 +7,7 @@
   </ion-item>
   <ion-item>
     <ion-label>设备名</ion-label>
-    <ion-select [(ngModel)]="equipment"  okText="确定" cancelText="取消">
+    <ion-select [(ngModel)]="equipment" (ngModelChange)="equipmentOk($event)"  okText="确定" cancelText="取消">
       <ion-option [value]="c.id" *ngFor="let c of equipments">{{c.name}}</ion-option>
     </ion-select>
   </ion-item>

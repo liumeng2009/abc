@@ -22,18 +22,13 @@ export class ListService {
 
   getWorkingOpList(stamp:number,userid:string): Promise<ResponseData> {
     let url=this.workingOpListUrl + '?stamp='+stamp+'&userid='+userid;
-    let token = this.cookieService.get('optAppToken');
-    let headers=new Headers({'Content-Type': 'application/json','authorization':token})
-    //return this.http.get(this.workingOpListUrl + '?stamp='+stamp+'&userid='+userid)
-    return this.http.get(url,{headers:headers})
+    return this.http.get(url)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
   }
   getDoneOpList(stamp:number,userid:string): Promise<ResponseData> {
-    let token = this.cookieService.get('optAppToken');
-    let headers=new Headers({'Content-Type': 'application/json','authorization':token})
-    return this.http.get(this.doneOpListUrl + '?stamp='+stamp+'&userid='+userid,{headers:headers})
+    return this.http.get(this.doneOpListUrl + '?stamp='+stamp+'&userid='+userid)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
@@ -48,9 +43,7 @@ export class ListService {
   }*/
 
   getOpCount(stamp:number,userid:string): Promise<ResponseData> {
-    let token = this.cookieService.get('optAppToken');
-    let headers=new Headers({'Content-Type': 'application/json','authorization':token})
-    return this.http.get(this.opCountUrl + '?stamp='+stamp+'&userid='+userid,{headers:headers})
+    return this.http.get(this.opCountUrl + '?stamp='+stamp+'&userid='+userid)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

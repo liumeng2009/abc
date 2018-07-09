@@ -72,6 +72,7 @@ export class DetailPage{
  this.events.publish('pop:shutdown');
  }*/
   ngOnDestroy() {
+    console.log('回到list页面');
     this.events.publish('pop:shutdown');
   }
 }

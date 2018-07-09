@@ -1,13 +1,11 @@
 <ion-list>
   <ion-item>
     <ion-label>
-      {{placeHolder}}
+      加急
     </ion-label>
-    <ion-input placeholder="{{placeHolder}}" [(ngModel)]="phone"></ion-input>
+    <ion-toggle [(ngModel)]="important"></ion-toggle>
   </ion-item>
 </ion-list>
 <div padding>
   <button ion-button block (click)="save()">保存</button>
 </div>
-
-

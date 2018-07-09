@@ -12,16 +12,14 @@ import {OptConfig} from '../../../config/config'
 @Injectable()
 export class DetailService {
   constructor(private http: Http, private cookieService: CookieService) {
-    let token = this.cookieService.get('optAppToken');
-    this.headers=new Headers({'Content-Type': 'application/json','authorization':token})
+
   }
-  private headers ;
 
   private operationDetailUrl=new OptConfig().serverPath+'/api/operation/'
   private editOperationUrl=new OptConfig().serverPath+'/api/operation/editSimple'
 
   getOperation(id:string): Promise<ResponseData> {
-    return this.http.get(this.operationDetailUrl +id,{headers:this.headers})
+    return this.http.get(this.operationDetailUrl +id)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
@@ -30,9 +28,10 @@ export class DetailService {
   //修改工单的所属公司
   editOperation(params:any): Promise<ResponseData> {
     let token = this.cookieService.get('optAppToken');
+    let headers=new Headers({'Content-Type': 'application/json','authorization':token})
     console.log(params);
     return this.http
-      .post(this.editOperationUrl+'?token='+token, params, {headers: this.headers})
+      .post(this.editOperationUrl+'?token='+token, params, {headers: headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError);
