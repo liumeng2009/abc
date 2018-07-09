@@ -1,11 +1,7 @@
 import {Component} from '@angular/core';
-import {NavController,Navbar,NavParams,Events,ViewController} from 'ionic-angular'
+import {NavParams,Events,ViewController} from 'ionic-angular'
 import {ToolService} from "../../../../util/tool.service";
-import {PublicDataService} from "../../../../util/data/public-data.service";
-import {Group} from "../../../../bean/Group";
-import {Corporation} from "../../../../bean/Corporation";
 import {DetailService} from "../detail.service";
-import {ResponseData} from "../../../../bean/responseData";
 
 
 @Component({
@@ -21,7 +17,7 @@ export class EditMarkPage{
     private viewCtrl:ViewController,
     private detailService:DetailService
   ){
-    this.listenToEvents();
+
   }
 
   private remark;
@@ -29,15 +25,7 @@ export class EditMarkPage{
     this.remark=this.navParams.data.inputValue;
   }
 
-  ionViewWillLeave(){
-    this.events.unsubscribe('pop:shutdown')
-  }
-  listenToEvents(){
-    this.events.subscribe('pop:shutdown',()=>{
-      console.log('received');
-      this.viewCtrl.dismiss();
-    })
-  }
+
 
   save(){
     console.log(this.remark)

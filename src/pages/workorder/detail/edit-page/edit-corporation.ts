@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {NavController,Navbar,NavParams,Events,ViewController} from 'ionic-angular'
+import {Component,ViewChild} from '@angular/core';
+import {NavParams,Events,ViewController,Select} from 'ionic-angular'
 import {ToolService} from "../../../../util/tool.service";
 import {PublicDataService} from "../../../../util/data/public-data.service";
 import {Group} from "../../../../bean/Group";
@@ -22,7 +22,7 @@ export class EditCorporationPage{
     private publicDataService:PublicDataService,
     private detailService:DetailService
   ){
-    this.listenToEvents();
+
   }
 
   ngOnInit(){
@@ -94,16 +94,7 @@ export class EditCorporationPage{
     })
   }
 
-  ionViewWillLeave(){
-    this.events.unsubscribe('pop:shutdown')
-  }
-  private subs;
-  listenToEvents(){
-    this.subs=this.events.subscribe('pop:shutdown',()=>{
-      console.log('received');
-      this.viewCtrl.dismiss();
-    })
-  }
+
 
   save(){
     let operationId=this.navParams.data.operationId;
@@ -124,4 +115,12 @@ export class EditCorporationPage{
       }
     )
   }
+  @ViewChild('selectGroup') selectGroup:Select;
+  @ViewChild('selectCorporation') selectCorporation:Select;
+
+  ngOnDestroy() {
+    this.selectGroup.close();
+    this.selectCorporation.close();
+  }
+
 }

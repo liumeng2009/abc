@@ -27,7 +27,7 @@
       <ion-label fixed>来电号码：</ion-label>
       <ion-label (press)="openPhoneEditPage(operation.id,operation.order.custom_phone)" >
         {{operation?.order?.custom_phone=='15822927208'?'':operation?.order?.custom_phone}}
-        <ion-icon name="create" md="md-create" color="primary" style="float:right" (click)="openPhoneEditPage(operation.id)"></ion-icon>
+        <ion-icon name="create" md="md-create" color="primary" style="float:right" (click)="openPhoneEditPage(operation.id,operation.order.custom_phone)"></ion-icon>
       </ion-label>
     </ion-item>
     <ion-item>
@@ -61,7 +61,7 @@
     </ion-item>
     <ion-item >
       <ion-label fixed>订单备注：</ion-label>
-      <ion-label (press)="openMarkEditPage(operation.id,operation.remark)" style="display: flex" >{{operation?.remark}}
+      <ion-label (press)="openMarkEditPage(operation.id,operation.remark)" >{{operation?.remark}}
         <ion-icon name="create" md="md-create" color="primary" (click)="openMarkEditPage(operation.id,operation.remark)" style="float:right;margin-left: 5px;"></ion-icon>
       </ion-label>
     </ion-item>

@@ -1,19 +1,19 @@
 <ion-list>
   <ion-item>
     <ion-label>业务类型</ion-label>
-    <ion-select [(ngModel)]="type" (ngModelChange)="typeOk($event)" okText="确定" cancelText="取消">
+    <ion-select #selectType [(ngModel)]="type" (ngModelChange)="typeOk($event)" okText="确定" cancelText="取消">
       <ion-option [value]="g.code" *ngFor="let g of types">{{g.name}}</ion-option>
     </ion-select>
   </ion-item>
   <ion-item>
     <ion-label>设备名</ion-label>
-    <ion-select [(ngModel)]="equipment" (ngModelChange)="equipmentOk($event)"  okText="确定" cancelText="取消">
+    <ion-select #selectEquipment [(ngModel)]="equipment" (ngModelChange)="equipmentOk($event)"  okText="确定" cancelText="取消">
       <ion-option [value]="c.id" *ngFor="let c of equipments">{{c.name}}</ion-option>
     </ion-select>
   </ion-item>
   <ion-item>
     <ion-label>操作名</ion-label>
-    <ion-select [(ngModel)]="business"  okText="确定" cancelText="取消">
+    <ion-select #selectBusiness [(ngModel)]="business"  okText="确定" cancelText="取消">
       <ion-option [value]="bc.id" *ngFor="let bc of businessContents">{{bc?.equipOp?.name}}</ion-option>
     </ion-select>
   </ion-item>

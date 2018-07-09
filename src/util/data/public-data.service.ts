@@ -1,12 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Http,Response,Headers,RequestOptions} from '@angular/http';
-
+import {Http,Response,Headers} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-
-import {CookieService} from 'angular2-cookie/core';
-
 import {ResponseData} from '../../bean/responseData';
-
 import {OptConfig} from '../../config/config'
 
 @Injectable()
@@ -17,21 +12,19 @@ export class PublicDataService {
   private equipmenturl = new OptConfig().serverPath + '/api/business/getequip/get';
   private businessurl = new OptConfig().serverPath + '/api/business/list';
 
-  constructor(private http: Http, private cookieService: CookieService) {
+  constructor(private http: Http) {
 
   }
 
   getGroups(): Promise<ResponseData> {
-    let headers=new Headers({'Content-Type': 'application/json'})
-    return this.http.get(this.groupurl,{headers:headers})
+    return this.http.get(this.groupurl)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
   }
 
   getCoporations(groupId): Promise<ResponseData> {
-    let headers=new Headers({'Content-Type': 'application/json'})
-    return this.http.get(this.corporationurl +'?group='+groupId,{headers:headers})
+    return this.http.get(this.corporationurl +'?group='+groupId)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
@@ -46,17 +39,16 @@ export class PublicDataService {
   }
 
   getEquipment(typecode:string): Promise<ResponseData> {
-    let headers=new Headers({'Content-Type': 'application/json'})
     if(typecode&&typecode!=''){
       return this.http
-        .get(this.equipmenturl+'/'+typecode,{headers:headers})
+        .get(this.equipmenturl+'/'+typecode,)
         .toPromise()
         .then(this.extractData)
         .catch(this.handleError);
     }
     else{
       return this.http
-        .get(this.equipmenturl,{headers:headers})
+        .get(this.equipmenturl)
         .toPromise()
         .then(this.extractData)
         .catch(this.handleError);
@@ -64,7 +56,6 @@ export class PublicDataService {
   }
 
   getBusinessContents(pageid,type:string,equipment:string):Promise<ResponseData>{
-    let headers=new Headers({'Content-Type': 'application/json'})
     let url='';
     if(pageid){
       url=this.businessurl+'/page/'+pageid
@@ -82,7 +73,7 @@ export class PublicDataService {
       url=url+'&equipment='+equipment
     }
     console.log(url);
-    return this.http.get(url,{headers:headers})
+    return this.http.get(url)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

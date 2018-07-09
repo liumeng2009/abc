@@ -1,5 +1,5 @@
-import {Component,ViewEncapsulation} from '@angular/core';
-import {NavController, Refresher, IonicPage,Events,NavParams} from 'ionic-angular'
+import {Component} from '@angular/core';
+import {NavController, Refresher,Events,NavParams} from 'ionic-angular'
 
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
@@ -7,10 +7,8 @@ import {AuthService} from "../../../util/auth.service";
 import {ResponseData} from "../../../bean/responseData";
 
 import {DetailPage} from '../detail/detail'
-import {LoginPage} from '../../login/login'
 
 import * as moment from 'moment'
-import {OperationGroup} from "../../../bean/OpGroup";
 import {Operation} from "../../../bean/operation";
 import {Order} from "../../../bean/order";
 
@@ -27,8 +25,7 @@ export class ListPage{
     private listService:ListService,
     private toolService:ToolService,
     private authService:AuthService,
-    private events:Events,
-    private navParams:NavParams
+    private events:Events
   ){
 
   }

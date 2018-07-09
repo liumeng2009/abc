@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {NavParams,Events,ViewController} from 'ionic-angular'
+import {Component, ViewChild} from '@angular/core';
+import {NavParams,Events,ViewController,Select} from 'ionic-angular'
 import {ToolService} from "../../../../util/tool.service";
 import {PublicDataService} from "../../../../util/data/public-data.service";
 import {DetailService} from "../detail.service";
@@ -22,7 +22,7 @@ export class EditContentPage{
     private detailService:DetailService,
     private publicDataService:PublicDataService
   ){
-    this.listenToEvents();
+
   }
 
 
@@ -49,15 +49,7 @@ export class EditContentPage{
     })
   }
 
-  ionViewWillLeave(){
-    this.events.unsubscribe('pop:shutdown')
-  }
-  listenToEvents(){
-    this.events.subscribe('pop:shutdown',()=>{
-      console.log('received');
-      this.viewCtrl.dismiss();
-    })
-  }
+
 
   private type;
   private types:EquipType[]=[];
@@ -170,4 +162,16 @@ export class EditContentPage{
       this.toolService.toast(e);
     })
   }
+
+
+  @ViewChild('selectType') selectType:Select;
+  @ViewChild('selectEquipment') selectEquipment:Select;
+  @ViewChild('selectBusiness') selectBusiness:Select;
+
+  ngOnDestroy() {
+    this.selectType.close();
+    this.selectEquipment.close();
+    this.selectBusiness.close();
+  }
+
 }

@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Http,Response,Headers,RequestOptions,RequestOptionsArgs} from '@angular/http';
+import {Http,Response} from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
-
-import {CookieService} from 'angular2-cookie/core';
 
 import {ResponseData} from '../../../bean/responseData';
 
@@ -11,7 +9,7 @@ import {OptConfig} from '../../../config/config'
 
 @Injectable()
 export class ListService {
-  constructor(private http: Http, private cookieService: CookieService) {
+  constructor(private http: Http) {
 
   }
 
