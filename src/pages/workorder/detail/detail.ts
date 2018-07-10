@@ -1,4 +1,4 @@
-import {Component,ViewChild} from '@angular/core';
+import {Component, ViewChild, ElementRef} from '@angular/core';
 import {NavParams, Events, ModalController, Refresher} from 'ionic-angular'
 import {AuthService} from "../../../util/auth.service";
 import {Operation} from "../../../bean/operation";
@@ -28,6 +28,7 @@ export class DetailPage{
   private onlyMe:boolean=false;
   private operation:Operation;
   private operation_no:string;
+  @ViewChild('startTime') startTimeSelect:ElementRef;
   ionViewWillEnter(){
     let id=this.navParams.data.id;
     let no=this.navParams.data.no;
@@ -81,17 +82,18 @@ export class DetailPage{
             action.enable=true;
           }
         }
+        moment.locale('zh_cn');
         if(action.call_time){
           action.call_time_date=moment(action.call_time).format();
-          action.call_time_date_show=moment(action.call_time).format('YYYY年MM月DD日 h时mm分');
+          action.call_time_date_show=moment(action.call_time).format('YYYY年MM月DD日 a hh时mm分');
         }
         if(action.start_time){
           action.start_time_date=moment(action.start_time).format();
-          action.start_time_date_show=moment(action.start_time).format('YYYY年MM月DD日 h时mm分');
+          action.start_time_date_show=moment(action.start_time).format('YYYY年MM月DD日 hh时mm分');
         }
         if(action.end_time){
           action.end_time_date=moment(action.end_time).format();
-          action.end_time_date_show=moment(action.end_time).format('YYYY年MM月DD日 h时mm分');
+          action.end_time_date_show=moment(action.end_time).format('YYYY年MM月DD日 hh时mm分');
         }
       }
     }
@@ -119,5 +121,9 @@ export class DetailPage{
       e.complete();
       this.toolService.toast(e)
     });
+  }
+
+  okStartTime(e){
+    console.log(e);
   }
 }

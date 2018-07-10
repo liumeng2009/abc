@@ -18,6 +18,7 @@ export class DetailService {
   private operationDetailUrl=new OptConfig().serverPath+'/api/operation/'
   private operationDetailActionUrl=new OptConfig().serverPath+'/api/operation/getaction/'
   private editOperationUrl=new OptConfig().serverPath+'/api/operation/editSimple'
+  private editActionUrl=new OptConfig().serverPath+'/api/action/edit'
 
   getOperation(id:string): Promise<ResponseData> {
     return this.http.get(this.operationDetailUrl +id)
@@ -39,7 +40,18 @@ export class DetailService {
     let headers=new Headers({'Content-Type': 'application/json','authorization':token})
     console.log(params);
     return this.http
-      .post(this.editOperationUrl+'?token='+token, params, {headers: headers})
+      .post(this.editOperationUrl, params, {headers: headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
+  }
+
+  saveAction(params:any): Promise<ResponseData> {
+    let token = this.cookieService.get('optAppToken');
+    let headers=new Headers({'Content-Type': 'application/json','authorization':token})
+    console.log(params);
+    return this.http
+      .post(this.editActionUrl, params, {headers: headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError);
