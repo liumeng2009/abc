@@ -6,20 +6,13 @@
 
     <ion-segment [(ngModel)]="workStatus" (ionChange)="statusChanged($event)">
       <ion-segment-button value="working">
-        <!--
-        <ion-badge item-end *ngIf="statusCount.working!=0">{{statusCount.working}}</ion-badge>-->
+        <ion-badge item-end *ngIf="statusCount.working!=0">{{statusCount.working}}</ion-badge>
         未完成
       </ion-segment-button>
       <ion-segment-button value="done">
-        <!--
-        <ion-badge item-end *ngIf="statusCount.done!=0">{{statusCount.done}}</ion-badge>-->
+        <ion-badge item-end *ngIf="statusCount.done!=0">{{statusCount.done}}</ion-badge>
         已完成
       </ion-segment-button>
-      <!--
-      <ion-segment-button value="all">
-        全部
-        <ion-badge item-end *ngIf="statusCount.all!=0">{{statusCount.all}}</ion-badge>
-      </ion-segment-button>-->
     </ion-segment>
 
     <ion-buttons end>

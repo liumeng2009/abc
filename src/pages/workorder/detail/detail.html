@@ -1,6 +1,8 @@
 <ion-header>
   <ion-navbar #nav>
-    <ion-title>处理情况</ion-title>
+    <ion-title>
+      处理状态
+    </ion-title>
 
     <ion-buttons end>
       <button ion-button icon-only  (click)="openModal()">
@@ -17,35 +19,42 @@
   <ion-refresher #refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <ion-list>
+    <ion-item>
+      <ion-label>只看我的处理状态</ion-label>
+      <ion-toggle [(ngModel)]="onlyMe"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="operation?.actions.length==0">
+      没有相关记录
+    </ion-item>
+    <ion-item-group *ngFor="let action of operation?.actions">
+      <ion-item-divider sticky *ngIf="!onlyMe||onlyMe&&action?.enable">
+        <ion-label>
+          {{action?.user?.name}}
+        </ion-label>
+      </ion-item-divider>
 
-  <ion-item *ngIf="operation.actions.length==0">
-    没有相关记录
-  </ion-item>
-  <ion-item-group *ngFor="let action of operation.actions">
-    <ion-item-divider sticky>
-      <ion-label>
-        {{action?.id}}
-      </ion-label>
-    </ion-item-divider>
+      <ion-item-sliding *ngIf="!onlyMe||onlyMe&&action?.enable">
+        <ion-item>
+          <ion-label fixed>指派时间:</ion-label>
+          <!--
+          <ion-datetime *ngIf="false" displayFormat="YYYY年MM月DD日 h时mm分" pickerFormat="YYYY MM DD h mm" [(ngModel)]="action.call_time_date"></ion-datetime>-->
+          <ion-label>{{action.call_time_date_show}}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label fixed>开始时间:</ion-label>
+          <ion-datetime cancelText="取消" doneText="确定" *ngIf="action?.enable"  displayFormat="YYYY年MM月DD日 h时mm分" pickerFormat="YYYY年MM月DD日h时mm分" [(ngModel)]="action.start_time_date"></ion-datetime>
+          <ion-label  *ngIf="!action?.enable" disabled>{{action.start_time_date_show}}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label fixed>结束时间:</ion-label>
+          <ion-datetime cancelText="取消" doneText="确定"  *ngIf="action?.enable" displayFormat="YYYY年MM月DD日 h时mm分" pickerFormat="YYYY MM DD h mm" [(ngModel)]="action.end_time_date"></ion-datetime>
+          <ion-label  *ngIf="!action?.enable" disabled>{{action.end_time_date_show}}</ion-label>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-item-group>
+  </ion-list>
 
-    <ion-item-sliding *ngFor="let op of group.operations" [attr.track]="op.important?'angular':'ionic'" >
-      <button ion-item (click)="goToDetail(op.id,op.no)">
-        <h3 *ngIf="op.businessContent.sequence!=1">{{op?.businessContent?.equipment}} {{op?.businessContent?.equipOp?.name}}</h3>
-        <h3 *ngIf="op.businessContent.sequence==1">{{op.businessContent.equipOp.name}}{{op.businessContent.equipment}} </h3>
-        <p style="color:green" *ngIf="op?.progress_status_code==2">
-          {{op?.progress_time|dateList}} - {{op?.progress_name}}
-        </p>
-        <p style="color:#AC282B" *ngIf="op?.progress_status_code==1">
-          {{op?.progress_time|dateList}} - {{op?.progress_name}}
-        </p>
-        <p style="color:gray" *ngIf="op?.progress_status_code==0">
-          {{op?.progress_time|dateList}} - {{op?.progress_name}}
-        </p>
-        <p style="color:orange" *ngIf="op?.progress_status_code==3">
-          {{op?.progress_name}} - {{op?.progress_time|dateList}} 完成
-        </p>
-      </button>
-    </ion-item-sliding>
-  </ion-item-group>
+
 
 </ion-content>

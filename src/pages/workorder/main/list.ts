@@ -43,7 +43,7 @@ export class ListPage{
   ngOnInit(){
     this.getTodayString();
     this.authService.checkLogin().then((data:ResponseData)=>{
-      //this.getOpCount();
+      this.getOpCount();
       console.log(data);
       this.userid=data.data.id;
       this.getData(this.userid).then((data:ResponseData)=>{
@@ -223,6 +223,7 @@ export class ListPage{
 
   doRefresh(refresher:Refresher){
     this.groups.splice(0,this.groups.length);
+    this.getOpCount();
     this.getData(this.userid).then((data:ResponseData)=>{
       if(data.status==0){
         //this.listToGroup(data.data);
@@ -253,6 +254,7 @@ export class ListPage{
 
   ok(e){
     this.groups.splice(0,this.groups.length);
+    this.getOpCount();
     this.getData(this.userid).then((data:ResponseData)=>{
       if(data.status==0){
         //this.listToGroup(data.data);
@@ -268,6 +270,7 @@ export class ListPage{
 
   statusChanged(e){
     this.groups.splice(0,this.groups.length);
+    this.getOpCount();
     this.getData(this.userid).then((data:ResponseData)=>{
       if(data.status==0){
         //this.listToGroup(data.data);

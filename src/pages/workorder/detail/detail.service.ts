@@ -16,10 +16,18 @@ export class DetailService {
   }
 
   private operationDetailUrl=new OptConfig().serverPath+'/api/operation/'
+  private operationDetailActionUrl=new OptConfig().serverPath+'/api/operation/getaction/'
   private editOperationUrl=new OptConfig().serverPath+'/api/operation/editSimple'
 
   getOperation(id:string): Promise<ResponseData> {
     return this.http.get(this.operationDetailUrl +id)
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+
+  getOperationAction(id:string): Promise<ResponseData> {
+    return this.http.get(this.operationDetailActionUrl +id)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

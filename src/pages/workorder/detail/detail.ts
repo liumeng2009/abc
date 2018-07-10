@@ -6,6 +6,7 @@ import {DetailService} from "./detail.service";
 import {ToolService} from "../../../util/tool.service";
 import {DetailModalPage} from "./detail-modal";
 import {ResponseData} from "../../../bean/responseData";
+import * as moment from 'moment'
 
 
 @Component({
@@ -23,7 +24,8 @@ export class DetailPage{
     private modalCtrl:ModalController
   ){}
 
-
+  private userid:string;
+  private onlyMe:boolean=false;
   private operation:Operation;
   private operation_no:string;
   ionViewWillEnter(){
@@ -31,9 +33,12 @@ export class DetailPage{
     let no=this.navParams.data.no;
     this.operation_no=no;
     console.log(id);
-    this.authService.checkLogin().then(()=>{
+    this.authService.checkLogin().then((data:ResponseData)=>{
+      this.userid=data.data.id;
       this.getData(id).then((data:ResponseData)=>{
         this.operation={...data.data};
+        console.log(this.operation)
+        this.formatData();
       }).catch((e)=>{
         this.toolService.toast(e)
       });
@@ -50,7 +55,7 @@ export class DetailPage{
   @ViewChild('refresher') refresher:Refresher
   getData(id){
     return new Promise((resolve,reject)=>{
-      this.detailService.getOperation(id).then(
+      this.detailService.getOperationAction(id).then(
         data=>{
           let result=this.toolService.apiResult(data);
           if(result&&result.status==0){
@@ -68,6 +73,30 @@ export class DetailPage{
     })
   }
 
+  formatData(){
+    if(this.operation.actions){
+      for(let action of this.operation.actions){
+        if(action.user){
+          if(action.user.id==this.userid){
+            action.enable=true;
+          }
+        }
+        if(action.call_time){
+          action.call_time_date=moment(action.call_time).format();
+          action.call_time_date_show=moment(action.call_time).format('YYYY年MM月DD日 h时mm分');
+        }
+        if(action.start_time){
+          action.start_time_date=moment(action.start_time).format();
+          action.start_time_date_show=moment(action.start_time).format('YYYY年MM月DD日 h时mm分');
+        }
+        if(action.end_time){
+          action.end_time_date=moment(action.end_time).format();
+          action.end_time_date_show=moment(action.end_time).format('YYYY年MM月DD日 h时mm分');
+        }
+      }
+    }
+  }
+
   private infoModal;
   private openModal(){
     let id=this.navParams.data.id;
@@ -75,7 +104,8 @@ export class DetailPage{
     this.infoModal.present();
   }
   ngOnDestroy() {
-    this.infoModal.dismiss();
+    if(this.infoModal)
+      this.infoModal.dismiss();
   }
 
   doRefresh(e){
@@ -83,6 +113,8 @@ export class DetailPage{
     this.getData(id).then((data:ResponseData)=>{
       e.complete();
       this.operation={...data.data};
+      console.log(this.operation)
+      this.formatData();
     }).catch((e)=>{
       e.complete();
       this.toolService.toast(e)
