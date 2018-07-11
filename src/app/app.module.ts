@@ -61,12 +61,7 @@ import { Autosize} from '../util/autosize';
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp,{
-      tabsHideOnSubPages:true,
-      monthNames: ['jan', 'fev', 'mar','si','wu','liu','qi','ba','jiu','shi','shiyi','shier' ],
-      monthShortNames: ['jan', 'fev', 'mar','si','wu','liu','qi','ba','jiu','shi','shiyi','shier'],
-      dayNames: ['domingo', 'segunda-feira', 'ter\u00e7a-feira'],
-      dayShortNames: ['dom', 'seg', 'ter' ]
-
+      tabsHideOnSubPages:true
     },{
       links:[
         {component:TabsPage,name:'TabsPage',segment:'main'},

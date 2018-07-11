@@ -89,10 +89,12 @@ export class DetailPage{
         }
         if(action.start_time){
           action.start_time_date=moment(action.start_time).format();
+          action.start_time_date_old=action.start_time_date;
           action.start_time_date_show=moment(action.start_time).format('YYYY年MM月DD日 HH时mm分');
         }
         if(action.end_time){
           action.end_time_date=moment(action.end_time).format();
+          action.end_time_date_old=action.end_time_date;
           action.end_time_date_show=moment(action.end_time).format('YYYY年MM月DD日 HH时mm分');
         }
       }
@@ -123,7 +125,9 @@ export class DetailPage{
     });
   }
 
-  okStartTime(e,operationId,actionId,create_stamp,call_stamp,end_stamp,isCompleteOperation){
+  @ViewChild('start') startSelect:ElementRef;
+  okStartTime(e,operationId,actionId,create_stamp,call_stamp,end_stamp,isCompleteOperation,old){
+    console.log(this.startSelect);
     let startDate=new Date(e);
     this.detailService.saveAction({
       operationId:operationId,
@@ -144,10 +148,13 @@ export class DetailPage{
         }
         else{
           this.toolService.toast(data.message)
+          this.oldToOperationObj(actionId)
+
         }
       },
       error=>{
         this.toolService.toast(error)
+        this.oldToOperationObj(actionId)
       }
     )
   }
@@ -172,10 +179,12 @@ export class DetailPage{
         }
         else{
           this.toolService.toast(data.message)
+          this.oldToOperationObj(actionId)
         }
       },
       error=>{
         this.toolService.toast(error)
+        this.oldToOperationObj(actionId)
       }
     )
   }
@@ -196,6 +205,18 @@ export class DetailPage{
             action.end_time_date=moment(action.end_time).format();
             action.end_time_date_show=moment(action.end_time).format('YYYY年MM月DD日 HH时mm分');
           }
+        }
+      }
+    }
+  }
+
+  oldToOperationObj(actionId){
+    if(this.operation.actions){
+      for(let action of this.operation.actions){
+        if(action.id==actionId){
+          //修改这个
+          action.start_time_date=action.start_time_date_old;
+          action.end_time_date=action.end_time_date_old;
         }
       }
     }

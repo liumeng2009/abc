@@ -21,7 +21,7 @@
   </ion-refresher>
   <ion-list>
     <ion-item>
-      <ion-label>只看我的处理状态</ion-label>
+      <ion-label>只看我的处理进程</ion-label>
       <ion-toggle [(ngModel)]="onlyMe"></ion-toggle>
     </ion-item>
     <ion-item *ngIf="operation?.actions.length==0">
@@ -45,19 +45,22 @@
         <ion-item>
           <ion-label fixed>开始时间:</ion-label>
           <ion-label *ngIf="!action?.enable">{{action.start_time_date_show}}</ion-label>
-          <ion-datetime cancelText="取消" doneText="确定"  placeholder="未开始"
+          <ion-datetime #start cancelText="取消" doneText="确定"  placeholder="未开始"
                         *ngIf="action?.enable"  displayFormat="YYYY年MM月DD日  HH时mm分" pickerFormat="YYYY MM DD HH mm"
                         [(ngModel)]="action.start_time_date"
-                        (ngModelChange)="okStartTime($event,operation?.id,action?.id,operation?.create_time,action?.call_time,action?.end_time,action?.isCompleteOperation)"
+                        (ngModelChange)="okStartTime($event,operation?.id,action?.id,operation?.create_time,action?.call_time,action?.end_time,action?.isCompleteOperation,action?.start_tie_date_old)"
           ></ion-datetime>
         </ion-item>
         <ion-item *ngIf="action.start_time_date!=null">
           <ion-label fixed>结束时间:</ion-label>
           <ion-label *ngIf="!action?.enable">{{action.end_time_date_show}}</ion-label>
-          <ion-datetime cancelText="取消" doneText="确定" placeholder="未结束"  *ngIf="action?.enable" displayFormat="YYYY年MM月DD日 hh时mm分" pickerFormat="YYYY MM DD HH mm"
+          <ion-datetime cancelText="取消" doneText="确定" placeholder="未结束"  *ngIf="action?.enable" displayFormat="YYYY年MM月DD日 HH时mm分" pickerFormat="YYYY MM DD HH mm"
                         [(ngModel)]="action.end_time_date"
                         (ngModelChange)="okEndTime($event,operation?.id,action?.id,operation?.create_time,action?.call_time,action?.start_time)"
           ></ion-datetime>
+        </ion-item>
+        <ion-item>
+
         </ion-item>
       </ion-item-sliding>
     </ion-item-group>
