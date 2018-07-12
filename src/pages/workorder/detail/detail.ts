@@ -74,6 +74,17 @@ export class DetailPage{
     })
   }
 
+  private colors:string[]=[
+  'ionic',
+  'angular',
+  'communication',
+  'tooling',
+  'services',
+  'design',
+  'workshop',
+  'food',
+  'documentation',
+  'navigation'];
   formatData(){
     if(this.operation.actions){
       for(let action of this.operation.actions){
@@ -85,18 +96,22 @@ export class DetailPage{
         moment.locale('zh_cn');
         if(action.call_time){
           action.call_time_date=moment(action.call_time).format();
-          action.call_time_date_show=moment(action.call_time).format('YYYY年MM月DD日 HH时mm分');
+          action.call_time_date_show=moment(action.call_time).format('MM月DD日 HH时mm分');
         }
         if(action.start_time){
           action.start_time_date=moment(action.start_time).format();
           action.start_time_date_old=action.start_time_date;
-          action.start_time_date_show=moment(action.start_time).format('YYYY年MM月DD日 HH时mm分');
+          action.start_time_date_show=moment(action.start_time).format('MM月DD日 HH时mm分');
         }
         if(action.end_time){
           action.end_time_date=moment(action.end_time).format();
           action.end_time_date_old=action.end_time_date;
-          action.end_time_date_show=moment(action.end_time).format('YYYY年MM月DD日 HH时mm分');
+          action.end_time_date_show=moment(action.end_time).format('MM月DD日 HH时mm分');
         }
+        //
+        let randomInt=parseInt((Math.random()*10).toString()).toString();
+        let color=this.colors[randomInt];
+        action.color=color;
       }
     }
   }
@@ -189,6 +204,39 @@ export class DetailPage{
     )
   }
 
+  completeChange(e,operationId,actionId,create_stamp,call_stamp,start_stamp,end_stamp){
+    this.detailService.saveAction({
+      operationId:operationId,
+      id:actionId,
+      workerId:this.userid,
+      create_stamp:create_stamp,
+      call_stamp:call_stamp,
+      showArriveDate:true,
+      start_stamp:start_stamp,
+      showFinishDate:true,
+      end_stamp:end_stamp,
+      isCompleteOperation:e
+    }).then(
+      data=>{
+        if(data.status==0){
+          this.toolService.toast(data.message);
+          this.resultToOperationObj(data.data,actionId);
+        }
+        else{
+          this.toolService.toast(data.message)
+          this.oldToOperationObj(actionId)
+          this.oldCompleteToOperationObj(actionId,!e)
+
+        }
+      },
+      error=>{
+        this.toolService.toast(error)
+        this.oldToOperationObj(actionId)
+        this.oldCompleteToOperationObj(actionId,!e)
+      }
+    )
+  }
+
   //将更新好的结果，覆盖掉该action
   resultToOperationObj(data,actionId){
     if(this.operation.actions){
@@ -199,11 +247,11 @@ export class DetailPage{
           action.end_time=data.end_time;
           if(action.start_time){
             action.start_time_date=moment(action.start_time).format();
-            action.start_time_date_show=moment(action.start_time).format('YYYY年MM月DD日 HH时mm分');
+            action.start_time_date_show=moment(action.start_time).format('MM月DD日 HH时mm分');
           }
           if(action.end_time){
             action.end_time_date=moment(action.end_time).format();
-            action.end_time_date_show=moment(action.end_time).format('YYYY年MM月DD日 HH时mm分');
+            action.end_time_date_show=moment(action.end_time).format('MM月DD日 HH时mm分');
           }
         }
       }
@@ -217,6 +265,15 @@ export class DetailPage{
           //修改这个
           action.start_time_date=action.start_time_date_old;
           action.end_time_date=action.end_time_date_old;
+        }
+      }
+    }
+  }
+  oldCompleteToOperationObj(actionId,complete){
+    if(this.operation.actions){
+      for(let action of this.operation.actions){
+        if(action.id==actionId){
+          action.CompleteOperation=complete;
         }
       }
     }

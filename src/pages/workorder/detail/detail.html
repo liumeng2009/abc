@@ -10,9 +10,6 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-
-
-
 </ion-header>
 
 <ion-content>
@@ -24,11 +21,13 @@
       <ion-label>只看我的处理进程</ion-label>
       <ion-toggle [(ngModel)]="onlyMe"></ion-toggle>
     </ion-item>
+  </ion-list>
+  <ion-list inset>
     <ion-item *ngIf="operation?.actions.length==0">
       没有相关记录
     </ion-item>
     <ion-item-group *ngFor="let action of operation?.actions">
-      <ion-item-divider sticky *ngIf="!onlyMe||onlyMe&&action?.enable">
+      <ion-item-divider sticky *ngIf="!onlyMe||onlyMe&&action?.enable" [attr.track]="action?.color">
         <ion-label *ngIf="!action?.enable">
           {{action?.user?.name}}的处理进程
         </ion-label>
@@ -37,7 +36,7 @@
         </ion-label>
       </ion-item-divider>
 
-      <ion-item-sliding *ngIf="!onlyMe||onlyMe&&action?.enable">
+      <ion-item-sliding *ngIf="!onlyMe||onlyMe&&action?.enable" [attr.track]="action?.color">
         <ion-item>
           <ion-label fixed>指派时间:</ion-label>
           <ion-label>{{action.call_time_date_show}}</ion-label>
@@ -46,7 +45,7 @@
           <ion-label fixed>开始时间:</ion-label>
           <ion-label *ngIf="!action?.enable">{{action.start_time_date_show}}</ion-label>
           <ion-datetime #start cancelText="取消" doneText="确定"  placeholder="未开始"
-                        *ngIf="action?.enable"  displayFormat="YYYY年MM月DD日  HH时mm分" pickerFormat="YYYY MM DD HH mm"
+                        *ngIf="action?.enable"  displayFormat="MM月DD日  HH时mm分Z" pickerFormat="YYYY MM DD HH mmZ"
                         [(ngModel)]="action.start_time_date"
                         (ngModelChange)="okStartTime($event,operation?.id,action?.id,operation?.create_time,action?.call_time,action?.end_time,action?.isCompleteOperation,action?.start_tie_date_old)"
           ></ion-datetime>
@@ -54,18 +53,18 @@
         <ion-item *ngIf="action.start_time_date!=null">
           <ion-label fixed>结束时间:</ion-label>
           <ion-label *ngIf="!action?.enable">{{action.end_time_date_show}}</ion-label>
-          <ion-datetime cancelText="取消" doneText="确定" placeholder="未结束"  *ngIf="action?.enable" displayFormat="YYYY年MM月DD日 HH时mm分" pickerFormat="YYYY MM DD HH mm"
+          <ion-datetime cancelText="取消" doneText="确定" placeholder="未结束"  *ngIf="action?.enable" displayFormat="MM月DD日 HH时mm分" pickerFormat="YYYY MM DD HH mm"
                         [(ngModel)]="action.end_time_date"
                         (ngModelChange)="okEndTime($event,operation?.id,action?.id,operation?.create_time,action?.call_time,action?.start_time)"
           ></ion-datetime>
         </ion-item>
-        <ion-item>
-
+        <ion-item  *ngIf="action.end_time_date!=null">
+          <ion-label fixed>工单完成：</ion-label>
+          <ion-checkbox color="primary" [(ngModel)]="action.operationComplete"
+            (ngModelChange)="completeChange($event,operation?.id,action?.id,operation?.create_time,action?.call_time,action?.start_time,action?.end_time)"
+          ></ion-checkbox>
         </ion-item>
       </ion-item-sliding>
     </ion-item-group>
   </ion-list>
-
-
-
 </ion-content>

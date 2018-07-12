@@ -32,6 +32,16 @@ $categories: (
 }
 
 
+detail{
+  @each $track, $value in auxiliary-categories() {
+    ion-item-sliding[track=#{$track}], ion-item-divider[track=#{$track}]{
+      border-left: 2px solid $value;
+      padding-left: 10px;
+    }
+  }
+}
+
+
 @each $track, $value in auxiliary-categories() {
   ion-label[color=#{$track}]{
     color:$value
