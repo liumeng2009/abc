@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {NavParams, Events, ModalController, Refresher} from 'ionic-angular'
+import {NavParams, Events, ModalController, Refresher, PickerOptions, DateTime} from 'ionic-angular'
 import {AuthService} from "../../../util/auth.service";
 import {Operation} from "../../../bean/operation";
 import {DetailService} from "./detail.service";
@@ -140,9 +140,7 @@ export class DetailPage{
     });
   }
 
-  @ViewChild('start') startSelect:ElementRef;
   okStartTime(e,operationId,actionId,create_stamp,call_stamp,end_stamp,isCompleteOperation,old){
-    console.log(this.startSelect);
     let startDate=new Date(e);
     this.detailService.saveAction({
       operationId:operationId,
@@ -274,6 +272,43 @@ export class DetailPage{
       for(let action of this.operation.actions){
         if(action.id==actionId){
           action.CompleteOperation=complete;
+        }
+      }
+    }
+  }
+
+  @ViewChild('start') startSelect:DateTime
+  start_click(e,start_time,actionId,operationId,create_stamp,call_stamp){
+    let t=this;
+    let actionOp;
+    if(this.operation.actions){
+      for(let action of this.operation.actions){
+        if(action.id==actionId){
+          actionOp=action;
+        }
+      }
+    }
+
+
+    if(start_time){
+
+    }
+    else{
+      actionOp.start_time=moment().format();
+    }
+  }
+
+  end_click(e,end_time,actionId){
+    if(end_time){
+
+    }
+    else{
+      if(this.operation.actions){
+        for(let action of this.operation.actions){
+          if(action.id==actionId){
+            console.log(moment().format());
+            action.end_time_date=moment().format();
+          }
         }
       }
     }

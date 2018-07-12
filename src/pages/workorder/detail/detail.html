@@ -45,16 +45,19 @@
           <ion-label fixed>开始时间:</ion-label>
           <ion-label *ngIf="!action?.enable">{{action.start_time_date_show}}</ion-label>
           <ion-datetime #start cancelText="取消" doneText="确定"  placeholder="未开始"
-                        *ngIf="action?.enable"  displayFormat="MM月DD日  HH时mm分Z" pickerFormat="YYYY MM DD HH mmZ"
+                        *ngIf="action?.enable"  displayFormat="MM月DD日 HH时mm分" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
                         [(ngModel)]="action.start_time_date"
+                        (click)="start_click($event,action?.start_time,action?.id,operation?.id,operation?.create_time,action?.call_time)"
                         (ngModelChange)="okStartTime($event,operation?.id,action?.id,operation?.create_time,action?.call_time,action?.end_time,action?.isCompleteOperation,action?.start_tie_date_old)"
           ></ion-datetime>
         </ion-item>
         <ion-item *ngIf="action.start_time_date!=null">
           <ion-label fixed>结束时间:</ion-label>
           <ion-label *ngIf="!action?.enable">{{action.end_time_date_show}}</ion-label>
-          <ion-datetime cancelText="取消" doneText="确定" placeholder="未结束"  *ngIf="action?.enable" displayFormat="MM月DD日 HH时mm分" pickerFormat="YYYY MM DD HH mm"
+          <ion-datetime cancelText="取消" doneText="确定" placeholder="未结束"  *ngIf="action?.enable" displayFormat="MM月DD日 HH时mm分" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
                         [(ngModel)]="action.end_time_date"
+                        (click)="end_click($event,action?.end_time,action?.id)"
+                        (ionCancel)="start_delete($event)"
                         (ngModelChange)="okEndTime($event,operation?.id,action?.id,operation?.create_time,action?.call_time,action?.start_time)"
           ></ion-datetime>
         </ion-item>

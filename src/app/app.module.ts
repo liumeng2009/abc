@@ -109,3 +109,6 @@ import { Autosize} from '../util/autosize';
   ]
 })
 export class AppModule {}
+
+/*important*/
+//ionic-angular component datetime.js   var nowString = (new Date(+new Date() + 8 * 3600 * 1000)).toISOString();
