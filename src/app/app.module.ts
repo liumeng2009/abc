@@ -111,4 +111,19 @@ import { Autosize} from '../util/autosize';
 export class AppModule {}
 
 /*important*/
-//ionic-angular component datetime.js   var nowString = (new Date(+new Date() + 8 * 3600 * 1000)).toISOString();
+//ionic-angular component datetime.js
+/*DateTime.prototype.getValueOrDefault = function () {
+  if (this.hasValue()) {
+    return this._value;
+  }
+  var initialDateString = this.getDefaultValueDateString();
+  var _default = {};
+  updateDate(_default, initialDateString);
+  _default.tzOffset=480;
+  _default.hour=_default.hour+8;
+  if(_default.hour>23){
+    _default.day=_default.day+1;
+    _default.hour=_default-24;
+  }
+  return _default;
+};*/

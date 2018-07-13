@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {NavParams, Events, ModalController, Refresher, PickerOptions, DateTime} from 'ionic-angular'
+import {NavParams, Events, ModalController, Refresher, PickerOptions, DateTime,AlertController} from 'ionic-angular'
 import {AuthService} from "../../../util/auth.service";
 import {Operation} from "../../../bean/operation";
 import {DetailService} from "./detail.service";
@@ -21,7 +21,8 @@ export class DetailPage{
     private detailService:DetailService,
     private toolService:ToolService,
     private events:Events,
-    private modalCtrl:ModalController
+    private modalCtrl:ModalController,
+    private alertCtrl:AlertController
   ){}
 
   private userid:string;
@@ -103,10 +104,20 @@ export class DetailPage{
           action.start_time_date_old=action.start_time_date;
           action.start_time_date_show=moment(action.start_time).format('MM月DD日 HH时mm分');
         }
+        else{
+          action.start_time_date=null
+          action.start_time_date_old=null
+          action.start_time_date_show='未开始'
+        }
         if(action.end_time){
           action.end_time_date=moment(action.end_time).format();
           action.end_time_date_old=action.end_time_date;
           action.end_time_date_show=moment(action.end_time).format('MM月DD日 HH时mm分');
+        }
+        else{
+          action.end_time_date=null
+          action.end_time_date_old=null
+          action.end_time_date_show='未结束'
         }
         //
         let randomInt=parseInt((Math.random()*10).toString()).toString();
@@ -183,12 +194,64 @@ export class DetailPage{
       start_stamp:start_stamp,
       showFinishDate:true,
       end_stamp:endDate.getTime(),
-      isCompleteOperation:true
+      isCompleteOperation:false
     }).then(
       data=>{
         if(data.status==0){
           this.toolService.toast(data.message);
           this.resultToOperationObj(data.data,actionId);
+          //如果自己的action没有完成标识，且其他的action也没有完成标识，弹出询问框
+          if(this.existCompleteOperation()){
+
+          }
+          else{
+            //再次弹出询问框，是否完成此工单
+            const confirm = this.alertCtrl.create({
+              title: '此工单完成了吗?',
+              buttons: [
+                {
+                  text: '完成',
+                  handler: () => {
+                    this.detailService.saveAction({
+                      operationId:operationId,
+                      id:actionId,
+                      workerId:this.userid,
+                      create_stamp:create_stamp,
+                      call_stamp:call_stamp,
+                      showArriveDate:true,
+                      start_stamp:start_stamp,
+                      showFinishDate:true,
+                      end_stamp:endDate.getTime(),
+                      isCompleteOperation:true
+                    }).then(
+                      data=>{
+                        if(data.status==0) {
+                          this.toolService.toast(data.message);
+                          this.resultToOperationObj(data.data, actionId);
+                        }
+                        else{
+                          this.toolService.toast(data.message)
+                          this.oldToOperationObj(actionId)
+                        }
+                      },
+                      error=>{
+                        this.toolService.toast(error)
+                        this.oldToOperationObj(actionId)
+                      }
+                    )
+                  }
+                },
+                {
+                  text: '未完成',
+                  handler: () => {
+
+                  }
+                }
+              ]
+            });
+            confirm.present();
+          }
+
         }
         else{
           this.toolService.toast(data.message)
@@ -200,6 +263,17 @@ export class DetailPage{
         this.oldToOperationObj(actionId)
       }
     )
+  }
+
+  existCompleteOperation(){
+    if(this.operation.actions){
+      for(let action of this.operation.actions){
+        if(action.OperationComplete){
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   completeChange(e,operationId,actionId,create_stamp,call_stamp,start_stamp,end_stamp){
@@ -247,10 +321,12 @@ export class DetailPage{
             action.start_time_date=moment(action.start_time).format();
             action.start_time_date_show=moment(action.start_time).format('MM月DD日 HH时mm分');
           }
+
           if(action.end_time){
             action.end_time_date=moment(action.end_time).format();
             action.end_time_date_show=moment(action.end_time).format('MM月DD日 HH时mm分');
           }
+          break;
         }
       }
     }
@@ -263,6 +339,7 @@ export class DetailPage{
           //修改这个
           action.start_time_date=action.start_time_date_old;
           action.end_time_date=action.end_time_date_old;
+          break;
         }
       }
     }
@@ -271,7 +348,8 @@ export class DetailPage{
     if(this.operation.actions){
       for(let action of this.operation.actions){
         if(action.id==actionId){
-          action.CompleteOperation=complete;
+          action.operationComplete=complete;
+          break;
         }
       }
     }
@@ -289,29 +367,43 @@ export class DetailPage{
       }
     }
 
+    let button={
+      text:'删除开始时间',
+      role:'delete',
+      handler:function(){
+        if(actionOp.end_time){
+          t.toolService.toast('请先删除工作的结束时间，再进行尝试！')
+        }
+        else{
 
-    if(start_time){
-
-    }
-    else{
-      actionOp.start_time=moment().format();
-    }
-  }
-
-  end_click(e,end_time,actionId){
-    if(end_time){
-
-    }
-    else{
-      if(this.operation.actions){
-        for(let action of this.operation.actions){
-          if(action.id==actionId){
-            console.log(moment().format());
-            action.end_time_date=moment().format();
-          }
         }
       }
     }
+
+    this.startSelect._picker.addButton(button);
+  }
+
+  @ViewChild('end') endSelect:DateTime
+  end_click(e,end_time,actionId){
+    let t=this;
+    let actionOp;
+    if(this.operation.actions){
+      for(let action of this.operation.actions){
+        if(action.id==actionId){
+          actionOp=action;
+        }
+      }
+    }
+
+    let button={
+      text:'删除结束时间',
+      style:'color:red',
+      handler:function(){
+        alert('delete end');
+      }
+    }
+
+    this.endSelect._picker.addButton(button);
   }
 
 }

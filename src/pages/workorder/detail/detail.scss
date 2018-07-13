@@ -4,13 +4,13 @@
 .datetime-md{
    padding-left: 0px;
    .datetime-placeholder{
-
+     color:color($colors,primary)
    }
  }
 .datetime-ios{
   padding-left: 0px;
   .datetime-placeholder{
-
+    color:color($colors,primary)
   }
 }
 
@@ -46,6 +46,10 @@ detail{
   ion-label[color=#{$track}]{
     color:$value
   }
+}
+
+ion-item-sliding[enable=gray] ion-label:nth-of-type(even){
+  color:#999;
 }
 
 
