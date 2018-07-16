@@ -151,118 +151,56 @@ export class DetailPage{
     });
   }
 
-  okStartTime(e,operationId,actionId,create_stamp,call_stamp,end_stamp,isCompleteOperation,old){
+  okStartTime(e,actionId){
+    let actionOp;
+    if(this.operation.actions){
+      for(let action of this.operation.actions){
+        if(action.id==actionId){
+          actionOp=action;
+        }
+      }
+    }
     let startDate=new Date(e);
-    this.detailService.saveAction({
-      operationId:operationId,
-      id:actionId,
-      workerId:this.userid,
-      create_stamp:create_stamp,
-      call_stamp:call_stamp,
-      showArriveDate:true,
-      start_stamp:startDate.getTime(),
-      showFinishDate:end_stamp==null?false:true,
-      end_stamp:end_stamp,
-      isCompleteOperation:isCompleteOperation?true:false
-    }).then(
-      data=>{
-        if(data.status==0){
-          this.toolService.toast(data.message);
-          this.resultToOperationObj(data.data,actionId);
-        }
-        else{
-          this.toolService.toast(data.message)
-          this.oldToOperationObj(actionId)
-
-        }
-      },
-      error=>{
-        this.toolService.toast(error)
-        this.oldToOperationObj(actionId)
-      }
-    )
+    this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,startDate.getTime(),actionOp.end_time==null?false:true,actionOp.end_stamp,actionOp.isCompleteOperation?true:false)
   }
-  okEndTime(e,operationId,actionId,create_stamp,call_stamp,start_stamp){
-    let endDate=new Date(e);
-    this.detailService.saveAction({
-      operationId:operationId,
-      id:actionId,
-      workerId:this.userid,
-      create_stamp:create_stamp,
-      call_stamp:call_stamp,
-      showArriveDate:true,
-      start_stamp:start_stamp,
-      showFinishDate:true,
-      end_stamp:endDate.getTime(),
-      isCompleteOperation:false
-    }).then(
-      data=>{
-        if(data.status==0){
-          this.toolService.toast(data.message);
-          this.resultToOperationObj(data.data,actionId);
-          //如果自己的action没有完成标识，且其他的action也没有完成标识，弹出询问框
-          if(this.existCompleteOperation()){
-
-          }
-          else{
-            //再次弹出询问框，是否完成此工单
-            const confirm = this.alertCtrl.create({
-              title: '此工单完成了吗?',
-              buttons: [
-                {
-                  text: '完成',
-                  handler: () => {
-                    this.detailService.saveAction({
-                      operationId:operationId,
-                      id:actionId,
-                      workerId:this.userid,
-                      create_stamp:create_stamp,
-                      call_stamp:call_stamp,
-                      showArriveDate:true,
-                      start_stamp:start_stamp,
-                      showFinishDate:true,
-                      end_stamp:endDate.getTime(),
-                      isCompleteOperation:true
-                    }).then(
-                      data=>{
-                        if(data.status==0) {
-                          this.toolService.toast(data.message);
-                          this.resultToOperationObj(data.data, actionId);
-                        }
-                        else{
-                          this.toolService.toast(data.message)
-                          this.oldToOperationObj(actionId)
-                        }
-                      },
-                      error=>{
-                        this.toolService.toast(error)
-                        this.oldToOperationObj(actionId)
-                      }
-                    )
-                  }
-                },
-                {
-                  text: '未完成',
-                  handler: () => {
-
-                  }
-                }
-              ]
-            });
-            confirm.present();
-          }
-
+  okEndTime(e,actionId){
+    let actionOp;
+    if(this.operation.actions){
+      for(let action of this.operation.actions){
+        if(action.id==actionId){
+          actionOp=action;
         }
-        else{
-          this.toolService.toast(data.message)
-          this.oldToOperationObj(actionId)
-        }
-      },
-      error=>{
-        this.toolService.toast(error)
-        this.oldToOperationObj(actionId)
       }
-    )
+    }
+    let endDate=new Date(e);
+    this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,endDate.getTime(),false).then(()=>{
+      if(this.existCompleteOperation()){
+
+      }
+      else{
+        //再次弹出询问框，是否完成此工单
+        const confirm = this.alertCtrl.create({
+          title: '此工单完成了吗?',
+          buttons: [
+            {
+              text: '完成',
+              handler: () => {
+                this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,endDate.getTime(),true)
+              }
+            },
+            {
+              text: '未完成',
+              handler: () => {
+
+              }
+            }
+          ]
+        });
+        confirm.present();
+      }
+    }).catch(()=>{
+
+    })
   }
 
   existCompleteOperation(){
@@ -276,37 +214,63 @@ export class DetailPage{
     return false;
   }
 
-  completeChange(e,operationId,actionId,create_stamp,call_stamp,start_stamp,end_stamp){
-    this.detailService.saveAction({
-      operationId:operationId,
-      id:actionId,
-      workerId:this.userid,
-      create_stamp:create_stamp,
-      call_stamp:call_stamp,
-      showArriveDate:true,
-      start_stamp:start_stamp,
-      showFinishDate:true,
-      end_stamp:end_stamp,
-      isCompleteOperation:e
-    }).then(
-      data=>{
-        if(data.status==0){
-          this.toolService.toast(data.message);
-          this.resultToOperationObj(data.data,actionId);
+  completeChange(e,actionId){
+    let actionOp;
+    if(this.operation.actions){
+      for(let action of this.operation.actions){
+        if(action.id==actionId){
+          actionOp=action;
         }
-        else{
-          this.toolService.toast(data.message)
-          this.oldToOperationObj(actionId)
-          this.oldCompleteToOperationObj(actionId,!e)
-
-        }
-      },
-      error=>{
-        this.toolService.toast(error)
-        this.oldToOperationObj(actionId)
-        this.oldCompleteToOperationObj(actionId,!e)
       }
-    )
+    }
+    let dateNow=new Date();
+    if(e){
+      this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,(actionOp.end_time==null?dateNow.getTime():actionOp.end_time),e).then().catch(()=>{
+        this.oldCompleteToOperationObj(actionId,!e)
+      });
+    }
+    else{
+      this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,actionOp.end_time,e).then().catch(()=>{
+        this.oldCompleteToOperationObj(actionId,!e)
+      });
+    }
+
+  }
+
+  editAction(operationId,actionId,create_stamp,call_stamp,showArriveDate,start_stamp,showFinishDate,end_stamp,isCompleteOperation){
+    return new Promise((resolve, reject)=>{
+      this.detailService.saveAction({
+        operationId:operationId,
+        id:actionId,
+        workerId:this.userid,
+        create_stamp:create_stamp,
+        call_stamp:call_stamp,
+        showArriveDate:showArriveDate,
+        start_stamp:start_stamp,
+        showFinishDate:showFinishDate,
+        end_stamp:end_stamp,
+        isCompleteOperation:isCompleteOperation
+      }).then(
+        data=>{
+          if(data.status==0){
+            this.toolService.toast(data.message);
+            this.resultToOperationObj(data.data,actionId);
+            resolve();
+          }
+          else{
+            this.toolService.toast(data.message)
+            this.oldToOperationObj(actionId)
+            reject();
+          }
+        },
+        error=>{
+          this.toolService.toast(error)
+          this.oldToOperationObj(actionId)
+          reject();
+        }
+      )
+    })
+
   }
 
   //将更新好的结果，覆盖掉该action
@@ -317,14 +281,23 @@ export class DetailPage{
           //修改这个
           action.start_time=data.start_time;
           action.end_time=data.end_time;
+          action.operationComplete=data.operationComplete;
           if(action.start_time){
             action.start_time_date=moment(action.start_time).format();
             action.start_time_date_show=moment(action.start_time).format('MM月DD日 HH时mm分');
+          }
+          else{
+            action.start_time_date=null
+            action.start_time_date_show=null
           }
 
           if(action.end_time){
             action.end_time_date=moment(action.end_time).format();
             action.end_time_date_show=moment(action.end_time).format('MM月DD日 HH时mm分');
+          }
+          else{
+            action.end_time_date=null
+            action.end_time_date_show=null
           }
           break;
         }
@@ -356,7 +329,7 @@ export class DetailPage{
   }
 
   @ViewChild('start') startSelect:DateTime
-  start_click(e,start_time,actionId,operationId,create_stamp,call_stamp){
+  start_click(actionId){
     let t=this;
     let actionOp;
     if(this.operation.actions){
@@ -367,24 +340,26 @@ export class DetailPage{
       }
     }
 
-    let button={
-      text:'删除开始时间',
-      role:'delete',
-      handler:function(){
-        if(actionOp.end_time){
-          t.toolService.toast('请先删除工作的结束时间，再进行尝试！')
-        }
-        else{
-
+    if(actionOp.start_time){
+      let button={
+        text:'删除开始时间',
+        role:'delete',
+        handler:function(){
+          if(actionOp.end_time){
+            t.toolService.toast('请先删除工作的结束时间，再进行尝试！')
+          }
+          else{
+            //删除开始时间
+            t.editAction(t.operation.id,actionId,t.operation.create_time,actionOp.call_time,false,null,false,null,false);
+          }
         }
       }
+      this.startSelect._picker.addButton(button);
     }
-
-    this.startSelect._picker.addButton(button);
   }
 
   @ViewChild('end') endSelect:DateTime
-  end_click(e,end_time,actionId){
+  end_click(actionId){
     let t=this;
     let actionOp;
     if(this.operation.actions){
@@ -394,16 +369,16 @@ export class DetailPage{
         }
       }
     }
-
-    let button={
-      text:'删除结束时间',
-      style:'color:red',
-      handler:function(){
-        alert('delete end');
+    if(actionOp.end_time){
+      let button={
+        text:'删除结束时间',
+        role:'delete',
+        handler:function(){
+          t.editAction(t.operation.id,actionId,t.operation.create_time,actionOp.call_time,true,actionOp.start_time,false,null,false);
+        }
       }
+
+      this.endSelect._picker.addButton(button);
     }
-
-    this.endSelect._picker.addButton(button);
   }
-
 }

@@ -8,6 +8,8 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import {CookieService} from 'angular2-cookie/core'
 
+import { SignaturePadModule } from 'angular2-signaturepad';
+
 import { MyApp } from './app.component';
 
 import {TabsPage} from '../pages/tabs/tab';
@@ -34,6 +36,7 @@ import {EditImportantPage} from "../pages/workorder/detail/edit-page/edit-import
 import {EditMarkPage} from "../pages/workorder/detail/edit-page/edit-mark";
 
 import { Autosize} from '../util/autosize';
+import {SignPage} from "../pages/workorder/sign/sign";
 
 
 @NgModule({
@@ -50,6 +53,8 @@ import { Autosize} from '../util/autosize';
     EditContentPage,
     EditImportantPage,
     EditMarkPage,
+
+    SignPage,
 
     LoginPage,
     WeChatPage,
@@ -73,7 +78,8 @@ import { Autosize} from '../util/autosize';
       ]
     }),
     IonicStorageModule.forRoot(),
-    PipesModule
+    PipesModule,
+    SignaturePadModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -88,6 +94,8 @@ import { Autosize} from '../util/autosize';
     EditContentPage,
     EditImportantPage,
     EditMarkPage,
+
+    SignPage,
 
     LoginPage,
     WeChatPage,

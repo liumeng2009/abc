@@ -52,5 +52,11 @@ ion-item-sliding[enable=gray] ion-label:nth-of-type(even){
   color:#999;
 }
 
+.picker-toolbar-delete{
+  .picker-button{
+    color:color($colors,danger)
+  }
+}
+
 
 

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, Refresher,Events,NavParams} from 'ionic-angular'
+import {NavController, Refresher, Events, ModalController} from 'ionic-angular'
 
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
@@ -11,6 +11,7 @@ import {DetailPage} from '../detail/detail'
 import * as moment from 'moment'
 import {Operation} from "../../../bean/operation";
 import {Order} from "../../../bean/order";
+import {SignPage} from "../sign/sign";
 
 
 @Component({
@@ -25,7 +26,8 @@ export class ListPage{
     private listService:ListService,
     private toolService:ToolService,
     private authService:AuthService,
-    private events:Events
+    private events:Events,
+    private modalCtrl:ModalController
   ){
 
   }
@@ -43,9 +45,9 @@ export class ListPage{
   ngOnInit(){
     this.getTodayString();
     this.authService.checkLogin().then((data:ResponseData)=>{
-      this.getOpCount();
       console.log(data);
       this.userid=data.data.id;
+      this.getOpCount();
       this.getData(this.userid).then((data:ResponseData)=>{
         let result=this.toolService.apiResult(data);
         if(result&&result.status==0){
@@ -289,6 +291,12 @@ export class ListPage{
       id:id,
       no:no
     })
+  }
+
+  private infoModal;
+  sign(){
+    this.infoModal=this.modalCtrl.create(SignPage);
+    this.infoModal.present();
   }
 }
 

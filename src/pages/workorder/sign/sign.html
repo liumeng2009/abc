@@ -1,0 +1,16 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">关闭</button>
+    </ion-buttons>
+    <ion-title>
+      添加签名
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content>
+  <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+</ion-content>
+

@@ -50,6 +50,7 @@
       <ion-item-divider sticky>
         <ion-label>
           {{group.incoming_time|dateList}} - {{group.custom_corporation}} {{group.custom_phone=='15822927208'?'':('- '+group.custom_phone)}}
+          <a style="float:right" (click)="sign()">签名</a>
         </ion-label>
       </ion-item-divider>
 
