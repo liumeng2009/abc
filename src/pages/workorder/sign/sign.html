@@ -1,16 +1,16 @@
-<ion-header>
-
+<ion-header #head>
   <ion-navbar>
-    <ion-buttons start>
+    <ion-buttons end>
       <button ion-button (click)="dismiss()">关闭</button>
     </ion-buttons>
-    <ion-title>
-      添加签名
-    </ion-title>
-  </ion-navbar>
 
+  </ion-navbar>
 </ion-header>
 <ion-content>
+  <ion-item #item>
+    <button ion-button default color="secondary" (click)="save()">保存</button>
+    <button ion-button default color="danger" (click)="clear()">清除</button>
+  </ion-item>
   <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
 </ion-content>
 

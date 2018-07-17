@@ -1,5 +1,6 @@
 export class Operation {
   constructor(
+    public id:string,
     public no: string,
     public create_time: number,
     public progress_time:number,

@@ -146,6 +146,7 @@ export class ListPage{
           break;
       }
     })
+    console.log(this.groups);
   }
 
   formatServerData(data){
@@ -183,7 +184,7 @@ export class ListPage{
         }
         operations.push(operation);
       }
-      let groupObj=new Order(d.id,d.incoming_time,d.custom_phone,d.corporation.name,operations);
+      let groupObj=new Order(d.id,d.no,d.incoming_time,d.custom_phone,d.corporation.name,operations);
       this.groups.push(groupObj);
     }
   }
@@ -294,8 +295,11 @@ export class ListPage{
   }
 
   private infoModal;
-  sign(){
-    this.infoModal=this.modalCtrl.create(SignPage);
+  sign(no){
+    this.infoModal=this.modalCtrl.create(SignPage,{
+      type:'order',
+      no:no
+    });
     this.infoModal.present();
   }
 }

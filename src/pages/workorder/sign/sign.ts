@@ -1,4 +1,5 @@
 import {Component,ViewChild} from '@angular/core';
+import {DOCUMENT} from '@angular/platform-browser'
 import {NavController,NavParams,ViewController} from 'ionic-angular'
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 
@@ -19,13 +20,36 @@ export class SignPage {
   @ViewChild(SignaturePad) signaturePad: SignaturePad;
 
   private signaturePadOptions: Object = {
-    'canvasWidth': 500,
-    'canvasHeight': 300
+    canvasWidth: 500,
+    canvasHeight: 300
   }
 
+  private no:string;
+  @ViewChild('head') head:ElementRef;
+  @ViewChild('item') item:ElementRef;
   ngAfterViewInit() {
-    // this.signaturePad is now available
-    this.signaturePad.clear(); // invoke functions from szimek/signature_pad API
+    let type=this.navParams.get('type');
+    this.no=this.navParams.get('no');
+    this.calSignWH();
+    this.signaturePad.clear();
+  }
+
+  calSignWH(){
+    let hAll=window.document.body.clientHeight;
+    let wAll=window.document.body.clientWidth;
+
+    let headH=this.head.nativeElement.clientHeight;
+    let itemH=this.item._elementRef.nativeElement.clientHeight;
+
+    let h=hAll-headH-itemH;
+
+    //this.signaturePadOptions.canvasWidth=wAll;
+    //this.signaturePadOptions.canvasHeight=h;
+
+    //console.log(h);
+    this.signaturePad.set('canvasWidth',wAll)
+    this.signaturePad.set('canvasHeight',h)
+
   }
 
   drawComplete() {
@@ -36,6 +60,10 @@ export class SignPage {
   drawStart() {
     // will be notified of szimek/signature_pad's onBegin event
     console.log('begin drawing');
+  }
+
+  clear(){
+    this.signaturePad.clear();
   }
 
   dismiss(){
