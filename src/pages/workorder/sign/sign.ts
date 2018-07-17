@@ -1,4 +1,4 @@
-import {Component,ViewChild} from '@angular/core';
+import {Component,ViewChild,ElementRef} from '@angular/core';
 import {DOCUMENT} from '@angular/platform-browser'
 import {NavController,NavParams,ViewController} from 'ionic-angular'
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
@@ -25,8 +25,8 @@ export class SignPage {
   }
 
   private no:string;
-  @ViewChild('head') head:ElementRef;
-  @ViewChild('item') item:ElementRef;
+/*  @ViewChild('head') head:ElementRef;*/
+  @ViewChild('foot') foot:ElementRef;
   ngAfterViewInit() {
     let type=this.navParams.get('type');
     this.no=this.navParams.get('no');
@@ -38,10 +38,10 @@ export class SignPage {
     let hAll=window.document.body.clientHeight;
     let wAll=window.document.body.clientWidth;
 
-    let headH=this.head.nativeElement.clientHeight;
-    let itemH=this.item._elementRef.nativeElement.clientHeight;
+    //let headH=this.head.nativeElement.clientHeight;
+    let itemH=this.foot.nativeElement.clientHeight;
 
-    let h=hAll-headH-itemH;
+    let h=hAll-itemH;
 
     //this.signaturePadOptions.canvasWidth=wAll;
     //this.signaturePadOptions.canvasHeight=h;

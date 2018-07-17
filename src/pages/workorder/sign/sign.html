@@ -1,16 +1,22 @@
-<ion-header #head>
+<!--<ion-header #head>
   <ion-navbar>
     <ion-buttons end>
       <button ion-button (click)="dismiss()">关闭</button>
     </ion-buttons>
-
   </ion-navbar>
-</ion-header>
+</ion-header>-->
 <ion-content>
-  <ion-item #item>
-    <button ion-button default color="secondary" (click)="save()">保存</button>
-    <button ion-button default color="danger" (click)="clear()">清除</button>
-  </ion-item>
   <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
 </ion-content>
+<ion-footer #foot>
+  <ion-toolbar color="light">
+    <ion-buttons start>
+      <button ion-button default color="danger" solid (click)="clear()">清除</button>
+      <button ion-button default color="secondary" solid  (click)="save()">保存</button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button default color="primary" (click)="dismiss()">关闭</button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
 

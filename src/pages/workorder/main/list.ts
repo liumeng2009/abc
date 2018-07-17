@@ -146,7 +146,6 @@ export class ListPage{
           break;
       }
     })
-    console.log(this.groups);
   }
 
   formatServerData(data){

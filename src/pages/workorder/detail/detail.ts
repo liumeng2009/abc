@@ -161,7 +161,17 @@ export class DetailPage{
       }
     }
     let startDate=new Date(e);
-    this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,startDate.getTime(),actionOp.end_time==null?false:true,actionOp.end_stamp,actionOp.isCompleteOperation?true:false)
+    //怪异的操作，为了弥补修改插件造成的问题，没找到好的方案
+    //为了让他默认是东8区的时间，就在插件的取得默认值的方法上，加了8小时，于是当start_time是空的时候，这里要相应的减8小时
+    if(actionOp.start_time==null){
+      let stamp=startDate.getTime();
+      stamp=stamp-8*60*60*1000;
+      startDate=new Date(stamp);
+    }
+
+
+    this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,startDate.getTime(),actionOp.end_time==null?false:true,actionOp.end_time,actionOp.operationComplete?true:false)
+      .then(()=>{}).catch(()=>{});
   }
   okEndTime(e,actionId){
     let actionOp;
@@ -173,6 +183,11 @@ export class DetailPage{
       }
     }
     let endDate=new Date(e);
+    if(actionOp.end_time==null){
+      let stamp=endDate.getTime();
+      stamp=stamp-8*60*60*1000;
+      endDate=new Date(stamp);
+    }
     this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,endDate.getTime(),false).then(()=>{
       if(this.existCompleteOperation()){
 
@@ -185,7 +200,7 @@ export class DetailPage{
             {
               text: '完成',
               handler: () => {
-                this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,endDate.getTime(),true)
+                this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,endDate.getTime(),true).then(()=>{}).catch(()=>{});
               }
             },
             {
@@ -225,12 +240,12 @@ export class DetailPage{
     }
     let dateNow=new Date();
     if(e){
-      this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,(actionOp.end_time==null?dateNow.getTime():actionOp.end_time),e).then().catch(()=>{
+      this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,(actionOp.end_time==null?dateNow.getTime():actionOp.end_time),e).then(()=>{}).catch(()=>{
         this.oldCompleteToOperationObj(actionId,!e)
       });
     }
     else{
-      this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,actionOp.end_time,e).then().catch(()=>{
+      this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,actionOp.end_time,e).then(()=>{}).catch(()=>{
         this.oldCompleteToOperationObj(actionId,!e)
       });
     }
@@ -350,7 +365,7 @@ export class DetailPage{
           }
           else{
             //删除开始时间
-            t.editAction(t.operation.id,actionId,t.operation.create_time,actionOp.call_time,false,null,false,null,false);
+            t.editAction(t.operation.id,actionId,t.operation.create_time,actionOp.call_time,false,null,false,null,false).then(()=>{}).catch(()=>{});;
           }
         }
       }
@@ -374,7 +389,7 @@ export class DetailPage{
         text:'删除结束时间',
         role:'delete',
         handler:function(){
-          t.editAction(t.operation.id,actionId,t.operation.create_time,actionOp.call_time,true,actionOp.start_time,false,null,false);
+          t.editAction(t.operation.id,actionId,t.operation.create_time,actionOp.call_time,true,actionOp.start_time,false,null,false).then(()=>{}).catch(()=>{});;
         }
       }
 

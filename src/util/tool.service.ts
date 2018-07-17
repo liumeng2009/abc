@@ -26,7 +26,9 @@ export class ToolService{
     const toast = this.toastCtrl.create({
       message:msg,
       duration: 3000,
-      position:'top'
+      position:'bottom',
+      showCloseButton: true,
+      closeButtonText: '关闭'
     });
     toast.present();
   }
