@@ -98,9 +98,7 @@ export class ListPage{
                 }
                 resolve(data);
               }
-              else{
-                reject(data.message)
-              }
+
 
             },
             error=>{
@@ -115,9 +113,7 @@ export class ListPage{
               if(result&&result.status==0){
                 resolve(data);
               }
-              else{
-                reject(data.message)
-              }
+
             },
             error=>{
               reject(error);
@@ -135,9 +131,7 @@ export class ListPage{
                 }
                 resolve(data);
               }
-              else{
-                reject(data.message)
-              }
+
             },
             error=>{
               reject(error);
