@@ -45,7 +45,9 @@ export class ListService {
   }*/
 
   getOpCount(stamp:number,userid:string): Promise<ResponseData> {
-    return this.http.get(this.opCountUrl + '?stamp='+stamp+'&userid='+userid)
+    let token = this.cookieService.get('optAppToken');
+    let headers=new Headers({'Content-Type': 'application/json','authorization':token})
+    return this.http.get(this.opCountUrl + '?stamp='+stamp+'&userid='+userid,{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

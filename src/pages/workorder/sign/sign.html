@@ -1,7 +1,7 @@
 <ion-header #head>
   <ion-navbar>
     <ion-title>
-      {{type}}{{no}}的签字确认
+      {{typeName}}{{no}}
     </ion-title>
     <ion-buttons end>
       <button ion-button (click)="dismiss()">关闭</button>
@@ -12,8 +12,11 @@
   <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
 </ion-content>
 <ion-footer #foot>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons start>
+      <button ion-button (click)="clear()">重新载入</button>
+    </ion-buttons>
+    <ion-buttons end>
       <button ion-button (click)="clear()">清除</button>
       <button ion-button (click)="save()">保存</button>
     </ion-buttons>

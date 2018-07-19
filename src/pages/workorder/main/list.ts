@@ -12,6 +12,7 @@ import * as moment from 'moment'
 import {Operation} from "../../../bean/operation";
 import {Order} from "../../../bean/order";
 import {SignPage} from "../sign/sign";
+import {RememberService} from "../../../util/remember.service";
 
 
 @Component({
@@ -27,7 +28,8 @@ export class ListPage{
     private toolService:ToolService,
     private authService:AuthService,
     private events:Events,
-    private modalCtrl:ModalController
+    private modalCtrl:ModalController,
+    private rememberService:RememberService
   ){
 
   }
@@ -43,7 +45,7 @@ export class ListPage{
 
   private userid;
   ngOnInit(){
-    this.getTodayString();
+    this.getDateString();
     this.authService.checkLogin().then((data:ResponseData)=>{
       console.log(data);
       this.userid=data.data.id;
@@ -71,7 +73,11 @@ export class ListPage{
     });
   }
 
-  private getTodayString(){
+  private getDateString(){
+    let rememberDate=this.rememberService.getListDate();
+    if(rememberDate!=null){
+      this.today=rememberDate;
+    }
     let year=this.today.getFullYear();
     let month=this.today.getMonth()+1;
     let day=this.today.getDate();
@@ -249,6 +255,9 @@ export class ListPage{
   }
 
   ok(e){
+    let selectDate=new Date(e);
+    this.rememberService.setListDate(selectDate);
+
     this.groups.splice(0,this.groups.length);
     this.getOpCount();
     this.getData(this.userid).then((data:ResponseData)=>{
@@ -259,8 +268,8 @@ export class ListPage{
       else{
         this.toolService.toast(data.message);
       }
-    }).catch((e)=>{
-      this.toolService.toast(e)
+    }).catch((error)=>{
+      this.toolService.toast(error)
     });
   }
 
