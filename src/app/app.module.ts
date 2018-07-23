@@ -38,6 +38,7 @@ import {EditMarkPage} from "../pages/workorder/detail/edit-page/edit-mark";
 import { Autosize} from '../util/autosize';
 import {SignPage} from "../pages/workorder/sign/sign";
 import {RememberService} from "../util/remember.service";
+import {SignService} from "../pages/workorder/sign/sign.service";
 
 
 @NgModule({
@@ -113,6 +114,7 @@ import {RememberService} from "../util/remember.service";
     LoginService,
     PublicDataService,
     RememberService,
+    SignService,
 
     AuthService,
     ToolService

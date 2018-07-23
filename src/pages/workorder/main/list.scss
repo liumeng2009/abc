@@ -17,10 +17,19 @@ $categories: (
 
 page-list{
   @each $track, $value in auxiliary-categories() {
-    ion-item-sliding[track=#{$track}] ion-label {
+    ion-item-sliding[track=#{$track}] ion-label ion-label {
       border-left: 2px solid $value;
       padding-left: 10px;
     }
+  }
+}
+
+page-list{
+  ion-item-sliding ion-label.label-md{
+    margin:0px;
+  }
+  ion-item-sliding ion-label ion-label.label-md{
+    margin:13px 8px 13px 0;
   }
 }
 

@@ -301,12 +301,95 @@ export class ListPage{
 
   private infoModal;
   private signStatusArray=[];
-  sign(no){
-    this.infoModal=this.modalCtrl.create(SignPage,{
-      type:'order',
-      no:no
-    });
-    this.infoModal.present();
+  sign(orderId){
+
+    this.operationIdArray.splice(0,this.operationIdArray.length);
+
+    for(let status of this.signStatusArray){
+      if(status.id==orderId){
+        if(status.show){
+          status.show=false;
+        }
+        else{
+          //把所有的数组元素show属性都置否
+          this.allFalse();
+          status.show=true;
+        }
+        break;
+      }
+    }
+  }
+
+  allFalse(){
+    for(let status of this.signStatusArray){
+      status.show=false;
+    }
+  }
+
+  showCheckbox(orderId){
+    for(let status of this.signStatusArray){
+      if(status.id==orderId&&status.show){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  cancelCheck(orderId){
+    for(let status of this.signStatusArray){
+      if(status.id==orderId){
+        status.show=false;
+      }
+    }
+  }
+
+  signCheckChanged(e,operationId){
+    if(e.value){
+      if(!this.isExistInOpArray(operationId))
+        this.operationIdArray.push(operationId)
+    }
+    else{
+      let noInArray=this.inArrayNo(operationId);
+      if(noInArray>0){
+        this.operationIdArray.splice(noInArray,1);
+      }
+    }
+  }
+
+  inArrayNo(id){
+    let i=-1;
+    for(let o of this.operationIdArray){
+      if(o==id){
+        return i+1;
+      }
+      i++;
+    }
+    return i;
+  }
+
+  isExistInOpArray(id){
+    for(let o of this.operationIdArray){
+      if(o==id){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private operationIdArray:string[]=[];
+  saveSign(){
+    console.log(this.operationIdArray);
+    if(this.operationIdArray.length>0){
+      this.infoModal=this.modalCtrl.create(SignPage,{
+        opList:this.operationIdArray
+      });
+      this.infoModal.present();
+    }
+    else{
+      this.toolService.toast('请至少选择一个工单！')
+    }
+
+
   }
 }
 
