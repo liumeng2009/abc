@@ -39,6 +39,7 @@ import { Autosize} from '../util/autosize';
 import {SignPage} from "../pages/workorder/sign/sign";
 import {RememberService} from "../util/remember.service";
 import {SignService} from "../pages/workorder/sign/sign.service";
+import {SignsPage} from "../pages/workorder/sign/signs";
 
 
 @NgModule({
@@ -57,6 +58,7 @@ import {SignService} from "../pages/workorder/sign/sign.service";
     EditMarkPage,
 
     SignPage,
+    SignsPage,
 
     LoginPage,
     WeChatPage,
@@ -98,6 +100,7 @@ import {SignService} from "../pages/workorder/sign/sign.service";
     EditMarkPage,
 
     SignPage,
+    SignsPage,
 
     LoginPage,
     WeChatPage,

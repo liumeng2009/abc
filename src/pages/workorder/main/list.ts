@@ -11,7 +11,7 @@ import {DetailPage} from '../detail/detail'
 import * as moment from 'moment'
 import {Operation} from "../../../bean/operation";
 import {Order} from "../../../bean/order";
-import {SignPage} from "../sign/sign";
+import {SignsPage} from "../sign/signs";
 import {RememberService} from "../../../util/remember.service";
 
 
@@ -71,6 +71,12 @@ export class ListPage{
         },0)
       }
     });
+  }
+
+  private eventListener(){
+    this.events.subscribe('list sign:updated',()=>{
+      this.allFalse();
+    })
   }
 
   private getDateString(){
@@ -380,7 +386,7 @@ export class ListPage{
   saveSign(){
     console.log(this.operationIdArray);
     if(this.operationIdArray.length>0){
-      this.infoModal=this.modalCtrl.create(SignPage,{
+      this.infoModal=this.modalCtrl.create(SignsPage,{
         opList:this.operationIdArray
       });
       this.infoModal.present();

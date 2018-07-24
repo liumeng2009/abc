@@ -9,6 +9,9 @@ import {EditSimplePage} from "./edit-page/edit-simple";
 import {EditContentPage} from "./edit-page/edit-content";
 import {EditImportantPage} from "./edit-page/edit-important";
 import {EditMarkPage} from "./edit-page/edit-mark";
+import {SignService} from "../sign/sign.service";
+import {SignPage} from "../sign/sign";
+import {ModalController} from "ionic-angular/index";
 
 @Component({
   templateUrl:'detail-modal.html',
@@ -19,10 +22,12 @@ export class DetailModalPage{
   constructor(
     private navParams: NavParams,
     private detailService:DetailService,
+    private signService:SignService,
     private toolService:ToolService,
     private events:Events,
     private viewCtrl:ViewController,
-    private popupCtrl:PopoverController
+    private popupCtrl:PopoverController,
+    private modalCtrl:ModalController
   ){
     this.listenToEvents();
   }
@@ -30,9 +35,9 @@ export class DetailModalPage{
   private operation:Operation;
   ionViewWillEnter(){
     console.log('进入modal');
-
     let id=this.navParams.get('id');
     this.getData(id);
+    this.getSign(id);
   }
 
 
@@ -46,6 +51,25 @@ export class DetailModalPage{
         }
         else{
           this.toolService.toast(data.message);
+        }
+      },
+      error=>{
+        this.toolService.toast(error);
+      }
+    )
+  }
+
+  private sign:string;
+  getSign(id){
+    this.signService.getSign(id).then(
+      data=>{
+        console.log(data);
+        let result=this.toolService.apiResult(data);
+        if(result&&result.status==0){
+          this.sign=result.data;
+        }
+        else{
+          this.toolService.toast(data.message)
         }
       },
       error=>{
@@ -121,6 +145,15 @@ export class DetailModalPage{
   ngOnDestroy() {
     if(this.popover)
       this.popover.dismiss();
+  }
+
+  private infoModal;
+  editSign(operationId){
+    let id=this.navParams.get('id');
+    this.infoModal=this.modalCtrl.create(SignPage,{
+      opList:[id]
+    });
+    this.infoModal.present();
   }
 
 }

@@ -15,7 +15,7 @@ export class SignService {
   }
 
   private saveUrl=new OptConfig().serverPath+'/api/sign/save'
-  private getUrl=new OptConfig().serverPath+'/api/'
+  private getUrl=new OptConfig().serverPath+'/api/sign/'
 
   saveSign(sign:any): Promise<ResponseData> {
     let token = this.cookieService.get('optAppToken');

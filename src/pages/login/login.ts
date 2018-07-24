@@ -1,7 +1,6 @@
 import {Component} from '@angular/core'
 import {
-  NavController,
-  LoadingController
+  NavController
 } from "ionic-angular";
 import {User} from '../../bean/user'
 import {LoginService} from "./login.service";
@@ -18,36 +17,34 @@ import {TabsPage} from '../tabs/tab'
 export class LoginPage{
   constructor(
     private navCtrl:NavController,
-    private loadingCtrl:LoadingController,
     private cookieService:CookieService,
     private toolService:ToolService,
     private loginService:LoginService
   ){}
 
   private user:User=new User('','');
-
+  private isLoading:boolean=false;
   login(){
-    let loading=this.loadingCtrl.create({
-      content:'请稍等...',
-    });
-    loading.present();
-    this.loginService.login(this.user).then(
-      data=>{
-        loading.dismiss()
-        console.log(data);
-        if(data&&data.status==0){
-          this.cookieService.put('optAppToken',data.data.token);
-          console.log(data.data.name);
-          this.navCtrl.push(TabsPage,{ev:data.data.name});
+    if(!this.isLoading){
+      this.isLoading=true;
+      this.loginService.login(this.user).then(
+        data=>{
+          this.isLoading=false;
+          console.log(data);
+          if(data&&data.status==0){
+            this.cookieService.put('optAppToken',data.data.token);
+            console.log(data.data.name);
+            this.navCtrl.push(TabsPage,{ev:data.data.name});
+          }
+          else{
+            this.toolService.toast(data.message);
+          }
+        },
+        error=>{
+          this.isLoading=true;
+          this.toolService.toast(error);
         }
-        else{
-          this.toolService.toast(data.message);
-        }
-      },
-      error=>{
-        loading.dismiss()
-        this.toolService.toast(error);
-      }
-    )
+      )
+    }
   }
 }
