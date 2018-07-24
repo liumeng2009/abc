@@ -106,6 +106,7 @@ export class SignPage {
       data=>{
         let result=this.toolService.apiResult(data);
         this.toolService.toast(result.message);
+        this.viewCtrl.dismiss();
       },
       error=>{
         this.toolService.toast(error)

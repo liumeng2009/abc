@@ -40,6 +40,8 @@ import {SignPage} from "../pages/workorder/sign/sign";
 import {RememberService} from "../util/remember.service";
 import {SignService} from "../pages/workorder/sign/sign.service";
 import {SignsPage} from "../pages/workorder/sign/signs";
+import {QrService} from "../pages/workorder/qrcode/qr.service";
+import {QrPage} from "../pages/workorder/qrcode/qr";
 
 
 @NgModule({
@@ -59,6 +61,7 @@ import {SignsPage} from "../pages/workorder/sign/signs";
 
     SignPage,
     SignsPage,
+    QrPage,
 
     LoginPage,
     WeChatPage,
@@ -101,6 +104,7 @@ import {SignsPage} from "../pages/workorder/sign/signs";
 
     SignPage,
     SignsPage,
+    QrPage,
 
     LoginPage,
     WeChatPage,
@@ -118,6 +122,7 @@ import {SignsPage} from "../pages/workorder/sign/signs";
     PublicDataService,
     RememberService,
     SignService,
+    QrService,
 
     AuthService,
     ToolService

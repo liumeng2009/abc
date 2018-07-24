@@ -17,7 +17,7 @@ $categories: (
 
 page-list{
   @each $track, $value in auxiliary-categories() {
-    ion-item-sliding[track=#{$track}] ion-label ion-label {
+    ion-item-sliding[track=#{$track}] ion-label .headline ion-label {
       border-left: 2px solid $value;
       padding-left: 10px;
     }
@@ -43,3 +43,5 @@ page-list{
     color:color($colors, primary)
   }
 }
+
+

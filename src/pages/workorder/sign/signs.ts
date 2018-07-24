@@ -35,6 +35,26 @@ export class SignsPage {
     console.log(ops);
     this.calSignWH();
     this.signaturePad.clear();
+    if(ops instanceof Array&&ops.length==1){
+      this.getSign(ops[0]);
+    }
+  }
+
+  getSign(id){
+    this.signService.getSign(id).then(
+      data=>{
+        let result=this.toolService.apiResult(data);
+        if(result&&result.status==0){
+          this.signaturePad.fromDataURL(result.data,{width:this.signaturePadOptions.canvasWidth,height:this.signaturePadOptions.canvasHeight})
+        }
+        else{
+          this.toolService.toast(data.message);
+        }
+      },
+      error=>{
+        this.toolService.toast(error)
+      }
+    )
   }
 
   calSignWH(){
@@ -79,10 +99,13 @@ export class SignsPage {
       sign:this.signaturePad.toDataURL()
     }).then(
       data=>{
+        console.log(data);
         let result=this.toolService.apiResult(data);
         this.toolService.toast(result.message);
         if(result&&result.status==0){
-          this.events.publish('list sign:updated');
+          console.log('发出');
+          this.events.publish('list sign:updated',{ids:ops,signString:result.data});
+          this.viewCtrl.dismiss();
         }
       },
       error=>{

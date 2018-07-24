@@ -13,6 +13,8 @@ import {Operation} from "../../../bean/operation";
 import {Order} from "../../../bean/order";
 import {SignsPage} from "../sign/signs";
 import {RememberService} from "../../../util/remember.service";
+import {SignService} from "../sign/sign.service";
+import {QrPage} from "../qrcode/qr";
 
 
 @Component({
@@ -25,6 +27,7 @@ export class ListPage{
   constructor(
     private navCtrl:NavController,
     private listService:ListService,
+    private signService:SignService,
     private toolService:ToolService,
     private authService:AuthService,
     private events:Events,
@@ -44,8 +47,40 @@ export class ListPage{
   }
 
   private userid;
+
+/*  ionViewWillEnter(){
+    this.getDateString();
+    this.eventListener();
+    this.authService.checkLogin().then((data:ResponseData)=>{
+      console.log(data);
+      this.userid=data.data.id;
+      this.getOpCount();
+      this.getData(this.userid).then((data:ResponseData)=>{
+        let result=this.toolService.apiResult(data);
+        if(result&&result.status==0){
+          this.formatServerData(result.data);
+          console.log(this.groups);
+        }
+        else{
+          this.toolService.toast(data.message);
+        }
+      }).catch((e)=>{
+        this.toolService.toast(e);
+      });
+    }).catch((e)=>{
+      this.toolService.toast(e.message);
+      if(e.action&&e.action=='login'){
+        //this.navCtrl.push(LoginPage);
+        setTimeout(()=>{
+          this.events.publish('user:logout');
+        },0)
+      }
+    });
+  }*/
+
   ngOnInit(){
     this.getDateString();
+    this.eventListener();
     this.authService.checkLogin().then((data:ResponseData)=>{
       console.log(data);
       this.userid=data.data.id;
@@ -74,7 +109,7 @@ export class ListPage{
   }
 
   private eventListener(){
-    this.events.subscribe('list sign:updated',()=>{
+    this.events.subscribe('list sign:updated',(signResult:any)=>{
       this.allFalse();
     })
   }
@@ -194,6 +229,28 @@ export class ListPage{
       let signStatus={id:d.id,show:false};
       this.signStatusArray.push(signStatus);
       this.groups.push(groupObj);
+    }
+
+    //为groups增加sign，为了保证基本数据加载的速度，在第二时间加载sign图片
+    this.initSign();
+
+  }
+
+  initSign(){
+    for(let group of this.groups){
+      for(let op of group.operations){
+        this.signService.getSign(op.id).then(
+          data=>{
+            let result=this.toolService.apiResult(data);
+            if(result&&result.status==0){
+              op.signString=result.data;
+            }
+          },
+          error=>{
+
+          }
+        )
+      }
     }
   }
 
@@ -386,7 +443,7 @@ export class ListPage{
   saveSign(){
     console.log(this.operationIdArray);
     if(this.operationIdArray.length>0){
-      this.infoModal=this.modalCtrl.create(SignsPage,{
+      this.infoModal=this.modalCtrl.create(QrPage,{
         opList:this.operationIdArray
       });
       this.infoModal.present();

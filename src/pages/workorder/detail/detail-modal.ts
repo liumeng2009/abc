@@ -34,48 +34,69 @@ export class DetailModalPage{
 
   private operation:Operation;
   ionViewWillEnter(){
-    console.log('进入modal');
     let id=this.navParams.get('id');
-    this.getData(id);
-    this.getSign(id);
+    this.getData(id).then(()=>{}).catch(()=>{});
+    this.getSign(id).then(()=>{}).catch(()=>{});
   }
 
 
 
   getData(id){
-    this.detailService.getOperation(id).then(
-      data=>{
-        console.log(data);
-        if(data.status==0){
-          this.operation={...data.data};
+    return new Promise((resolve, reject)=>{
+      this.detailService.getOperation(id).then(
+        data=>{
+          console.log(data);
+          if(data.status==0){
+            this.operation={...data.data};
+            resolve();
+          }
+          else{
+            this.toolService.toast(data.message);
+            reject()
+          }
+        },
+        error=>{
+          this.toolService.toast(error);
+          reject()
         }
-        else{
-          this.toolService.toast(data.message);
-        }
-      },
-      error=>{
-        this.toolService.toast(error);
-      }
-    )
+      )
+    })
   }
 
   private sign:string;
   getSign(id){
-    this.signService.getSign(id).then(
-      data=>{
-        console.log(data);
-        let result=this.toolService.apiResult(data);
-        if(result&&result.status==0){
-          this.sign=result.data;
+    return new Promise((resolve, reject)=>{
+      this.signService.getSign(id).then(
+        data=>{
+          console.log(data);
+          let result=this.toolService.apiResult(data);
+          if(result&&result.status==0){
+            this.sign=result.data;
+            resolve();
+          }
+          else{
+            this.toolService.toast(data.message)
+            reject()
+          }
+        },
+        error=>{
+          this.toolService.toast(error);
+          reject()
         }
-        else{
-          this.toolService.toast(data.message)
-        }
-      },
-      error=>{
-        this.toolService.toast(error);
-      }
-    )
+      )
+    })
+  }
+  doRefresh(e){
+    let id=this.navParams.get('id');
+    this.getData(id).then(()=>{
+      this.getSign(id).then(()=>{
+        e.complete();
+      }).catch(()=>{
+        e.complete();
+      })
+    }).catch(()=>{
+      e.complete();
+    })
   }
 
   dismiss(){

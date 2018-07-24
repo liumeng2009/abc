@@ -12,6 +12,9 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher #refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list>
     <ion-list-header>
       {{operation?.no}}号工单

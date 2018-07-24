@@ -1,0 +1,18 @@
+<ion-header #head>
+  <ion-navbar>
+    <ion-buttons end>
+      <button ion-button (click)="dismiss()">关闭</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      请扫描二维码以添加用户签名
+    </ion-card-header>
+    <ion-card-content>
+      <img [src]="qrcode">
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
