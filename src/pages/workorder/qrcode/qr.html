@@ -6,6 +6,9 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+  <ion-refresher #refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-card>
     <ion-card-header>
       请扫描二维码以添加用户签名

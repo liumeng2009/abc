@@ -25,13 +25,28 @@ export class QrPage {
   private qrcode:string;
   ngAfterViewInit() {
     let ops = this.navParams.get('opList');
-    this.qrService.getQr().then(
+    this.qrService.getQr({ids:ops}).then(
       data=>{
         console.log(data);
         this.qrcode=data.data
       },
       error=>{
         this.toolService.toast(error)
+      }
+    )
+  }
+
+  doRefresh(e){
+    let ops = this.navParams.get('opList');
+    this.qrService.getQr({ids:ops}).then(
+      data=>{
+        console.log(data);
+        this.qrcode=data.data
+        e.complete()
+      },
+      error=>{
+        this.toolService.toast(error)
+        e.complete()
       }
     )
   }

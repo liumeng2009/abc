@@ -232,7 +232,7 @@ export class ListPage{
     }
 
     //为groups增加sign，为了保证基本数据加载的速度，在第二时间加载sign图片
-    this.initSign();
+    //this.initSign();
 
   }
 
