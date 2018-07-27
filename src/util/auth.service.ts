@@ -8,12 +8,16 @@ import {CookieService} from 'angular2-cookie/core';
 import {ResponseData} from '../bean/responseData';
 
 import {OptConfig} from '../config/config'
+import {ToolService} from "./tool.service";
 
 @Injectable()
 export class AuthService {
   private loginurl = new OptConfig().serverPath + '/api/user/';
 
-  constructor(private http: Http, private cookieService: CookieService) {
+  constructor(private http: Http,
+              private cookieService: CookieService,
+              private toolService:ToolService
+  ) {
 
   }
 
@@ -31,11 +35,12 @@ export class AuthService {
         this.getUserInfo().then(
           data=>{
             console.log(data);
-            if(data&&data.status==0){
+            let result=this.toolService.apiResult(data);
+            if(result&&result.status==0){
               resolve(data);
             }
             else{
-              reject({message:data.message,action:'login'})
+              reject({message:data.message})
             }
           },
           error=>{

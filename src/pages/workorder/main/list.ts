@@ -291,21 +291,36 @@ export class ListPage{
 
   doRefresh(refresher:Refresher){
     this.groups.splice(0,this.groups.length);
-    this.getOpCount();
-    this.getData(this.userid).then((data:ResponseData)=>{
-      if(data.status==0){
-        //this.listToGroup(data.data);
-        this.formatServerData(data.data);
+    this.authService.checkLogin().then((data:ResponseData)=>{
+      console.log(data);
+      this.userid=data.data.id;
+      this.getOpCount();
+      this.getData(this.userid).then((data:ResponseData)=>{
         refresher.complete();
-      }
-      else{
-        this.toolService.toast(data.message);
+        let result=this.toolService.apiResult(data);
+        if(result&&result.status==0){
+          this.formatServerData(result.data);
+          console.log(this.groups);
+        }
+        else{
+          this.toolService.toast(data.message);
+        }
+      }).catch((e)=>{
         refresher.complete();
-      }
+        this.toolService.toast(e);
+      });
     }).catch((e)=>{
-      this.toolService.toast(e);
       refresher.complete();
-    })
+      this.toolService.toast(e.message);
+      if(e.action&&e.action=='login'){
+        //this.navCtrl.push(LoginPage);
+        setTimeout(()=>{
+          this.events.publish('user:logout');
+        },0)
+      }
+    });
+
+
   }
 
   canDateClick(){
