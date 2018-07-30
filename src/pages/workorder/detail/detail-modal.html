@@ -71,7 +71,7 @@
     <ion-item >
       <ion-label fixed>客户签字：</ion-label>
       <ion-label (press)="editSign(operation.id)" >
-        <img [src]="sign" style="max-height:100px" >
+        <ion-img [src]="sign" style="max-height:100px" ></ion-img>
         <ion-icon name="create" md="md-create" color="primary" (click)="editSign(operation.id)"  style="float:right;margin-left: 5px;"></ion-icon>
       </ion-label>
     </ion-item>
