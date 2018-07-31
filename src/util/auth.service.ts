@@ -9,17 +9,20 @@ import {ResponseData} from '../bean/responseData';
 
 import {OptConfig} from '../config/config'
 import {ToolService} from "./tool.service";
+import {User} from "../bean/user";
 
 @Injectable()
 export class AuthService {
   private loginurl = new OptConfig().serverPath + '/api/user/';
-
+  private user:User;
   constructor(private http: Http,
               private cookieService: CookieService,
               private toolService:ToolService
   ) {
 
   }
+
+
 
   getUserInfo(): Promise<ResponseData> {
     let token = this.cookieService.get('optAppToken');
@@ -31,24 +34,20 @@ export class AuthService {
   }
 
   checkLogin(){
-      return new Promise((resolve,reject)=>{
-        this.getUserInfo().then(
-          data=>{
-            console.log(data);
-            let result=this.toolService.apiResult(data);
-            if(result&&result.status==0){
-              resolve(data);
-            }
-            else{
-              reject({message:data.message})
-            }
-          },
-          error=>{
-            reject({message:error});
-
+    return new Promise((resolve,reject)=>{
+      this.getUserInfo().then(
+        data=>{
+          console.log(data);
+          let result=this.toolService.apiResult(data);
+          if(result){
+            resolve(data);
           }
-        )
-      })
+        },
+        error=>{
+          reject({message:error});
+        }
+      )
+    })
   }
 
 

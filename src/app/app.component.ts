@@ -8,6 +8,7 @@ import {TabsPage} from '../pages/tabs/tab'
 import {AuthService} from "../util/auth.service";
 import {User} from "../bean/user";
 import {ResponseData} from "../bean/responseData";
+import {WebSocketService} from "../util/WebSocketService";
 @Component({
   templateUrl: 'app.html'
 })
@@ -17,12 +18,15 @@ export class MyApp {
 
   private user:User;
 
+  private socketurl='ws://192.168.1.106:8102'
+
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     public events:Events,
-    public authService:AuthService
+    public authService:AuthService,
+    public webSocketService:WebSocketService
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -31,18 +35,24 @@ export class MyApp {
       splashScreen.hide();
 
       this.events.subscribe('user:logout',()=>{
-        this.nav.setRoot('Login', {}).then(()=>{console.log('OK');}).catch((err: any) => {
+        this.nav.setRoot('Login', {}).then(()=>{}).catch((err: any) => {
           console.log(`Didn't set nav root: ${err}`);
         });
       })
 
-      this.authService.checkLogin().then((data:ResponseData)=>{
+      this.authService.getUserInfo().then((data:ResponseData)=>{
         if(data.status==0){
           this.user={...data.data};
         }
       }).catch((e)=>{
         console.log(e);
       })
+
+      this.webSocketService.createObservableSocket(this.socketurl).subscribe(
+        data=>{console.log(data);},
+        error=>{console.log(error);},
+        ()=>{console.log('complete');}
+      )
 
     });
   }

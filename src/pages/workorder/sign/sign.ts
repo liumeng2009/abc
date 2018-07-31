@@ -114,5 +114,13 @@ export class SignPage {
     )
   }
 
+  reload(){
+    let ops=this.navParams.get('opList');
+    this.signaturePad.clear();
+    if(ops.length==1){
+      this.getSign(ops[0]);
+    }
+  }
+
 
 }

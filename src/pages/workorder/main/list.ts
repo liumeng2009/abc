@@ -48,36 +48,6 @@ export class ListPage{
 
   private userid;
 
-/*  ionViewWillEnter(){
-    this.getDateString();
-    this.eventListener();
-    this.authService.checkLogin().then((data:ResponseData)=>{
-      console.log(data);
-      this.userid=data.data.id;
-      this.getOpCount();
-      this.getData(this.userid).then((data:ResponseData)=>{
-        let result=this.toolService.apiResult(data);
-        if(result&&result.status==0){
-          this.formatServerData(result.data);
-          console.log(this.groups);
-        }
-        else{
-          this.toolService.toast(data.message);
-        }
-      }).catch((e)=>{
-        this.toolService.toast(e);
-      });
-    }).catch((e)=>{
-      this.toolService.toast(e.message);
-      if(e.action&&e.action=='login'){
-        //this.navCtrl.push(LoginPage);
-        setTimeout(()=>{
-          this.events.publish('user:logout');
-        },0)
-      }
-    });
-  }*/
-
   ngOnInit(){
     this.getDateString();
     this.eventListener();
@@ -100,7 +70,6 @@ export class ListPage{
     }).catch((e)=>{
       this.toolService.toast(e.message);
       if(e.action&&e.action=='login'){
-        //this.navCtrl.push(LoginPage);
         setTimeout(()=>{
           this.events.publish('user:logout');
         },0)
@@ -232,7 +201,7 @@ export class ListPage{
     }
 
     //为groups增加sign，为了保证基本数据加载的速度，在第二时间加载sign图片
-    //this.initSign();
+    this.initSign();
 
   }
 
@@ -242,7 +211,7 @@ export class ListPage{
         this.signService.getSign(op.id).then(
           data=>{
             let result=this.toolService.apiResult(data);
-            if(result&&result.status==0){
+            if(result){
               op.signString=result.data;
             }
           },

@@ -14,8 +14,11 @@ export class ToolService{
       this.toast(data.message+'即将跳转到登录页面！');
       this.events.publish('user:logout');
     }
-    else{
+    else if(data.status==0){
       return data;
+    }
+    else{
+      this.toast(data.message)
     }
   }
 

@@ -9,6 +9,8 @@ import {CookieService} from "angular2-cookie/core";
 
 import {TabsPage} from '../tabs/tab'
 
+import * as moment from 'moment'
+
 @Component({
   selector:'login',
   templateUrl:'login.html'
@@ -32,7 +34,10 @@ export class LoginPage{
           this.isLoading=false;
           console.log(data);
           if(data&&data.status==0){
-            this.cookieService.put('optAppToken',data.data.token);
+            moment.locale('zh_cn');
+            let date=moment().add(7, 'days');
+            console.log(date);
+            this.cookieService.put('optAppToken',data.data.token,{expires:date.toISOString()});
             console.log(data.data.name);
             this.navCtrl.push(TabsPage,{ev:data.data.name});
           }

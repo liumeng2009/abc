@@ -5,13 +5,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule} from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
-
 import {CookieService} from 'angular2-cookie/core'
-
 import { SignaturePadModule } from 'angular2-signaturepad';
 
 import { MyApp } from './app.component';
-
 import {TabsPage} from '../pages/tabs/tab';
 import {ListPage} from '../pages/workorder/main/list'
 import {DetailPage} from '../pages/workorder/detail/detail'
@@ -19,7 +16,6 @@ import {DetailModalPage} from "../pages/workorder/detail/detail-modal"
 import {LoginPage} from '../pages/login/login'
 import {WeChatPage} from '../pages/wechat/wechat';
 import {SettingPage} from '../pages/settings/setting'
-
 import {PublicDataService} from '../util/data/public-data.service';
 import {ListService} from '../pages/workorder/main/list.service'
 import {LoginService} from '../pages/login/login.service'
@@ -42,7 +38,7 @@ import {SignService} from "../pages/workorder/sign/sign.service";
 import {SignsPage} from "../pages/workorder/sign/signs";
 import {QrService} from "../pages/workorder/qrcode/qr.service";
 import {QrPage} from "../pages/workorder/qrcode/qr";
-
+import {WebSocketService} from "../util/WebSocketService";
 
 @NgModule({
   declarations: [
@@ -123,6 +119,7 @@ import {QrPage} from "../pages/workorder/qrcode/qr";
     RememberService,
     SignService,
     QrService,
+    WebSocketService,
 
     AuthService,
     ToolService
