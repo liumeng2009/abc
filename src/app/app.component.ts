@@ -9,6 +9,7 @@ import {AuthService} from "../util/auth.service";
 import {User} from "../bean/user";
 import {ResponseData} from "../bean/responseData";
 import {WebSocketService} from "../util/WebSocketService";
+import {RememberService} from "../util/remember.service";
 @Component({
   templateUrl: 'app.html'
 })
@@ -26,7 +27,8 @@ export class MyApp {
     public splashScreen: SplashScreen,
     public events:Events,
     public authService:AuthService,
-    public webSocketService:WebSocketService
+    public webSocketService:WebSocketService,
+    public rememberService:RememberService
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -49,7 +51,23 @@ export class MyApp {
       })
 
       this.webSocketService.createObservableSocket(this.socketurl).subscribe(
-        data=>{console.log(data);},
+        data=>{
+          console.log(data);
+          let dataJson=JSON.parse(data);
+          console.log(dataJson);
+          if(dataJson.action){
+            switch(dataJson.action){
+              case 'sign complete':
+                let signidOwn=this.rememberService.getSignId();
+                if(signidOwn&&signidOwn==dataJson.signId){
+                  this.events.publish('client sign complete',{ids:dataJson.ids});
+                }
+                break;
+              default:
+                break;
+            }
+          }
+        },
         error=>{console.log(error);},
         ()=>{console.log('complete');}
       )
