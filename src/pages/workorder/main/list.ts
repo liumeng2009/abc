@@ -81,6 +81,9 @@ export class ListPage{
     this.events.subscribe('list sign:updated',(signResult:any)=>{
       this.allFalse();
     })
+    this.events.subscribe('client sign complete',()=>{
+      this.initSign();
+    })
   }
 
   private getDateString(){

@@ -1,24 +1,26 @@
 import {Injectable} from '@angular/core'
 import {Observable} from 'rxjs'
+import io from 'socket.io-client'
 
 @Injectable()
 export class WebSocketService{
-  ws:WebSocket
   constructor(){}
-
-  createObservableSocket(url:string):Observable<any>{
-    this.ws=new WebSocket(url);
+  private url='http://192.168.1.106:8102'
+  createObservableSocket():Observable<any>{
+    let socket = io(this.url);
     return new Observable(
       observer=>{
-        this.ws.onmessage=(event)=>observer.next(event.data);
-        this.ws.onerror=(event)=>observer.error(event);
-        this.ws.onclose=(event)=>observer.complete();
+        socket.onopen=()=>{
+          console.log('连接了');
+        }
+        socket.on('sign complete',(data)=>{
+          observer.next(data)
+        })
+
+        socket.onclose=(event)=>{
+          console.log('关闭了');
+        }
       }
     )
   }
-
-  sendMessage(message:string){
-    this.ws.send(message);
-  }
-
 }
