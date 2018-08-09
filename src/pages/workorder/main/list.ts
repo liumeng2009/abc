@@ -15,6 +15,7 @@ import {SignsPage} from "../sign/signs";
 import {RememberService} from "../../../util/remember.service";
 import {SignService} from "../sign/sign.service";
 import {QrPage} from "../qrcode/qr";
+import {AddPage} from "../add/add";
 
 
 @Component({
@@ -438,8 +439,11 @@ export class ListPage{
     else{
       this.toolService.toast('请至少选择一个工单！')
     }
-
-
   }
+
+  goAdd(){
+    this.navCtrl.push(AddPage)
+  }
+
 }
 

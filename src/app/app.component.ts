@@ -20,8 +20,6 @@ export class MyApp {
 
   private user:User;
 
-  private socketurl='ws://192.168.1.106:8102'
-
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,

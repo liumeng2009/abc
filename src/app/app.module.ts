@@ -39,6 +39,7 @@ import {SignsPage} from "../pages/workorder/sign/signs";
 import {QrService} from "../pages/workorder/qrcode/qr.service";
 import {QrPage} from "../pages/workorder/qrcode/qr";
 import {WebSocketService} from "../util/WebSocketService";
+import {AddPage} from "../pages/workorder/add/add";
 
 @NgModule({
   declarations: [
@@ -63,6 +64,8 @@ import {WebSocketService} from "../util/WebSocketService";
     WeChatPage,
     SettingPage,
 
+    AddPage,
+
     Autosize
   ],
   imports: [
@@ -77,7 +80,8 @@ import {WebSocketService} from "../util/WebSocketService";
         {component:DetailPage,name:'Detail',segment:'detail/:id',defaultHistory:[ListPage]},
         {component:WeChatPage,name:'WeChat',segment:'wechat'},
         {component:SettingPage,name:'Setting',segment:'setting'},
-        {component:LoginPage,name:'Login',segment:'login'}
+        {component:LoginPage,name:'Login',segment:'login'},
+        {component:AddPage,name:'Add',segment:'add',defaultHistory:[ListPage]}
       ]
     }),
     IonicStorageModule.forRoot(),
@@ -104,7 +108,9 @@ import {WebSocketService} from "../util/WebSocketService";
 
     LoginPage,
     WeChatPage,
-    SettingPage
+    SettingPage,
+
+    AddPage
   ],
   providers: [
     StatusBar,

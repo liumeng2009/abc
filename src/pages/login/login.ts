@@ -1,4 +1,5 @@
 import {Component} from '@angular/core'
+import {Title} from '@angular/platform-browser';
 import {
   NavController
 } from "ionic-angular";
@@ -18,11 +19,14 @@ import * as moment from 'moment'
 
 export class LoginPage{
   constructor(
+    private title:Title,
     private navCtrl:NavController,
     private cookieService:CookieService,
     private toolService:ToolService,
     private loginService:LoginService
-  ){}
+  ){
+    this.title.setTitle('登录');
+  }
 
   private user:User=new User('','');
   private isLoading:boolean=false;
