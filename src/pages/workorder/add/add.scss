@@ -1,0 +1,17 @@
+add-op{
+  .trans {
+    .toolbar-background{
+      background: transparent;
+      border-color: transparent;
+    }
+  }
+  ion-footer.footer-md::before{
+    background: transparent;
+  }
+  .slide-zoom{
+    height:100%;
+  }
+  .scroll-content{
+    padding-bottom:0px;
+  }
+}

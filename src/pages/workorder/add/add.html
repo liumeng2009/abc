@@ -1,20 +1,83 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      新增工单
+      {{title.getTitle()}}
     </ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <ion-slides #slide>
-    <ion-slide style="background-color: green">
-      <h2>Slide 1</h2>
+  <ion-slides #slide (ionSlideDidChange)="slideChanged($event)" >
+    <ion-slide>
+      <ion-list padding>
+        <ion-item>
+          <ion-label fixed>公司：</ion-label>
+          <ion-select #selectGroup [(ngModel)]="groupId" (ngModelChange)="groupOk($event)" okText="确定" cancelText="取消">
+            <ion-option [value]="g.id" *ngFor="let g of groups">{{g.name}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label fixed></ion-label>
+          <ion-select #selectCorporation [(ngModel)]="corporationId"  okText="确定" cancelText="取消">
+            <ion-option [value]="c.id" *ngFor="let c of corporations">{{c.name}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label fixed>来电号码：</ion-label>
+          <ion-input placeholder="来电号码" type="text" value=""></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label fixed>来电客户：</ion-label>
+          <ion-input placeholder="来电客户" type="text" value=""></ion-input>
+        </ion-item>
+      </ion-list>
+      <ion-footer>
+        <ion-toolbar class="trans">
+
+          <ion-buttons end>
+            <button ion-button icon-end color="primary" icon-end (click)="setBusiness()" [disabled]="canGoBusiness()" >
+              下一步
+              <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
     </ion-slide>
-    <ion-slide style="background-color: blue">
-      <h2>Slide 2</h2>
+    <ion-slide>
+      <ion-footer>
+        <ion-toolbar class="trans">
+          <ion-buttons start style="position: absolute">
+            <button ion-button icon-end color="primary" clear (click)="setCustom()" >
+              <ion-icon name="arrow-back"></ion-icon>
+              上一步
+            </button>
+          </ion-buttons>
+          <ion-buttons end>
+            <button ion-button icon-end color="primary" clear (click)="setAction()" [disabled]="canGoAction()" >
+              下一步
+              <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
     </ion-slide>
-    <ion-slide style="background-color: red">
-      <h2>Slide 3</h2>
+    <ion-slide>
+      <ion-footer>
+        <ion-toolbar class="trans">
+          <ion-buttons start style="position: absolute" >
+            <button ion-button icon-end color="primary" clear (click)="setCustom()"  >
+              <ion-icon name="arrow-back"></ion-icon>
+              上一步
+            </button>
+          </ion-buttons>
+
+          <ion-buttons end>
+            <button ion-button icon-end color="primary" clear (click)="setAction()" [disabled]="canGoAction()" >
+              完成
+              <ion-icon name="checkmark-circle"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
     </ion-slide>
   </ion-slides>
 </ion-content>
