@@ -11,7 +11,22 @@ add-op{
   .slide-zoom{
     height:100%;
   }
-  .scroll-content{
-    padding-bottom:0px;
+  .datetime-md{
+    padding-left: 16px;
   }
+  .need-list{
+    .input-wrapper{
+      flex:5
+    }
+    .item-inner{
+      .item-block .item-inner{
+        border-bottom:1px solid #dedede
+      }
+      .item-block:last-child .item-inner{
+        border-bottom:none
+      }
+    }
+  }
+
+
 }

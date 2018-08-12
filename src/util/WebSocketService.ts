@@ -5,7 +5,7 @@ import io from 'socket.io-client'
 @Injectable()
 export class WebSocketService{
   constructor(){}
-  private url='https://192.168.1.106:8102'
+  private url='https://192.168.50.183:8102'
   createObservableSocket():Observable<any>{
     let socket = io(this.url);
     return new Observable(

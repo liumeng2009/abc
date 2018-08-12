@@ -66,10 +66,10 @@ export class ListPage{
           this.toolService.toast(data.message);
         }
       }).catch((e)=>{
-        this.toolService.toast(e);
+        this.toolService.apiException(e);
       });
     }).catch((e)=>{
-      this.toolService.toast(e.message);
+      this.toolService.apiException(e);
       if(e.action&&e.action=='login'){
         setTimeout(()=>{
           this.events.publish('user:logout');
@@ -197,7 +197,7 @@ export class ListPage{
         }
         operations.push(operation);
       }
-      let groupObj=new Order(d.id,d.no,d.incoming_time,d.custom_phone,d.corporation.name,operations);
+      let groupObj=new Order(d.id,d.no,d.incoming_time,'',d.custom_phone,d.corporation,operations,[]);
       //添加到signStatusArray中
       let signStatus={id:d.id,show:false};
       this.signStatusArray.push(signStatus);
@@ -257,7 +257,7 @@ export class ListPage{
         }
       },
       error=>{
-        this.toolService.toast(error);
+        this.toolService.apiException(error);
       }
     )
   }
@@ -271,20 +271,17 @@ export class ListPage{
       this.getData(this.userid).then((data:ResponseData)=>{
         refresher.complete();
         let result=this.toolService.apiResult(data);
-        if(result&&result.status==0){
+        if(result.status==0){
           this.formatServerData(result.data);
           console.log(this.groups);
         }
-        else{
-          this.toolService.toast(data.message);
-        }
       }).catch((e)=>{
         refresher.complete();
-        this.toolService.toast(e);
+        this.toolService.apiException(e);
       });
     }).catch((e)=>{
       refresher.complete();
-      this.toolService.toast(e.message);
+      this.toolService.apiException(e);
       if(e.action&&e.action=='login'){
         //this.navCtrl.push(LoginPage);
         setTimeout(()=>{
@@ -323,7 +320,7 @@ export class ListPage{
         this.toolService.toast(data.message);
       }
     }).catch((error)=>{
-      this.toolService.toast(error)
+      this.toolService.apiException(error);
     });
   }
 
@@ -339,7 +336,7 @@ export class ListPage{
         this.toolService.toast(data.message);
       }
     }).catch((e)=>{
-      this.toolService.toast(e)
+      this.toolService.apiException(e);
     });
   }
 

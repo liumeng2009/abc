@@ -11,6 +11,7 @@ export class PublicDataService {
   private equiptypeurl = new OptConfig().serverPath + '/api/equipType/list';
   private equipmenturl = new OptConfig().serverPath + '/api/business/getequip/get';
   private businessurl = new OptConfig().serverPath + '/api/business/list';
+  private corporationBuildingUrl=new OptConfig().serverPath+'/api/corpBuildings/list';
 
   constructor(private http: Http) {
 

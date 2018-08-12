@@ -28,7 +28,7 @@ export class LoginPage{
     this.title.setTitle('登录');
   }
 
-  private user:User=new User('','');
+  private user:User=new User('','','');
   private isLoading:boolean=false;
   login(){
     if(!this.isLoading){
@@ -51,7 +51,7 @@ export class LoginPage{
         },
         error=>{
           this.isLoading=true;
-          this.toolService.toast(error);
+          this.toolService.apiException(error);
         }
       )
     }

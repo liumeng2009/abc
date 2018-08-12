@@ -3,12 +3,27 @@
     <ion-title>
       {{title.getTitle()}}
     </ion-title>
+    <ion-buttons end *ngIf="showAddBusinessButton">
+      <button ion-button (click)="addBusiness()">
+        新增业务
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content fullscreen="true">
   <ion-slides #slide (ionSlideDidChange)="slideChanged($event)" >
     <ion-slide>
       <ion-list padding>
+        <ion-item>
+          <ion-label fixed style="color:#999">发生时间：</ion-label>
+          <ion-datetime displayFormat="MM-DD HH:mm:ss" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
+                        [(ngModel)]="todayString"
+                        (ngModelChange)="okCreateTime()"
+                        cancelText="取消"
+                        doneText="确定"
+          >
+          </ion-datetime>
+        </ion-item>
         <ion-item>
           <ion-label fixed>公司：</ion-label>
           <ion-select #selectGroup [(ngModel)]="groupId" (ngModelChange)="groupOk($event)" okText="确定" cancelText="取消">
@@ -17,17 +32,18 @@
         </ion-item>
         <ion-item>
           <ion-label fixed></ion-label>
-          <ion-select #selectCorporation [(ngModel)]="corporationId"  okText="确定" cancelText="取消">
-            <ion-option [value]="c.id" *ngFor="let c of corporations">{{c.name}}</ion-option>
+          <ion-select #selectCorporation [(ngModel)]="corporation" [selectedText]="corporation?.name"  okText="确定" cancelText="取消">
+            <ion-option [value]="c" *ngFor="let c of corporations">{{c.name}}</ion-option>
           </ion-select>
         </ion-item>
+
         <ion-item>
           <ion-label fixed>来电号码：</ion-label>
-          <ion-input placeholder="来电号码" type="text" value=""></ion-input>
+          <ion-input type="text" [(ngModel)]="order.custom_phone"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label fixed>来电客户：</ion-label>
-          <ion-input placeholder="来电客户" type="text" value=""></ion-input>
+          <ion-input type="text" [(ngModel)]="order.custom_name"></ion-input>
         </ion-item>
       </ion-list>
       <ion-footer>
@@ -43,6 +59,74 @@
       </ion-footer>
     </ion-slide>
     <ion-slide>
+      <ion-scroll scrollY="true" style="height:100%">
+          <ion-list padding class="need-list">
+            <ion-item *ngFor="let need of needs">
+              <p style="flex:5" *ngIf="!need.edit&&!need.op.sequence">{{need.equipment.name}}{{need?.op?.equipOp?.name}} X {{need.no}}
+              </p>
+              <p style="flex:5" *ngIf="!need.edit&&need.op.sequence">{{need?.op?.equipOp?.name}}{{need.equipment.name}} X {{need.no}}
+              </p>
+              <button *ngIf="!need.edit" default style="flex:1" ion-button color="primary" item-end (click)="editNeedList(need)">编辑</button>
+              <button *ngIf="!need.edit" default style="flex:1" ion-button color="danger" item-end (click)="deleteNeedList(need)">删除</button>
+              <ion-item *ngIf="need.edit">
+                <ion-label>业务类型{{editType?.name}}</ion-label>
+                <ion-select #editSelectType [(ngModel)]="editType" [selectedText]="editType?.name" (ngModelChange)="editTypeOk($event)" okText="确定" cancelText="取消">
+                  <ion-option [value]="g" *ngFor="let g of editTypes">{{g.name}}</ion-option>
+                </ion-select>
+              </ion-item>
+              <ion-item *ngIf="need.edit">
+                <ion-label>设备名</ion-label>
+                <ion-select #editSelectEquipment [(ngModel)]="editEquipment"  [selectedText]="editEquipment?.name" (ngModelChange)="editEquipmentOk($event)"  okText="确定" cancelText="取消">
+                  <ion-option [value]="c" *ngFor="let c of editEquipments">{{c.name}}</ion-option>
+                </ion-select>
+              </ion-item>
+              <ion-item *ngIf="need.edit">
+                <ion-label>操作名</ion-label>
+                <ion-select #editSelectBusiness [(ngModel)]="editBusinessContent" [selectedText]="editBusinessContent?.equipOp?.name"  okText="确定" cancelText="取消">
+                  <ion-option [value]="bc" *ngFor="let bc of editBusinessContents">{{bc?.equipOp?.name}}</ion-option>
+                </ion-select>
+              </ion-item>
+              <ion-item *ngIf="need.edit">
+                <ion-range min="1" max="10" [(ngModel)]="editCount">
+                </ion-range>
+                <ion-badge item-end>{{editCount}}个</ion-badge>
+              </ion-item>
+              <ion-item  *ngIf="need.edit">
+                <button ion-button round color="primary" (click)="editNeed(need)">保存</button>
+                <button ion-button round color="light" (click)="cancelEditBusiness(need)">取消</button>
+              </ion-item>
+            </ion-item>
+          </ion-list>
+          <ion-list padding *ngIf="showAddList">
+            <ion-item>
+              <ion-label>业务类型</ion-label>
+              <ion-select #selectType [(ngModel)]="type" [selectedText]="type.name" (ngModelChange)="typeOk($event)" okText="确定" cancelText="取消">
+                <ion-option [value]="g" *ngFor="let g of types">{{g.name}}</ion-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>设备名</ion-label>
+              <ion-select #selectEquipment [(ngModel)]="equipment"  [selectedText]="equipment.name" (ngModelChange)="equipmentOk($event)"  okText="确定" cancelText="取消">
+                <ion-option [value]="c" *ngFor="let c of equipments">{{c.name}}</ion-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>操作名</ion-label>
+              <ion-select #selectBusiness [(ngModel)]="business" [selectedText]="business.equipOp.name"  okText="确定" cancelText="取消">
+                <ion-option [value]="bc" *ngFor="let bc of businessContents">{{bc?.equipOp?.name}}</ion-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-range min="1" max="10" [(ngModel)]="count">
+              </ion-range>
+              <ion-badge item-end>{{count}}个</ion-badge>
+            </ion-item>
+            <ion-item>
+              <button ion-button default color="primary" (click)="saveNeed()">保存</button>
+              <button ion-button default color="light" (click)="cancelAddBusiness()">取消</button>
+            </ion-item>
+          </ion-list>
+      </ion-scroll>
       <ion-footer>
         <ion-toolbar class="trans">
           <ion-buttons start style="position: absolute">
@@ -52,15 +136,50 @@
             </button>
           </ion-buttons>
           <ion-buttons end>
-            <button ion-button icon-end color="primary" clear (click)="setAction()" [disabled]="canGoAction()" >
-              下一步
-              <ion-icon name="arrow-forward"></ion-icon>
+            <button ion-button icon-end color="primary" clear (click)="setAction()" [disabled]="!canGoAction()||isLoadingWorkerId" >
+              <span  *ngIf="!isLoadingWorkerId">下一步</span>
+              <ion-spinner name="bubbles" color="primary" *ngIf="isLoadingWorkerId"></ion-spinner>
+              <ion-icon name="arrow-forward"  *ngIf="!isLoadingWorkerId"></ion-icon>
             </button>
           </ion-buttons>
         </ion-toolbar>
       </ion-footer>
     </ion-slide>
     <ion-slide>
+      <ion-scroll scrollY="true" style="height:100%">
+        <ion-grid>
+          <ion-row>
+            <ion-col col-2>
+              <span *ngFor="let wo of workerOrders">
+                <button ion-button small clear *ngIf="!wo.select">
+                  <ion-icon name="hammer"></ion-icon>
+                </button>
+                <button ion-button small outline *ngIf="wo.select">
+                  <ion-icon name="hammer"></ion-icon>
+                </button>
+              </span>
+
+            </ion-col>
+            <ion-col col-10>
+              <ion-list>
+                <ion-item>
+                  <ion-label>工单内容</ion-label>
+                  <ion-label>连接打印机</ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label>是否加急</ion-label>
+                  <ion-input type="text"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label>备注</ion-label>
+                  <ion-input type="text"></ion-input>
+                </ion-item>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+
+        </ion-grid>
+      </ion-scroll>
       <ion-footer>
         <ion-toolbar class="trans">
           <ion-buttons start style="position: absolute" >
@@ -71,7 +190,7 @@
           </ion-buttons>
 
           <ion-buttons end>
-            <button ion-button icon-end color="primary" clear (click)="setAction()" [disabled]="canGoAction()" >
+            <button ion-button icon-end color="primary" clear (click)="setAction()" >
               完成
               <ion-icon name="checkmark-circle"></ion-icon>
             </button>

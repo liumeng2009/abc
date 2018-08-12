@@ -1,7 +1,6 @@
-export class User {
+export class EquipOp {
   constructor(
     public id:string,
     public name: string,
-    public password: string
-  ) {  }
+    public code: string) {  }
 }
