@@ -23,11 +23,21 @@ export class ToolService{
   }
 
   apiException(error:any){
-    if(error=='0 -  {"isTrusted":true}'){
-      this.toast('网络错误，请重新尝试操作！')
+    if(error.message){
+      if(error.message=='0 -  {"isTrusted":true}'){
+        this.toast('网络错误，请重新尝试操作！')
+      }
+      else{
+        this.toast(error.message);
+      }
     }
     else{
-      this.toast(error);
+      if(error=='0 -  {"isTrusted":true}'){
+        this.toast('网络错误，请重新尝试操作！')
+      }
+      else{
+        this.toast(error);
+      }
     }
   }
 

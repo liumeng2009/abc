@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {NavController, Refresher, Events, ModalController} from 'ionic-angular'
+import {Title} from '@angular/platform-browser';
 
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
@@ -26,6 +27,7 @@ import {AddPage} from "../add/add";
 
 export class ListPage{
   constructor(
+    private title:Title,
     private navCtrl:NavController,
     private listService:ListService,
     private signService:SignService,
@@ -50,6 +52,7 @@ export class ListPage{
   private userid;
 
   ngOnInit(){
+    this.title.setTitle('首页')
     this.getDateString();
     this.eventListener();
     this.authService.checkLogin().then((data:ResponseData)=>{

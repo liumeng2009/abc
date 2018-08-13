@@ -1,6 +1,6 @@
 import {Component,ViewChild} from '@angular/core';
 import {Title} from '@angular/platform-browser'
-import { Slides } from 'ionic-angular';
+import { Slides,Scroll } from 'ionic-angular';
 import {Corporation} from "../../../bean/Corporation";
 import {Group} from "../../../bean/Group";
 import {PublicDataService} from "../../../util/data/public-data.service";
@@ -38,13 +38,15 @@ export class AddPage {
   @ViewChild('slide') slide:Slides;
   private todayString=moment().format();
   private create_time_run;
-  private order:Order=new Order(null,null,null,"","",null,[]);
+  private order:Order=new Order(null,null,null,"","",null,[],[]);
   ionViewWillEnter(){
+
     this.create_time_run=Observable.interval(1000).subscribe(()=>{
       this.todayString=moment().format();
     })
-
-    console.log(this.todayString);
+    this.scrollRight.addScrollEventListener((e)=>{
+      console.log(e);
+    })
     this.title.setTitle('新增工单-设置客户信息');
     this.slide.lockSwipeToNext(true);
     this.slide.lockSwipeToPrev(true);
@@ -112,6 +114,9 @@ export class AddPage {
     }
 
   }
+
+  @ViewChild('scrollRight') scrollRight:Scroll
+
 
   okCreateTime(){
     if(this.create_time_run)
@@ -209,7 +214,7 @@ export class AddPage {
     this.slide.lockSwipeToPrev(false);
     this.slide.slidePrev();
   }
-  private workerOrders:WorkOrder[]=[];
+  private workerOrders:WorkOrder[]=[new WorkOrder(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)];
   private user:User
   private isLoadingWorkerId:boolean=false
   setAction(){
@@ -226,6 +231,7 @@ export class AddPage {
           let incoming_time=new Date(this.todayString)
           console.log(incoming_time);
           console.log(this.todayString);
+          this.workerOrders.splice(0,this.workerOrders.length);
           for(let need of this.needs){
             for(let i=0;i<need.no;i++){
               let workerOrder=new WorkOrder(null,null,incoming_time.getTime(),incoming_time,false,null,null,null,null,this.user.id,need.type,need.equipment,need.op,true,false,false,true,null,incoming_time.getTime(),incoming_time,false,false)
@@ -234,6 +240,9 @@ export class AddPage {
           }
           if(this.workerOrders.length>0)
             this.workerOrders[0].select=true;
+
+          console.log(this.workerOrders);
+
         }
       },
       error=>{
@@ -243,6 +252,38 @@ export class AddPage {
     )
 
   }
+
+  start_click(){
+
+  }
+
+  finish_click(){
+
+  }
+
+  okStartTime(){
+
+  }
+
+  okFinishTime(){
+
+  }
+
+  private selectedIndex=0;
+  editWorkOrder(wo){
+    let i=0;
+    for(let woil of this.workerOrders){
+      woil.select=false;
+      if(wo===woil)
+        this.selectedIndex=i;
+      i++
+    }
+    wo.select=true;
+  }
+
+
+
+
 
   private showAddBusinessButton:boolean=false;
   slideChanged(){
