@@ -40,6 +40,7 @@ import {QrService} from "../pages/workorder/qrcode/qr.service";
 import {QrPage} from "../pages/workorder/qrcode/qr";
 import {WebSocketService} from "../util/WebSocketService";
 import {AddPage} from "../pages/workorder/add/add";
+import {ActionHelpPage} from "../pages/workorder/add/actionHelp";
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import {AddPage} from "../pages/workorder/add/add";
     SettingPage,
 
     AddPage,
+    ActionHelpPage,
 
     Autosize
   ],
@@ -110,7 +112,8 @@ import {AddPage} from "../pages/workorder/add/add";
     WeChatPage,
     SettingPage,
 
-    AddPage
+    AddPage,
+    ActionHelpPage
   ],
   providers: [
     StatusBar,

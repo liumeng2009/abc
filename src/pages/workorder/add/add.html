@@ -3,9 +3,12 @@
     <ion-title>
       {{title.getTitle()}}
     </ion-title>
-    <ion-buttons end *ngIf="showAddBusinessButton">
-      <button ion-button (click)="addBusiness()">
+    <ion-buttons end>
+      <button ion-button (click)="addBusiness()"  *ngIf="showAddBusinessButton">
         新增业务
+      </button>
+      <button ion-button icon-only (click)="showHelp($event)"  *ngIf="showAddActionButton">
+        <ion-icon name="help-circle"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -99,19 +102,28 @@
           </ion-list>
           <ion-list padding *ngIf="showAddList">
             <ion-item>
-              <ion-label>业务类型</ion-label>
+              <ion-label style="display: flex;justify-content: space-between;">
+                业务类型
+                <ion-spinner name="bubbles" color="primary" *ngIf="isLoadingAddType"></ion-spinner>
+              </ion-label>
               <ion-select #selectType [(ngModel)]="type" [selectedText]="type.name" (ngModelChange)="typeOk($event)" okText="确定" cancelText="取消">
                 <ion-option [value]="g" *ngFor="let g of types">{{g.name}}</ion-option>
               </ion-select>
             </ion-item>
             <ion-item>
-              <ion-label>设备名</ion-label>
-              <ion-select #selectEquipment [(ngModel)]="equipment"  [selectedText]="equipment.name" (ngModelChange)="equipmentOk($event)"  okText="确定" cancelText="取消">
-                <ion-option [value]="c" *ngFor="let c of equipments">{{c.name}}</ion-option>
-              </ion-select>
+              <ion-label style="display: flex;justify-content: space-between;">
+                设备名
+                <ion-spinner name="bubbles" color="primary" *ngIf="isLoadingAddEquipment"></ion-spinner>
+              </ion-label>
+                <ion-select #selectEquipment [(ngModel)]="equipment"  [selectedText]="equipment.name" (ngModelChange)="equipmentOk($event)"  okText="确定" cancelText="取消">
+                  <ion-option [value]="c" *ngFor="let c of equipments">{{c.name}}</ion-option>
+                </ion-select>
             </ion-item>
             <ion-item>
-              <ion-label>操作名</ion-label>
+              <ion-label style="display: flex;justify-content: space-between;">
+                操作名
+                <ion-spinner name="bubbles" color="primary" *ngIf="isLoadingAddOp"></ion-spinner>
+              </ion-label>
               <ion-select #selectBusiness [(ngModel)]="business" [selectedText]="business.equipOp.name"  okText="确定" cancelText="取消">
                 <ion-option [value]="bc" *ngFor="let bc of businessContents">{{bc?.equipOp?.name}}</ion-option>
               </ion-select>
@@ -152,12 +164,12 @@
             <ion-col col-2>
               <span *ngFor="let wo of workerOrders">
                 <button ion-button color="light" outline *ngIf="!wo.select" (click)="editWorkOrder(wo)">
-                  <ion-icon name="hammer" color="red" *ngIf="wo.showArriveDate&&!wo.showFinishDate"></ion-icon>
+                  <ion-icon name="hammer" color="danger" *ngIf="wo.showArriveDate&&!wo.showFinishDate"></ion-icon>
                   <ion-icon name="bicycle" color="primary" *ngIf="!wo.showArriveDate&&!wo.showFinishDate"></ion-icon>
                   <ion-icon name="checkmark" color="secondary" *ngIf="wo.showArriveDate&&wo.showFinishDate"></ion-icon>
                 </button>
                 <button ion-button color="light" *ngIf="wo.select"  (click)="editWorkOrder(wo)">
-                  <ion-icon name="hammer" color="red" *ngIf="wo.showArriveDate&&!wo.showFinishDate"></ion-icon>
+                  <ion-icon name="hammer" color="danger" *ngIf="wo.showArriveDate&&!wo.showFinishDate"></ion-icon>
                   <ion-icon name="bicycle" color="primary" *ngIf="!wo.showArriveDate&&!wo.showFinishDate"></ion-icon>
                   <ion-icon name="checkmark" color="secondary" *ngIf="wo.showArriveDate&&wo.showFinishDate"></ion-icon>
                 </button>
@@ -165,7 +177,7 @@
 
             </ion-col>
             <ion-col col-10  [ngStyle]="topNumber">
-              <ion-list>
+              <ion-list [ngStyle]="editArea">
                 <ion-item>
                   <ion-label fixed style="color:#999">工单内容：</ion-label>
                   <ion-label *ngIf="workerOrders[selectedIndex]?.op?.sequence">{{workerOrders[selectedIndex]?.op?.equipOp?.name}}{{workerOrders[selectedIndex]?.equipment?.name}}</ion-label>
@@ -173,7 +185,7 @@
                 </ion-item>
                 <ion-item>
                   <ion-label fixed style="color:#999">是否加急：</ion-label>
-                  <ion-toggle (ngModel)="workerOrders[selectedIndex].important"></ion-toggle>
+                  <ion-toggle [(ngModel)]="workerOrders[selectedIndex].important"></ion-toggle>
                 </ion-item>
                 <ion-item>
                   <ion-label fixed style="color:#999">备注：</ion-label>
@@ -182,24 +194,24 @@
                 <ion-item>
                   <ion-label fixed style="color:#999">开始时间：</ion-label>
                   <ion-datetime #start cancelText="取消" doneText="确定"  placeholder="未开始"
-                                displayFormat="MM月DD日 HH时mm分" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
+                                displayFormat="DD日 HH:mm" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
                                 [(ngModel)]="workerOrders[selectedIndex].arrive_date"
-                                (click)="start_click()"
-                                (ngModelChange)="okStartTime($event)"
+                                (click)="start_click($event,workerOrders[selectedIndex])"
+                                (ngModelChange)="okStartTime($event,workerOrders[selectedIndex])"
                   ></ion-datetime>
                 </ion-item>
                 <ion-item *ngIf="workerOrders[selectedIndex].showArriveDate">
                   <ion-label fixed style="color:#999">完成时间：</ion-label>
                   <ion-datetime #start cancelText="取消" doneText="确定"  placeholder="未开始"
-                                  displayFormat="MM月DD日 HH时mm分" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
+                                displayFormat="DD日 HH:mm" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
                                 [(ngModel)]="workerOrders[selectedIndex].finish_date"
                                 (click)="finish_click()"
-                                (ngModelChange)="okFinishTime($event)"
+                                (ngModelChange)="okFinishTime($event,workerOrders[selectedIndex])"
                   ></ion-datetime>
                 </ion-item>
                 <ion-item *ngIf="workerOrders[selectedIndex].showArriveDate&&workerOrders[selectedIndex].showFinishDate">
                   <ion-label fixed style="color:#999">工单完成？</ion-label>
-                  <ion-toggle  (ngModel)="workerOrders[selectedIndex].isCompleteOperation"></ion-toggle>
+                  <ion-toggle  [(ngModel)]="workerOrders[selectedIndex].isCompleteOperation"></ion-toggle>
                 </ion-item>
               </ion-list>
             </ion-col>

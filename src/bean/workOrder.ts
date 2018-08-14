@@ -20,13 +20,13 @@ export class WorkOrder {
     //响应时间
     public arrive_date_timestamp:number,
 
-    public arrive_date:Date,
+    public arrive_date:string,
 
 
     //完成时间
     public finish_date_timestamp:number,
 
-    public finish_date:Date,
+    public finish_date:string,
 
     public worker:string,
 

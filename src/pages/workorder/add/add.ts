@@ -1,6 +1,6 @@
 import {Component,ViewChild} from '@angular/core';
 import {Title} from '@angular/platform-browser'
-import { Slides,Scroll } from 'ionic-angular';
+import { Slides,Scroll,PopoverController,Popover } from 'ionic-angular';
 import {Corporation} from "../../../bean/Corporation";
 import {Group} from "../../../bean/Group";
 import {PublicDataService} from "../../../util/data/public-data.service";
@@ -17,6 +17,7 @@ import {AuthService} from "../../../util/auth.service";
 import {Order} from "../../../bean/order";
 import {WorkOrder} from "../../../bean/workOrder";
 import {User} from "../../../bean/user";
+import {ActionHelpPage} from "./actionHelp";
 
 @Component({
   templateUrl:'add.html',
@@ -30,7 +31,8 @@ export class AddPage {
     private publicDataService:PublicDataService,
     private toolService:ToolService,
     private cookieService:CookieService,
-    private authService:AuthService
+    private authService:AuthService,
+    private popService:PopoverController
   ) {
 
   }
@@ -39,13 +41,18 @@ export class AddPage {
   private todayString=moment().format();
   private create_time_run;
   private order:Order=new Order(null,null,null,"","",null,[],[]);
+  private editArea={
+    position:'relative',
+    top:'0px'
+  }
   ionViewWillEnter(){
 
     this.create_time_run=Observable.interval(1000).subscribe(()=>{
       this.todayString=moment().format();
     })
     this.scrollRight.addScrollEventListener((e)=>{
-      console.log(e);
+      if(e.srcElement.scrollTop)
+        this.editArea.top=e.srcElement.scrollTop+'px'
     })
     this.title.setTitle('新增工单-设置客户信息');
     this.slide.lockSwipeToNext(true);
@@ -261,12 +268,37 @@ export class AddPage {
 
   }
 
-  okStartTime(){
+  okStartTime(e,workerOrder:WorkOrder){
+    let startDate=new Date(e);
+    let stamp=startDate.getTime();
+    //怪异的操作，为了弥补修改插件造成的问题，没找到好的方案
+    //为了让他默认是东8区的时间，就在插件的取得默认值的方法上，加了8小时，于是当start_time是空的时候，这里要相应的减8小时
+    if(workerOrder.showArriveDate==false){
+      stamp=stamp-8*60*60*1000;
+      startDate=new Date(stamp);
+    }
+    workerOrder.showArriveDate=true;
+    workerOrder.arrive_date=moment(startDate).format();
+    workerOrder.arrive_date_timestamp=stamp;
+
+    console.log(workerOrder);
 
   }
 
-  okFinishTime(){
-
+  okFinishTime(e,workerOrder:WorkOrder){
+    let finishDate=new Date(e);
+    let stamp=finishDate.getTime();
+    //怪异的操作，为了弥补修改插件造成的问题，没找到好的方案
+    //为了让他默认是东8区的时间，就在插件的取得默认值的方法上，加了8小时，于是当start_time是空的时候，这里要相应的减8小时
+    if(workerOrder.showFinishDate==false){
+      stamp=stamp-8*60*60*1000;
+      finishDate=new Date(stamp);
+    }
+    workerOrder.showFinishDate=true;
+    workerOrder.finish_date=moment(finishDate).format();
+    workerOrder.finish_date_timestamp=stamp;
+    workerOrder.isCompleteOperation=true;
+    console.log(workerOrder);
   }
 
   private selectedIndex=0;
@@ -286,31 +318,49 @@ export class AddPage {
 
 
   private showAddBusinessButton:boolean=false;
+  private showAddActionButton:boolean=false;
   slideChanged(){
     this.slide.lockSwipeToNext(true);
     this.slide.lockSwipeToPrev(true);
     let index=this.slide.getActiveIndex();
     if(index==0){
       this.showAddBusinessButton=false;
+      this.showAddActionButton=false;
       this.title.setTitle('新增工单-设置客户信息');
     }
     else if(index==1){
       this.showAddBusinessButton=true;
+      this.showAddActionButton=false;
       this.title.setTitle('新增工单-设置业务内容');
     }
     else if(index==2){
       this.showAddBusinessButton=false;
+      this.showAddActionButton=true;
       this.title.setTitle('新增工单-设置处理进程');
     }
   }
 
+  private popover:Popover;
+  private showHelp(ev){
+    this.popover=this.popService.create(ActionHelpPage)
+    this.popover.present({
+      ev:ev
+    });
+  }
+
+  ionViewWillLeave(){
+    this.popover.dismiss();
+  }
 
   private type:EquipType;
   private types:EquipType[]=[];
+  private isLoadingAddType:boolean=false;
   getType(){
+    this.isLoadingAddType=true;
     return new Promise((resolve, reject)=>{
       this.publicDataService.getTypes().then(
         data=>{
+          this.isLoadingAddType=false;
           if(data.status==0){
             resolve(data)
           }
@@ -319,6 +369,7 @@ export class AddPage {
           }
         },
         error=>{
+          this.isLoadingAddType=false;
           reject(error)
         }
       )
@@ -327,10 +378,13 @@ export class AddPage {
 
   private equipment:Equipment;
   private equipments:Equipment[]=[];
+  private isLoadingAddEquipment:boolean=false;
   getEquipment(typecode){
+    this.isLoadingAddEquipment=true;
     return new Promise((resolve, reject)=>{
       this.publicDataService.getEquipment(typecode).then(
         data=>{
+          this.isLoadingAddEquipment=false;
           if(data.status==0){
             resolve(data)
           }
@@ -339,6 +393,7 @@ export class AddPage {
           }
         },
         error=>{
+          this.isLoadingAddEquipment=false;
           reject(error)
         }
       )
@@ -347,10 +402,13 @@ export class AddPage {
 
   private business:BusinessContent;
   private businessContents:any[]=[];
+  private isLoadingAddOp:boolean=false;
   getBusiness(typecode,equipment){
+    this.isLoadingAddOp=true;
     return new Promise((resolve, reject)=>{
       this.publicDataService.getBusinessContents(0,typecode,equipment).then(
         data=>{
+          this.isLoadingAddOp=false;
           if(data.status==0){
             resolve(data)
           }
@@ -359,6 +417,7 @@ export class AddPage {
           }
         },
         error=>{
+          this.isLoadingAddOp=false;
           reject(error)
         }
       )
@@ -415,7 +474,14 @@ export class AddPage {
 
   private needs:Needs[]=[];
   saveNeed(){
-    let need=new Needs(this.equipment,this.type,this.business,this.count,false);
+    let need:Needs={
+      equipment:this.equipment,
+      type:this.type,
+      op:this.business,
+      no:this.count,
+      edit:false
+    };
+    //new Needs(this.equipment,this.type,this.business,this.count,false);
     let isExistResult=this.isExistBusinessContent(this.business.id)
     if(isExistResult){
       isExistResult.no=isExistResult.no+this.count;
@@ -424,7 +490,9 @@ export class AddPage {
       this.needs.push(need)
     }
     console.log(this.needs);
-    this.cookieService.put('OpAppNeed',JSON.stringify(this.needs))
+    moment.locale('zh_cn');
+    let date=moment().add(7, 'days');
+    this.cookieService.put('OpAppNeed',JSON.stringify(this.needs),{expired:date.toISOString()})
     this.showAddList=false;
   }
   isExistBusinessContent(businessId){
