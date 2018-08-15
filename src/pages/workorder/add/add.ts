@@ -157,7 +157,7 @@ export class AddPage {
         },
         error=>{
           this.isLoadingGroup=false;
-          this.toolService.toast(error);
+          this.toolService.apiException(error);
           reject();
         }
       )
@@ -491,7 +491,8 @@ export class AddPage {
       type:this.type,
       op:this.business,
       no:this.count,
-      edit:false
+      edit:false,
+      forget:false
     };
     //new Needs(this.equipment,this.type,this.business,this.count,false);
     let isExistResult=this.isExistBusinessContent(this.business.id)
@@ -511,11 +512,11 @@ export class AddPage {
     //简化
     for(let need of this.needs){
       need.op.equipType=null;
-      need.op.createdAt=null;
-      need.op.updatedAt=null;
+      //need.op.createdAt=null;
+      //need.op.updatedAt=null;
       need.op.equipOp.id=null;
-      need.op.equipOp.createdAt=null;
-      need.op.equipOp.updatedAt=null;
+      //need.op.equipOp.createdAt=null;
+      //need.op.equipOp.updatedAt=null;
     }
 
     let newNeedArray=[...this.needs];
@@ -531,10 +532,15 @@ export class AddPage {
       let encodeUriStr=encodeURIComponent(jsonString);
       if(encodeUriStr.length>4000){
         this.toolService.toast('您增加的业务内容太多，由于存储限制，可能无法帮你全部记忆！')
-        testArray.splice(testArray.length,1);
+        testArray.splice(testArray.length-1,1);
         moment.locale('zh_cn');
         let date=moment().add(7, 'days');
         this.cookieService.put('OpAppNeed',JSON.stringify(testArray),{expires:date.toISOString()});
+        //i后面的，都无法记忆了
+        for(let index=i;index<=this.needs.length;index++){
+          this.needs[index-1].forget=true;
+        }
+
         break;
       }
       else{

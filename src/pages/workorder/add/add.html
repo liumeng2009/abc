@@ -71,9 +71,15 @@
       <ion-scroll scrollY="true" style="height:100%" #scrollTwo>
           <ion-list padding class="need-list">
             <ion-item *ngFor="let need of needs">
-              <p style="flex:5" *ngIf="!need.edit&&!need.op.sequence">{{need.equipment.name}}{{need?.op?.equipOp?.name}}{{need?.op?.isAdvanced?'（系统级）':''}} X {{need.no}}
+              <p style="flex:6" *ngIf="!need.edit&&!need.op.sequence">
+                <ion-icon name="thunderstorm" *ngIf="need?.forget" style="color:#ffc125" title="无法记忆"></ion-icon>
+                <span *ngIf="need?.op?.isAdvanced" style="color:#f53d3d">{{need.equipment.name}}{{need?.op?.equipOp?.name}}X {{need.no}}</span>
+                <span *ngIf="!need?.op?.isAdvanced">{{need.equipment.name}}{{need?.op?.equipOp?.name}}X {{need.no}}</span>
               </p>
-              <p style="flex:5" *ngIf="!need.edit&&need.op.sequence">{{need?.op?.equipOp?.name}}{{need.equipment.name}}{{need?.op?.isAdvanced?'（系统级）':''}} X {{need.no}}
+              <p style="flex:6" *ngIf="!need.edit&&need.op.sequence">
+                <ion-icon name="thunderstorm"  *ngIf="need?.forget" style="color:#ffc125" title="无法记忆"></ion-icon>
+                <span *ngIf="need?.op?.isAdvanced"  style="color:#f53d3d">{{need?.op?.equipOp?.name}}{{need.equipment.name}}X {{need.no}}</span>
+                <span *ngIf="!need?.op?.isAdvanced">{{need?.op?.equipOp?.name}}{{need.equipment.name}}X {{need.no}}</span>
               </p>
               <button *ngIf="!need.edit" default style="flex:1" ion-button color="primary" item-end (click)="editNeedList(need)">编辑</button>
               <button *ngIf="!need.edit" default style="flex:1" ion-button color="danger" item-end (click)="deleteNeedList(need)">删除</button>

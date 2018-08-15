@@ -7,6 +7,7 @@ export class Needs {
     public type:EquipType,
     public op: BusinessContent,
     public no: number,
-    public edit:boolean
+    public edit:boolean,
+    public forget:boolean
   ) {  }
 }
