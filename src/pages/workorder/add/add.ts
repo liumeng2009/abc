@@ -132,10 +132,13 @@ export class AddPage {
 
   private groups:Group[]=[];
   private groupId;
+  private isLoadingGroup:boolean=false;
   getGroups(){
+    this.isLoadingGroup=true;
     return new Promise((resolve,reject)=>{
       this.publicDataService.getGroups().then(
         data=>{
+          this.isLoadingGroup=false;
           let result=this.toolService.apiResult(data);
           if(result.status==0){
             this.groups=[...data.data];
@@ -152,8 +155,8 @@ export class AddPage {
             resolve();
           }
         },
-
         error=>{
+          this.isLoadingGroup=false;
           this.toolService.toast(error);
           reject();
         }
@@ -179,10 +182,13 @@ export class AddPage {
 
   private corporations:Corporation[]=[]
   private corporation:Corporation;
+  private isLoadingCorporation:boolean=false;
   getCorporation(){
+    this.isLoadingCorporation=true;
     return new Promise((resolve,reject)=>{
       this.publicDataService.getCoporations(this.groupId).then(
         data=>{
+          this.isLoadingCorporation=false;
           if(data.status==0){
             resolve(data)
           }
@@ -191,6 +197,7 @@ export class AddPage {
           }
         },
         error=>{
+          this.isLoadingCorporation=false;
           reject(error)
         }
       )
@@ -349,7 +356,8 @@ export class AddPage {
   }
 
   ionViewWillLeave(){
-    this.popover.dismiss();
+    if(this.popover)
+      this.popover.dismiss();
   }
 
   private type:EquipType;
@@ -464,6 +472,9 @@ export class AddPage {
     this.showAddList=true;
     //只归零数量，不归零其他三个select
     this.count=1;
+    setTimeout(()=>{
+      this.scrollTwo._scrollContent.nativeElement.scrollTop=this.scrollTwo._scrollContent.nativeElement.scrollHeight-this.scrollTwo._scrollContent.nativeElement.clientHeight;
+    },100)
   }
   cancelAddBusiness(){
     this.showAddList=false;
@@ -472,6 +483,7 @@ export class AddPage {
     need.edit=false;
   }
 
+  @ViewChild('scrollTwo') scrollTwo:Scroll;
   private needs:Needs[]=[];
   saveNeed(){
     let need:Needs={
@@ -490,11 +502,47 @@ export class AddPage {
       this.needs.push(need)
     }
     console.log(this.needs);
-    moment.locale('zh_cn');
-    let date=moment().add(7, 'days');
-    this.cookieService.put('OpAppNeed',JSON.stringify(this.needs),{expired:date.toISOString()})
+    this.rememberNeeds();
     this.showAddList=false;
   }
+
+  //简化needs，甚至删除一部分needs，以满足cookie存储限制4096字节
+  rememberNeeds(){
+    //简化
+    for(let need of this.needs){
+      need.op.equipType=null;
+      need.op.createdAt=null;
+      need.op.updatedAt=null;
+      need.op.equipOp.id=null;
+      need.op.equipOp.createdAt=null;
+      need.op.equipOp.updatedAt=null;
+    }
+
+    let newNeedArray=[...this.needs];
+    let testArray=[];
+
+    //可能性能不咋地
+    for(let i=1;i<newNeedArray.length+1;i++){
+      testArray.splice(0,testArray.length)
+      for(let j=0;j<i;j++){
+        testArray.push(newNeedArray[j]);
+      }
+      let jsonString=JSON.stringify(testArray)
+      let encodeUriStr=encodeURIComponent(jsonString);
+      if(encodeUriStr.length>4000){
+        this.toolService.toast('您增加的业务内容太多，由于存储限制，可能无法帮你全部记忆！')
+        testArray.splice(testArray.length,1);
+        moment.locale('zh_cn');
+        let date=moment().add(7, 'days');
+        this.cookieService.put('OpAppNeed',JSON.stringify(testArray),{expires:date.toISOString()});
+        break;
+      }
+      else{
+
+      }
+    }
+  }
+
   isExistBusinessContent(businessId){
     for(let need of this.needs){
       if(need.op.id==businessId){
