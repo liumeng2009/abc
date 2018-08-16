@@ -55,23 +55,28 @@ export class ListPage{
     this.title.setTitle('首页')
     this.getDateString();
     this.eventListener();
+
+  }
+
+  private isLoadingList:boolean=false;
+  ionViewWillEnter(){
+    this.isLoadingList=true
     this.authService.checkLogin().then((data:ResponseData)=>{
-      console.log(data);
+      this.isLoadingList=false;
       this.userid=data.data.id;
       this.getOpCount();
       this.getData(this.userid).then((data:ResponseData)=>{
         let result=this.toolService.apiResult(data);
-        if(result&&result.status==0){
+        if(result){
           this.formatServerData(result.data);
-          console.log(this.groups);
-        }
-        else{
-          this.toolService.toast(data.message);
+
         }
       }).catch((e)=>{
+
         this.toolService.apiException(e);
       });
     }).catch((e)=>{
+      this.isLoadingList=false;
       this.toolService.apiException(e);
       if(e.action&&e.action=='login'){
         setTimeout(()=>{
@@ -104,6 +109,7 @@ export class ListPage{
   private groups:Order[]=[];
   private opList:any[]=[];
   getData(userid:string){
+    this.isLoadingList=true;
     return new Promise((resolve,reject)=>{
       this.opList.splice(0,this.opList.length);
       let now=new Date(this.todayString);
@@ -113,8 +119,9 @@ export class ListPage{
         case 'working':
           this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString()),userid).then(
             data=>{
+              this.isLoadingList=false;
               let result=this.toolService.apiResult(data);
-              if(result&&result.status==0){
+              if(result){
                 for(let d of result.data){
                   moment.locale('zh_cn');
                   d.create_time_show=moment(d.create_time).fromNow();
@@ -125,6 +132,7 @@ export class ListPage{
 
             },
             error=>{
+              this.isLoadingList=false;
               reject(error);
             }
           );
@@ -132,13 +140,15 @@ export class ListPage{
         case 'done':
           this.listService.getDoneOpList(parseInt((date.getTime()/1000).toString()),userid).then(
             data=>{
+              this.isLoadingList=false;
               let result=this.toolService.apiResult(data);
-              if(result&&result.status==0){
+              if(result){
                 resolve(data);
               }
 
             },
             error=>{
+              this.isLoadingList=false;
               reject(error);
             }
           );
@@ -146,8 +156,9 @@ export class ListPage{
         default:
           this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString()),userid).then(
             data=>{
+              this.isLoadingList=false;
               let result=this.toolService.apiResult(data);
-              if(result&&result.status==0){
+              if(result){
                 for(let d of result.data){
                   moment.locale('zh_cn');
                   d.create_time_show=moment(d.create_time).fromNow();
@@ -157,6 +168,7 @@ export class ListPage{
 
             },
             error=>{
+              this.isLoadingList=false;
               reject(error);
             }
           );
@@ -200,7 +212,7 @@ export class ListPage{
         }
         operations.push(operation);
       }
-      let groupObj=new Order(d.id,d.no,d.incoming_time,'',d.custom_phone,d.corporation,operations,[]);
+      let groupObj=new Order(d.id,d.no,d.incoming_time,'',d.custom_phone,d.corporation,'',operations,[]);
       //添加到signStatusArray中
       let signStatus={id:d.id,show:false};
       this.signStatusArray.push(signStatus);

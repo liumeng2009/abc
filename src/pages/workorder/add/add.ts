@@ -18,6 +18,7 @@ import {Order} from "../../../bean/order";
 import {WorkOrder} from "../../../bean/workOrder";
 import {User} from "../../../bean/user";
 import {ActionHelpPage} from "./actionHelp";
+import {AddService} from "./add.service";
 
 @Component({
   templateUrl:'add.html',
@@ -32,7 +33,8 @@ export class AddPage {
     private toolService:ToolService,
     private cookieService:CookieService,
     private authService:AuthService,
-    private popService:PopoverController
+    private popService:PopoverController,
+    private addService:AddService
   ) {
 
   }
@@ -40,7 +42,7 @@ export class AddPage {
   @ViewChild('slide') slide:Slides;
   private todayString=moment().format();
   private create_time_run;
-  private order:Order=new Order(null,null,null,"","",null,[],[]);
+  private order:Order=new Order(null,null,null,"","",null,'',[],[]);
   private editArea={
     position:'relative',
     top:'0px'
@@ -221,6 +223,8 @@ export class AddPage {
   }
 
   setBusiness(){
+    if(this.create_time_run)
+      this.create_time_run.unsubscribe()
     this.slide.lockSwipeToNext(false);
     this.slide.slideNext();
   }
@@ -248,7 +252,7 @@ export class AddPage {
           this.workerOrders.splice(0,this.workerOrders.length);
           for(let need of this.needs){
             for(let i=0;i<need.no;i++){
-              let workerOrder=new WorkOrder(null,null,incoming_time.getTime(),incoming_time,false,null,null,null,null,this.user.id,need.type,need.equipment,need.op,true,false,false,true,null,incoming_time.getTime(),incoming_time,false,false)
+              let workerOrder=new WorkOrder(null,null,incoming_time.getTime(),incoming_time,false,null,null,null,null,this.user.id,need.type,need.equipment,need.op,true,false,false,true,null,incoming_time.getTime()+1000,incoming_time,false,false)
               this.workerOrders.push(workerOrder);
             }
           }
@@ -662,7 +666,34 @@ export class AddPage {
     need.op=this.editBusinessContent;
     need.no=this.editCount;
     need.edit=false;
-    this.cookieService.put('OpAppNeed',JSON.stringify(this.needs))
+    this.rememberNeeds();
+    //this.cookieService.put('OpAppNeed',JSON.stringify(this.needs))
+  }
+
+  private isLoadingSave:boolean=false;
+  save(){
+    this.isLoadingSave=true;
+    this.order.corporation=this.corporation;
+    let d=new Date(this.todayString);
+    this.order.incoming_time=d.getTime();
+    this.order.workerOrders=this.workerOrders;
+    this.order.custom_position='';
+    console.log(this.order);
+
+    this.addService.createOperation(this.order).then(
+      data=>{
+        let result=this.toolService.apiResult(data);
+        if(result){
+          this.toolService.toast(result.message);
+        }
+        this.isLoadingSave=false;
+      },
+      error=>{
+        this.isLoadingSave=false;
+        this.toolService.apiException(error)
+      }
+    )
+
   }
 
 

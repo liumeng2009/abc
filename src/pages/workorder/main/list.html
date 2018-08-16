@@ -43,13 +43,16 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-item *ngIf="groups.length==0">
+    <ion-item *ngIf="isLoadingList" style="display: flex; align-items: center; flex-direction: column;">
+      <ion-spinner name="bubbles" color="primary"></ion-spinner>
+    </ion-item>
+    <ion-item *ngIf="groups.length==0&&!isLoadingList">
       没有相关记录
     </ion-item>
     <ion-item-group *ngFor="let group of groups">
       <ion-item-divider sticky>
         <ion-label (press)="sign(group.id)">
-          {{group.incoming_time|dateList}} - {{group.custom_corporation?.name }} {{group.custom_phone=='15822927208'?'':('- '+group.custom_phone)}}
+          {{group.incoming_time|dateList}} - {{group.corporation?.name }} {{(group.custom_phone==''||group.custom_phone=='15822927208')?'':('- '+group.custom_phone)}}
           <a style="float:right;color:#999" (click)="sign(group.id)"  *ngIf="!showCheckbox(group.id)">签名</a>
           <a style="float:right;color:#488aff" (click)="sign(group.id)"  *ngIf="showCheckbox(group.id)">签名</a>
         </ion-label>

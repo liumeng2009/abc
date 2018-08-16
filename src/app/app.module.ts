@@ -41,6 +41,7 @@ import {QrPage} from "../pages/workorder/qrcode/qr";
 import {WebSocketService} from "../util/WebSocketService";
 import {AddPage} from "../pages/workorder/add/add";
 import {ActionHelpPage} from "../pages/workorder/add/actionHelp";
+import {AddService} from "../pages/workorder/add/add.service";
 
 @NgModule({
   declarations: [
@@ -129,6 +130,7 @@ import {ActionHelpPage} from "../pages/workorder/add/actionHelp";
     SignService,
     QrService,
     WebSocketService,
+    AddService,
 
     AuthService,
     ToolService

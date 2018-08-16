@@ -8,7 +8,8 @@ export class Order {
     public incoming_time: number,
     public custom_name:string,
     public custom_phone:string,
-    public custom_corporation:Corporation,
+    public corporation:Corporation,
+    public custom_position:string,
     public operations:Operation[],
     public workerOrders:WorkOrder[]
   ) {  }
