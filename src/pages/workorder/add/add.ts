@@ -48,7 +48,7 @@ export class AddPage {
     top:'0px'
   }
   ionViewWillEnter(){
-
+    this.title.setTitle('新增工单-设置客户信息');
     this.create_time_run=Observable.interval(1000).subscribe(()=>{
       this.todayString=moment().format();
     })
@@ -56,7 +56,6 @@ export class AddPage {
       if(e.srcElement.scrollTop)
         this.editArea.top=e.srcElement.scrollTop+'px'
     })
-    this.title.setTitle('新增工单-设置客户信息');
     this.slide.lockSwipeToNext(true);
     this.slide.lockSwipeToPrev(true);
     this.getGroups().then(()=>{
@@ -334,10 +333,11 @@ export class AddPage {
     this.slide.lockSwipeToNext(true);
     this.slide.lockSwipeToPrev(true);
     let index=this.slide.getActiveIndex();
+    console.log('触发了：'+index)
     if(index==0){
       this.showAddBusinessButton=false;
       this.showAddActionButton=false;
-      this.title.setTitle('新增工单-设置客户信息');
+      this.title.setTitle('新增工单1-设置客户信息');
     }
     else if(index==1){
       this.showAddBusinessButton=true;

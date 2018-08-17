@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, Refresher, Events, ModalController} from 'ionic-angular'
+import {NavController, Refresher, Events, ModalController,App} from 'ionic-angular'
 import {Title} from '@angular/platform-browser';
 
 import {ListService} from "./list.service";
@@ -27,6 +27,7 @@ import {AddPage} from "../add/add";
 
 export class ListPage{
   constructor(
+    private app:App,
     private title:Title,
     private navCtrl:NavController,
     private listService:ListService,
@@ -52,14 +53,18 @@ export class ListPage{
   private userid;
 
   ngOnInit(){
-    this.title.setTitle('首页')
     this.getDateString();
     this.eventListener();
-
   }
 
   private isLoadingList:boolean=false;
+  ionViewDidEnter(){
+    setTimeout(()=>{
+      this.title.setTitle('首页')
+    },0)
+  }
   ionViewWillEnter(){
+
     this.isLoadingList=true
     this.authService.checkLogin().then((data:ResponseData)=>{
       this.isLoadingList=false;
@@ -69,7 +74,6 @@ export class ListPage{
         let result=this.toolService.apiResult(data);
         if(result){
           this.formatServerData(result.data);
-
         }
       }).catch((e)=>{
 
@@ -178,6 +182,9 @@ export class ListPage{
   }
 
   formatServerData(data){
+    //清空group数组
+    this.groups.splice(0,this.groups.length);
+
     let dateNow=new Date();
     let dateNowStamp=dateNow.getTime();
     for(let d of data){
