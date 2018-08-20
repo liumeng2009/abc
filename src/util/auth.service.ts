@@ -27,7 +27,7 @@ export class AuthService {
   getUserInfo(): Promise<ResponseData> {
     let token = this.cookieService.get('optAppToken');
     let headers=new Headers({'Content-Type': 'application/json','authorization':token})
-    return this.http.get(this.loginurl,{headers:headers})
+    return this.http.get(this.loginurl+'?device=webapp',{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

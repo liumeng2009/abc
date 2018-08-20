@@ -6,87 +6,55 @@
       <ion-toolbar>
         <ion-item id="app_avatar">
           <ion-avatar item-start>
-            <img src="assets/imgs/1.jpg">
+            <img src="{{serverPath}}{{user?.avatar}}" *ngIf="user?.avatarUseImg=='0'">
+            <img src="{{serverPath}}{{user?.avatar}}" *ngIf="user?.avatarUseImg=='1'">
+            <img src="../assets/imgs/1.jpg" *ngIf="user?.avatarUseImg==null">
           </ion-avatar>
-          <h2>{{user?.name}}</h2>
+          <ion-label>
+            <h2>
+              {{user?.name}}
+            </h2>
+            <h4>
+              {{user?.role?.name}}
+            </h4>
+          </ion-label>
+
         </ion-item>
       </ion-toolbar>
     </ion-header>
 
     <ion-content class="outer-content">
-
+      <ion-grid>
+        <ion-row>
+          <ion-col col-4 style="display: flex;flex-direction:column;align-items: center">
+            <h3 style="color:#488aff">23</h3>
+            <span>单</span>
+          </ion-col>
+          <ion-col col-4 style="display: flex;flex-direction:column;align-items: center">
+            <h3 style="color:#488aff">456</h3>
+            <span>分钟</span>
+          </ion-col>
+          <ion-col col-4 style="display: flex;flex-direction:column;align-items: center">
+            <h3 style="color:#488aff">100%</h3>
+            <span>好评率</span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
       <ion-list>
-        <ion-list-header>
-          Navigate
-        </ion-list-header>
-        <button ion-item menuClose *ngFor="let p of appPages" (click)="openPage(p)">
-          <ion-icon item-start [name]="p.icon" [color]="isActive(p)"></ion-icon>
-          {{p.title}}
-        </button>
-      </ion-list>
-
-      <ion-list>
-        <ion-list-header>
-          Account
-        </ion-list-header>
-        <button ion-item menuClose *ngFor="let p of loggedOutPages" (click)="openPage(p)">
-          <ion-icon item-start [name]="p.icon" [color]="isActive(p)"></ion-icon>
-          {{p.title}}
-        </button>
-      </ion-list>
-
-      <ion-list>
-        <ion-list-header>
-          Tutorial
-        </ion-list-header>
-        <button ion-item menuClose (click)="openTutorial()">
-          <ion-icon item-start name="hammer"></ion-icon>
-          Show Tutorial
-        </button>
-      </ion-list>
-    </ion-content>
-
-  </ion-menu>
-
-  <!-- logged in menu -->
-  <ion-menu id="loggedInMenu" [content]="content">
-
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Menu</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content class="outer-content">
-
-      <ion-list>
-        <ion-list-header>
-          Navigate
-        </ion-list-header>
-        <button ion-item menuClose *ngFor="let p of appPages" (click)="openPage(p)">
-          <ion-icon item-start [name]="p.icon" [color]="isActive(p)"></ion-icon>
-          {{p.title}}
-        </button>
-      </ion-list>
-
-      <ion-list>
-        <ion-list-header>
-          Account
-        </ion-list-header>
-        <button ion-item menuClose *ngFor="let p of loggedInPages" (click)="openPage(p)">
-          <ion-icon item-start [name]="p.icon" [color]="isActive(p)"></ion-icon>
-          {{p.title}}
-        </button>
-      </ion-list>
-
-      <ion-list>
-        <ion-list-header>
-          Tutorial
-        </ion-list-header>
-        <button ion-item menuClose (click)="openTutorial()">
-          <ion-icon item-start name="hammer"></ion-icon>
-          Show Tutorial
-        </button>
+        <ion-list>
+          <ion-item (click)="goData()">
+            <ion-icon name="pie" color="primary" style="margin-right: 5px;"></ion-icon>
+            我的数据
+          </ion-item>
+          <ion-item ion-item (click)="goSettings()">
+            <ion-icon name="settings" color="primary" style="margin-right: 5px;"></ion-icon>
+            设置
+          </ion-item>
+          <ion-item ion-item (click)="exit()">
+            <ion-icon name="log-out" color="primary" style="margin-right: 5px;" ></ion-icon>
+            退出账户
+          </ion-item>
+        </ion-list>
       </ion-list>
 
     </ion-content>

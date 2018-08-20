@@ -13,7 +13,7 @@ export class LoginService{
   private loginurl=new OptConfig().serverPath+'/api/user/login'
 
   login(user:User):Promise<ResponseData>{
-    return this.http.post(this.loginurl,user,{headers: this.headers})
+    return this.http.post(this.loginurl+'?device=webapp',user,{headers: this.headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

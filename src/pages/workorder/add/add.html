@@ -200,9 +200,6 @@
                   <ion-toggle [(ngModel)]="workerOrders[selectedIndex].important"></ion-toggle>
                 </ion-item>
                 <ion-item>
-                  <ion-label>{{workerOrders[selectedIndex].call_date_timestamp}} {{workerOrders[selectedIndex].incoming_date_timestamp}}</ion-label>
-                </ion-item>
-                <ion-item>
                   <ion-label style="color:#999">备注：</ion-label>
                   <ion-textarea autosize (ngModel)="workerOrders[selectedIndex].remark"></ion-textarea>
                 </ion-item>

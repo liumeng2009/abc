@@ -1,7 +1,7 @@
 import {Component} from '@angular/core'
 import {Title} from '@angular/platform-browser';
 import {
-  NavController
+  NavController,Events
 } from "ionic-angular";
 import {User} from '../../bean/user'
 import {LoginService} from "./login.service";
@@ -23,12 +23,13 @@ export class LoginPage{
     private navCtrl:NavController,
     private cookieService:CookieService,
     private toolService:ToolService,
-    private loginService:LoginService
+    private loginService:LoginService,
+    private event:Events
   ){
     this.title.setTitle('登录');
   }
 
-  private user:User=new User('','','');
+  private user:User=new User('','','',null,null,null);
   private isLoading:boolean=false;
   login(){
     if(!this.isLoading){
@@ -41,9 +42,11 @@ export class LoginPage{
             moment.locale('zh_cn');
             let date=moment().add(7, 'days');
             console.log(date);
-            this.cookieService.put('optAppToken',data.data.token,{expires:date.toISOString()});
+            this.cookieService.put('optAppToken',data.data.webapptoken,{expires:date.toISOString()});
             console.log(data.data.name);
             this.navCtrl.push(TabsPage,{ev:data.data.name});
+            //发出事件，这时候app.component的一些UI应该发生变化了
+            this.event.publish('user:login',this.user)
           }
           else{
             this.toolService.toast(data.message);

@@ -11,6 +11,7 @@ import {ResponseData} from "../bean/responseData";
 import {WebSocketService} from "../util/WebSocketService";
 import {RememberService} from "../util/remember.service";
 import {ToolService} from "../util/tool.service";
+import {OptConfig} from "../config/config";
 @Component({
   templateUrl: 'app.html'
 })
@@ -19,6 +20,7 @@ export class MyApp {
   rootPage:any = TabsPage;
 
   private user:User;
+  private serverPath:string=new OptConfig().serverPath;
 
   constructor(
     public platform: Platform,
@@ -42,9 +44,14 @@ export class MyApp {
         });
       })
 
+      this.events.subscribe('user:login',(user)=>{
+        this.user={...user};
+      })
+
       this.authService.getUserInfo().then((data:ResponseData)=>{
         if(data.status==0){
           this.user={...data.data};
+          console.log(this.user);
         }
       }).catch((e)=>{
         console.log(e);
@@ -75,5 +82,20 @@ export class MyApp {
 
     });
   }
+
+  goData(){
+    alert(123)
+  }
+
+  goSettings(){
+
+  }
+
+  exit(){
+
+  }
+
+
+
 }
 

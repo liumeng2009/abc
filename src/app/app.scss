@@ -16,14 +16,11 @@
 // automatically applied to the <body> element in the app.
 
 #app_avatar.item-md.item-block{
-  display: block;
+  display: flex;
   background-color: transparent;
   .item-inner{
     border:none;
     color:#fff
-  }
-  ion-avatar[item-start]{
-    margin-top: 18px;
   }
 }
 

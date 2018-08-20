@@ -1,6 +1,6 @@
 import {Component,ViewChild} from '@angular/core';
 import {Title} from '@angular/platform-browser'
-import { Slides,Scroll,PopoverController,Popover } from 'ionic-angular';
+import { Slides,Scroll,PopoverController,Popover,NavController } from 'ionic-angular';
 import {Corporation} from "../../../bean/Corporation";
 import {Group} from "../../../bean/Group";
 import {PublicDataService} from "../../../util/data/public-data.service";
@@ -19,6 +19,7 @@ import {WorkOrder} from "../../../bean/workOrder";
 import {User} from "../../../bean/user";
 import {ActionHelpPage} from "./actionHelp";
 import {AddService} from "./add.service";
+import {ListPage} from "../main/list";
 
 @Component({
   templateUrl:'add.html',
@@ -29,6 +30,7 @@ import {AddService} from "./add.service";
 export class AddPage {
   constructor(
     private title:Title,
+    private navCtrl:NavController,
     private publicDataService:PublicDataService,
     private toolService:ToolService,
     private cookieService:CookieService,
@@ -323,10 +325,6 @@ export class AddPage {
     wo.select=true;
   }
 
-
-
-
-
   private showAddBusinessButton:boolean=false;
   private showAddActionButton:boolean=false;
   slideChanged(){
@@ -525,7 +523,8 @@ export class AddPage {
 
     let newNeedArray=[...this.needs];
     let testArray=[];
-
+    moment.locale('zh_cn');
+    let date=moment().add(7, 'days');
     //可能性能不咋地
     for(let i=1;i<newNeedArray.length+1;i++){
       testArray.splice(0,testArray.length)
@@ -537,18 +536,18 @@ export class AddPage {
       if(encodeUriStr.length>4000){
         this.toolService.toast('您增加的业务内容太多，由于存储限制，可能无法帮你全部记忆！')
         testArray.splice(testArray.length-1,1);
-        moment.locale('zh_cn');
-        let date=moment().add(7, 'days');
+
         this.cookieService.put('OpAppNeed',JSON.stringify(testArray),{expires:date.toISOString()});
         //i后面的，都无法记忆了
         for(let index=i;index<=this.needs.length;index++){
           this.needs[index-1].forget=true;
         }
-
         break;
       }
       else{
-
+        if(testArray.length==newNeedArray.length){
+          this.cookieService.put('OpAppNeed',JSON.stringify(testArray),{expires:date.toISOString()});
+        }
       }
     }
   }
@@ -685,6 +684,8 @@ export class AddPage {
         let result=this.toolService.apiResult(data);
         if(result){
           this.toolService.toast(result.message);
+          this.navCtrl.push(ListPage);
+          this.cookieService.remove('OpAppNeed')
         }
         this.isLoadingSave=false;
       },
