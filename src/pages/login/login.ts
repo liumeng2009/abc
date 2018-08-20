@@ -37,19 +37,15 @@ export class LoginPage{
       this.loginService.login(this.user).then(
         data=>{
           this.isLoading=false;
-          console.log(data);
-          if(data&&data.status==0){
+          let result=this.toolService.apiResult(data);
+          if(result){
             moment.locale('zh_cn');
             let date=moment().add(7, 'days');
-            console.log(date);
             this.cookieService.put('optAppToken',data.data.webapptoken,{expires:date.toISOString()});
-            console.log(data.data.name);
+            this.user={...result.data};
             this.navCtrl.push(TabsPage,{ev:data.data.name});
             //发出事件，这时候app.component的一些UI应该发生变化了
             this.event.publish('user:login',this.user)
-          }
-          else{
-            this.toolService.toast(data.message);
           }
         },
         error=>{

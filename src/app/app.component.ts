@@ -1,7 +1,9 @@
 import { Component,ViewChild } from '@angular/core';
-import { Platform,Events,Nav } from 'ionic-angular';
+import { Platform,Events,Nav,MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
+import {CookieService} from "angular2-cookie/core";
 
 //import { ListPage } from '../pages/workorder/main/list.tab';
 import {TabsPage} from '../pages/tabs/tab'
@@ -30,7 +32,9 @@ export class MyApp {
     public authService:AuthService,
     public webSocketService:WebSocketService,
     public rememberService:RememberService,
-    public toolService:ToolService
+    public toolService:ToolService,
+    private cookieService:CookieService,
+    private menuCtrl:MenuController
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -44,18 +48,12 @@ export class MyApp {
         });
       })
 
+      //这个页面是程序入口，在这里获取user，其他页面都获取这个user
       this.events.subscribe('user:login',(user)=>{
-        this.user={...user};
+        this.getUserInfo();
       })
 
-      this.authService.getUserInfo().then((data:ResponseData)=>{
-        if(data.status==0){
-          this.user={...data.data};
-          console.log(this.user);
-        }
-      }).catch((e)=>{
-        console.log(e);
-      })
+      this.getUserInfo();
 
       this.webSocketService.createObservableSocket().subscribe(
         data=>{
@@ -83,6 +81,28 @@ export class MyApp {
     });
   }
 
+  getUserInfo(){
+    this.authService.getUserInfo().then((data:ResponseData)=>{
+      if(data.status==0){
+        this.user={...data.data};
+        console.log(this.user);
+      }
+    }).catch((e)=>{
+      console.log(e);
+    })
+/*    this.authService.getUserInfo().then(
+      data=>{
+        let result=this.toolService.apiResult(data);
+        if(result){
+          this.user={...result.data}
+        }
+      },
+      error=>{
+        this.toolService.apiException(error)
+      }
+    )*/
+  }
+
   goData(){
     alert(123)
   }
@@ -91,8 +111,17 @@ export class MyApp {
 
   }
 
-  exit(){
+  goAbout(){
 
+  }
+
+  exit(){
+    this.user=null;
+    this.cookieService.remove('optAppToken');
+    this.nav.setRoot('Login', {}).then(()=>{}).catch((err: any) => {
+      console.log(`Didn't set nav root: ${err}`);
+    });
+    this.menuCtrl.close();
   }
 
 
