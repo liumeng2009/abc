@@ -12,6 +12,7 @@ import {RememberService} from "../util/remember.service";
 import {ToolService} from "../util/tool.service";
 import {OptConfig} from "../config/config";
 import {NetExceptionPage} from "../pages/login/NetException";
+import {PublicDataService} from "../util/data/public-data.service";
 @Component({
   templateUrl: 'app.html'
 })
@@ -32,7 +33,8 @@ export class MyApp {
     public rememberService:RememberService,
     public toolService:ToolService,
     private cookieService:CookieService,
-    private menuCtrl:MenuController
+    private menuCtrl:MenuController,
+    private publicDataService:PublicDataService
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -47,9 +49,9 @@ export class MyApp {
       })
 
       //这个页面是程序入口，在这里获取user，其他页面都获取这个user
-/*      this.events.subscribe('user:login',(user)=>{
+      this.events.subscribe('user:login',(user)=>{
         this.getUserInfo();
-      })*/
+      })
 
       this.getUserInfo();
 
@@ -81,13 +83,49 @@ export class MyApp {
 
   getUserInfo(){
     this.authService.getUserInfo().then((data:ResponseData)=>{
-      let result=this.toolService.apiResult(data)
-      if(result){
-        this.user={...result.data};
+      //let result=this.toolService.apiResult(data)
+      if(data.status==0){
+        this.user={...data.data};
+        this.getUserWorkData(this.user.id);
       }
     }).catch((e)=>{
 
     })
+  }
+
+  private opCount=0;
+  private opStamp=0;
+  getUserWorkData(userid){
+    this.getOpCount(userid)
+    this.getOpStamp(userid)
+  }
+
+  getOpCount(userid){
+    this.publicDataService.getWorkerOpCount(userid).then(
+      data=>{
+        if(data.status==0){
+          this.opCount=data.data;
+        }
+      },
+      error=>{
+
+      }
+    )
+  }
+
+  getOpStamp(userid){
+      this.publicDataService.getWorkerOpStamp(userid).then(
+        data=>{
+          console.log(data)
+          if(data.status==0){
+            this.opStamp=data.data[0].stamp;
+          }
+        },
+        error=>{
+
+        }
+      )
+
   }
 
   goData(){

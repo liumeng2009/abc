@@ -30,24 +30,23 @@
       <ion-grid *ngIf="user">
         <ion-row>
           <ion-col col-4 style="display: flex;flex-direction:column;align-items: center">
-            <h3 style="color:#488aff">23</h3>
+            <span style="font-weight: bolder;line-height: 200%;color:#488aff">{{opCount}}</span>
             <span>单</span>
           </ion-col>
           <ion-col col-4 style="display: flex;flex-direction:column;align-items: center">
-            <h3 style="color:#488aff">456</h3>
+            <span  style="font-weight: bolder;line-height: 200%;color:#488aff">{{opStamp}}</span>
             <span>分钟</span>
           </ion-col>
           <ion-col col-4 style="display: flex;flex-direction:column;align-items: center">
-            <h3 style="color:#488aff">100%</h3>
+            <span  style="font-weight: bolder;line-height: 200%;color:#488aff">100%</span>
             <span>好评率</span>
           </ion-col>
         </ion-row>
       </ion-grid>
       <ion-list>
-        <ion-list>
           <ion-item (click)="goData()"  *ngIf="user">
             <ion-icon name="pie" color="primary" style="margin-right: 5px;"></ion-icon>
-            我的数据
+            我的工作数据
           </ion-item>
           <ion-item ion-item (click)="goSettings()"  *ngIf="user">
             <ion-icon name="settings" color="primary" style="margin-right: 5px;"></ion-icon>
@@ -62,7 +61,6 @@
             退出账户
           </ion-item>
         </ion-list>
-      </ion-list>
 
     </ion-content>
 

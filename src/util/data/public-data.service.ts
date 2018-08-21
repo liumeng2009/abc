@@ -3,6 +3,7 @@ import {Http,Response,Headers} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {ResponseData} from '../../bean/responseData';
 import {OptConfig} from '../../config/config'
+import {CookieService} from 'angular2-cookie/core';
 
 @Injectable()
 export class PublicDataService {
@@ -13,7 +14,11 @@ export class PublicDataService {
   private businessurl = new OptConfig().serverPath + '/api/business/list';
   private corporationBuildingUrl=new OptConfig().serverPath+'/api/corpBuildings/list';
 
-  constructor(private http: Http) {
+  private workerOpCount=new OptConfig().serverPath+'/api/operation/workerOpCount'
+  private workerOpStamp=new OptConfig().serverPath+'/api/operation/workerOpStamp'
+
+  constructor(private http: Http,
+              private cookieService: CookieService,) {
 
   }
 
@@ -75,6 +80,23 @@ export class PublicDataService {
     }
     console.log(url);
     return this.http.get(url)
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+
+  getWorkerOpCount(userid){
+    let token=this.cookieService.get('optAppToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http.get(this.workerOpCount+'?userid='+userid,{headers:headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+  getWorkerOpStamp(userid){
+    let token=this.cookieService.get('optAppToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http.get(this.workerOpStamp+'?userid='+userid,{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
