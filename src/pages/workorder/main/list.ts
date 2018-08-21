@@ -1,22 +1,19 @@
 import {Component} from '@angular/core';
-import {NavController, Refresher, Events, ModalController,App} from 'ionic-angular'
+import {NavController, Refresher, Events, ModalController} from 'ionic-angular'
 import {Title} from '@angular/platform-browser';
-
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
-import {AuthService} from "../../../util/auth.service";
 import {ResponseData} from "../../../bean/responseData";
-
 import {DetailPage} from '../detail/detail'
-
 import * as moment from 'moment'
 import {Operation} from "../../../bean/operation";
 import {Order} from "../../../bean/order";
-import {SignsPage} from "../sign/signs";
 import {RememberService} from "../../../util/remember.service";
 import {SignService} from "../sign/sign.service";
 import {QrPage} from "../qrcode/qr";
 import {AddPage} from "../add/add";
+import {User} from "../../../bean/user";
+import {AuthService} from "../../../util/auth.service";
 
 
 @Component({
@@ -27,16 +24,15 @@ import {AddPage} from "../add/add";
 
 export class ListPage{
   constructor(
-    private app:App,
     private title:Title,
     private navCtrl:NavController,
     private listService:ListService,
     private signService:SignService,
     private toolService:ToolService,
-    private authService:AuthService,
     private events:Events,
     private modalCtrl:ModalController,
-    private rememberService:RememberService
+    private rememberService:RememberService,
+    private authService:AuthService
   ){
 
   }
@@ -50,7 +46,7 @@ export class ListPage{
     all:0
   }
 
-  private userid;
+  private user:User;
 
   ngOnInit(){
     this.getDateString();
@@ -65,29 +61,37 @@ export class ListPage{
   }
   ionViewWillEnter(){
 
-    this.isLoadingList=true
-    this.authService.checkLogin().then((data:ResponseData)=>{
-      this.isLoadingList=false;
-      this.userid=data.data.id;
-      this.getOpCount();
-      this.getData(this.userid).then((data:ResponseData)=>{
-        let result=this.toolService.apiResult(data);
+    this.authService.getUserInfo().then(
+      data=>{
+        let result=this.toolService.apiResult(data)
         if(result){
-          this.formatServerData(result.data);
+          this.user={...result.data}
+          this.init();
         }
-      }).catch((e)=>{
+      },
+      error=>{
+        this.toolService.apiException(error);
+      }
 
-        this.toolService.apiException(e);
-      });
+    )
+
+
+
+  }
+
+  init(){
+    this.isLoadingList=true;
+    this.getOpCount();
+    this.getData(this.user.id).then((data:ResponseData)=>{
+      this.isLoadingList=false;
+      let result=this.toolService.apiResult(data);
+      if(result){
+        this.formatServerData(result.data);
+      }
     }).catch((e)=>{
       this.isLoadingList=false;
-      this.toolService.apiException(e);
-      if(e.action&&e.action=='login'){
-        setTimeout(()=>{
-          this.events.publish('user:logout');
-        },0)
-      }
-    });
+      this.toolService.apiException(e)
+    })
   }
 
   private eventListener(){
@@ -272,7 +276,7 @@ export class ListPage{
     let now=new Date(this.todayString);
     this.today=now;
     let date=this.today;
-    this.listService.getOpCount(parseInt((date.getTime()/1000).toString()),this.userid).then(
+    this.listService.getOpCount(parseInt((date.getTime()/1000).toString()),this.user.id).then(
       data=>{
         if(data.status==0){
           this.statusCount=data.data;
@@ -286,32 +290,21 @@ export class ListPage{
 
   doRefresh(refresher:Refresher){
     this.groups.splice(0,this.groups.length);
-    this.authService.checkLogin().then((data:ResponseData)=>{
-      console.log(data);
-      this.userid=data.data.id;
-      this.getOpCount();
-      this.getData(this.userid).then((data:ResponseData)=>{
+    if(this.user){
+      this.getData(this.user.id).then((data:ResponseData)=>{
         refresher.complete();
         let result=this.toolService.apiResult(data);
-        if(result.status==0){
+        if(result){
           this.formatServerData(result.data);
-          console.log(this.groups);
         }
       }).catch((e)=>{
         refresher.complete();
-        this.toolService.apiException(e);
-      });
-    }).catch((e)=>{
+        this.toolService.apiException(e)
+      })
+    }
+    else{
       refresher.complete();
-      this.toolService.apiException(e);
-      if(e.action&&e.action=='login'){
-        //this.navCtrl.push(LoginPage);
-        setTimeout(()=>{
-          this.events.publish('user:logout');
-        },0)
-      }
-    });
-
+    }
 
   }
 
@@ -333,7 +326,7 @@ export class ListPage{
 
     this.groups.splice(0,this.groups.length);
     this.getOpCount();
-    this.getData(this.userid).then((data:ResponseData)=>{
+    this.getData(this.user.id).then((data:ResponseData)=>{
       if(data.status==0){
         //this.listToGroup(data.data);
         this.formatServerData(data.data);
@@ -349,7 +342,7 @@ export class ListPage{
   statusChanged(e){
     this.groups.splice(0,this.groups.length);
     this.getOpCount();
-    this.getData(this.userid).then((data:ResponseData)=>{
+    this.getData(this.user.id).then((data:ResponseData)=>{
       if(data.status==0){
         //this.listToGroup(data.data);
         this.formatServerData(data.data);

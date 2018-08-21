@@ -42,6 +42,7 @@ import {WebSocketService} from "../util/WebSocketService";
 import {AddPage} from "../pages/workorder/add/add";
 import {ActionHelpPage} from "../pages/workorder/add/actionHelp";
 import {AddService} from "../pages/workorder/add/add.service";
+import {NetExceptionPage} from "../pages/login/NetException";
 
 @NgModule({
   declarations: [
@@ -68,6 +69,8 @@ import {AddService} from "../pages/workorder/add/add.service";
 
     AddPage,
     ActionHelpPage,
+
+    NetExceptionPage,
 
     Autosize
   ],
@@ -114,7 +117,8 @@ import {AddService} from "../pages/workorder/add/add.service";
     SettingPage,
 
     AddPage,
-    ActionHelpPage
+    ActionHelpPage,
+    NetExceptionPage
   ],
   providers: [
     StatusBar,
@@ -136,7 +140,11 @@ import {AddService} from "../pages/workorder/add/add.service";
     ToolService
   ]
 })
-export class AppModule {}
+export class AppModule {
+  constructor(){
+
+  }
+}
 
 /*important*/
 //ionic-angular component datetime.js

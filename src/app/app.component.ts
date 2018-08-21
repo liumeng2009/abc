@@ -1,11 +1,8 @@
 import { Component,ViewChild } from '@angular/core';
-import { Platform,Events,Nav,MenuController } from 'ionic-angular';
+import { Platform,Events,Nav,MenuController,PopoverController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
 import {CookieService} from "angular2-cookie/core";
-
-//import { ListPage } from '../pages/workorder/main/list.tab';
 import {TabsPage} from '../pages/tabs/tab'
 import {AuthService} from "../util/auth.service";
 import {User} from "../bean/user";
@@ -14,6 +11,7 @@ import {WebSocketService} from "../util/WebSocketService";
 import {RememberService} from "../util/remember.service";
 import {ToolService} from "../util/tool.service";
 import {OptConfig} from "../config/config";
+import {NetExceptionPage} from "../pages/login/NetException";
 @Component({
   templateUrl: 'app.html'
 })
@@ -49,9 +47,9 @@ export class MyApp {
       })
 
       //这个页面是程序入口，在这里获取user，其他页面都获取这个user
-      this.events.subscribe('user:login',(user)=>{
+/*      this.events.subscribe('user:login',(user)=>{
         this.getUserInfo();
-      })
+      })*/
 
       this.getUserInfo();
 
@@ -83,28 +81,17 @@ export class MyApp {
 
   getUserInfo(){
     this.authService.getUserInfo().then((data:ResponseData)=>{
-      if(data.status==0){
-        this.user={...data.data};
-        console.log(this.user);
+      let result=this.toolService.apiResult(data)
+      if(result){
+        this.user={...result.data};
       }
     }).catch((e)=>{
-      console.log(e);
+
     })
-/*    this.authService.getUserInfo().then(
-      data=>{
-        let result=this.toolService.apiResult(data);
-        if(result){
-          this.user={...result.data}
-        }
-      },
-      error=>{
-        this.toolService.apiException(error)
-      }
-    )*/
   }
 
   goData(){
-    alert(123)
+
   }
 
   goSettings(){
@@ -123,8 +110,5 @@ export class MyApp {
     });
     this.menuCtrl.close();
   }
-
-
-
 }
 

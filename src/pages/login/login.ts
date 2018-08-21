@@ -11,6 +11,7 @@ import {CookieService} from "angular2-cookie/core";
 import {TabsPage} from '../tabs/tab'
 
 import * as moment from 'moment'
+import {RememberService} from "../../util/remember.service";
 
 @Component({
   selector:'login',
@@ -24,9 +25,14 @@ export class LoginPage{
     private cookieService:CookieService,
     private toolService:ToolService,
     private loginService:LoginService,
-    private event:Events
+    private event:Events,
+    private rememberService:RememberService
   ){
     this.title.setTitle('登录');
+  }
+
+  ionViewWillEnter(){
+    this.rememberService.setUser(null);
   }
 
   private user:User=new User('','','',null,null,null);
@@ -43,6 +49,7 @@ export class LoginPage{
             let date=moment().add(7, 'days');
             this.cookieService.put('optAppToken',data.data.webapptoken,{expires:date.toISOString()});
             this.user={...result.data};
+            this.rememberService.setUser(this.user);
             this.navCtrl.push(TabsPage,{ev:data.data.name});
             //发出事件，这时候app.component的一些UI应该发生变化了
             this.event.publish('user:login',this.user)

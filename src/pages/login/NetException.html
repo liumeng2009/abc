@@ -1,0 +1,7 @@
+<div padding style="display: flex;flex-direction: column;align-items: center">
+  <ion-icon name="wifi" style="font-size:5em" color="danger" *ngIf="!isRetry"></ion-icon>
+  <ion-icon name="wifi" style="font-size:5em" color="primary" *ngIf="isRetry"></ion-icon>
+  <button ion-button block clear (click)="retry()" *ngIf="!isRetry">网络异常，请点击重试</button>
+  <button ion-button block clear (click)="retry()" *ngIf="isRetry" disabled>连接中</button>
+</div>
+
