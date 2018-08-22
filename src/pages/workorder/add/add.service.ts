@@ -17,6 +17,7 @@ export class AddService {
   }
 
   private saveUrl=new OptConfig().serverPath+'/api/order/saveOrder'
+  private orderListUrl=new OptConfig().serverPath+'/api/order/list'
 
   //建立订单和工单
   createOperation(order:Order): Promise<ResponseData> {
@@ -27,6 +28,31 @@ export class AddService {
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError);
+  }
+
+  getOrderList(pageid,time):Promise<ResponseData>{
+    let url='';
+    if(pageid){
+      if(time){
+        url=this.orderListUrl+'/page/'+pageid+'/time/'+time
+      }else{
+        url=this.orderListUrl+'/page/'+pageid
+      }
+
+    }
+    else{
+      if(time){
+        url=this.orderListUrl+'/time/'+time
+      }
+      else{
+        url=this.orderListUrl
+      }
+    }
+
+    return this.http.get(url)
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
   }
 
   private extractData(res:Response){

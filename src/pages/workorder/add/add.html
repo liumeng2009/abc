@@ -72,12 +72,12 @@
           <ion-list padding class="need-list">
             <ion-item *ngFor="let need of needs">
               <p style="flex:6" *ngIf="!need.edit&&!need.op.sequence">
-                <ion-icon name="thunderstorm" *ngIf="need?.forget" style="color:#ffc125" title="无法记忆"></ion-icon>
+                <ion-icon name="thunderstorm" *ngIf="need?.forget" style="color:#ffc125"></ion-icon>
                 <span *ngIf="need?.op?.isAdvanced" style="color:#f53d3d">{{need.equipment.name}}{{need?.op?.equipOp?.name}}X {{need.no}}</span>
                 <span *ngIf="!need?.op?.isAdvanced">{{need.equipment.name}}{{need?.op?.equipOp?.name}}X {{need.no}}</span>
               </p>
               <p style="flex:6" *ngIf="!need.edit&&need.op.sequence">
-                <ion-icon name="thunderstorm"  *ngIf="need?.forget" style="color:#ffc125" title="无法记忆"></ion-icon>
+                <ion-icon name="thunderstorm"  *ngIf="need?.forget" style="color:#ffc125"></ion-icon>
                 <span *ngIf="need?.op?.isAdvanced"  style="color:#f53d3d">{{need?.op?.equipOp?.name}}{{need.equipment.name}}X {{need.no}}</span>
                 <span *ngIf="!need?.op?.isAdvanced">{{need?.op?.equipOp?.name}}{{need.equipment.name}}X {{need.no}}</span>
               </p>

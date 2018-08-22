@@ -23,8 +23,7 @@ import {ListPage} from "../main/list";
 
 @Component({
   templateUrl:'add.html',
-  selector:'add-op',
-
+  selector:'add-op'
 })
 
 export class AddPage {
@@ -335,17 +334,17 @@ export class AddPage {
     if(index==0){
       this.showAddBusinessButton=false;
       this.showAddActionButton=false;
-      this.title.setTitle('新增工单1-设置客户信息');
+      this.title.setTitle('新增订单-设置客户信息');
     }
     else if(index==1){
       this.showAddBusinessButton=true;
       this.showAddActionButton=false;
-      this.title.setTitle('新增工单-设置业务内容');
+      this.title.setTitle('新增订单-设置业务内容');
     }
     else if(index==2){
       this.showAddBusinessButton=false;
       this.showAddActionButton=true;
-      this.title.setTitle('新增工单-设置处理进程');
+      this.title.setTitle('新增订单-设置处理进程');
     }
   }
 
