@@ -23,7 +23,7 @@ export class AddService {
     let token=this.cookieService.get('optAppToken');
     let headers= new Headers({'Content-Type': 'application/json','authorization':token});
     return this.http
-      .post(this.saveUrl, order, {headers: headers})
+      .post(this.saveUrl+'?device=webapp', order, {headers: headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError);

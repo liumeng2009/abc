@@ -43,6 +43,7 @@ import {AddPage} from "../pages/workorder/add/add";
 import {ActionHelpPage} from "../pages/workorder/add/actionHelp";
 import {AddService} from "../pages/workorder/add/add.service";
 import {NetExceptionPage} from "../pages/login/NetException";
+import {AddOpPage} from "../pages/workorder/addOp/addOp";
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import {NetExceptionPage} from "../pages/login/NetException";
     SettingPage,
 
     AddPage,
+    AddOpPage,
     ActionHelpPage,
 
     NetExceptionPage,
@@ -87,7 +89,8 @@ import {NetExceptionPage} from "../pages/login/NetException";
         {component:WeChatPage,name:'WeChat',segment:'wechat'},
         {component:SettingPage,name:'Setting',segment:'setting'},
         {component:LoginPage,name:'Login',segment:'login'},
-        {component:AddPage,name:'Add',segment:'add',defaultHistory:[ListPage]}
+        {component:AddPage,name:'Add',segment:'add',defaultHistory:[ListPage]},
+        {component:AddOpPage,name:'AddOp',segment:'addop',defaultHistory:[ListPage]}
       ]
     }),
     IonicStorageModule.forRoot(),
@@ -117,6 +120,7 @@ import {NetExceptionPage} from "../pages/login/NetException";
     SettingPage,
 
     AddPage,
+    AddOpPage,
     ActionHelpPage,
     NetExceptionPage
   ],

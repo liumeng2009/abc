@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, Refresher, Events, ModalController} from 'ionic-angular'
+import {NavController, Refresher, Events, ModalController,ActionSheetController,Platform} from 'ionic-angular'
 import {Title} from '@angular/platform-browser';
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
@@ -14,6 +14,7 @@ import {QrPage} from "../qrcode/qr";
 import {AddPage} from "../add/add";
 import {User} from "../../../bean/user";
 import {AuthService} from "../../../util/auth.service";
+import {AddOpPage} from "../addOp/addOp";
 
 
 @Component({
@@ -32,7 +33,9 @@ export class ListPage{
     private events:Events,
     private modalCtrl:ModalController,
     private rememberService:RememberService,
-    private authService:AuthService
+    private authService:AuthService,
+    private actionSheetCtrl:ActionSheetController,
+    private platform:Platform
   ){
 
   }
@@ -454,7 +457,39 @@ export class ListPage{
   }
 
   goAdd(){
-    this.navCtrl.push(AddPage)
+    //this.navCtrl.push(AddPage)
+/*    let pop=this.popCtrl.create(AddSelectPage)
+    pop.present();*/
+
+    let actionSheet = this.actionSheetCtrl.create({
+      title: '新增类型',
+      cssClass: 'action-sheets-basic-page',
+      buttons: [
+        {
+          text: '客户需求（可以包含多个工单）',
+          icon: !this.platform.is('ios') ? 'grid' : null,
+          handler: () => {
+            this.navCtrl.push(AddPage)
+          }
+        },
+        {
+          text: '工单',
+          icon: !this.platform.is('ios') ? 'paper' : null,
+          handler: () => {
+            this.navCtrl.push(AddOpPage)
+          }
+        },
+        {
+          text: '取消',
+          role: 'cancel', // will always sort to be on the bottom
+          icon: !this.platform.is('ios') ? 'close' : null,
+          handler: () => {
+
+          }
+        }
+      ]
+    });
+    actionSheet.present();
   }
 
 }

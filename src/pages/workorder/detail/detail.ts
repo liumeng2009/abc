@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {NavParams, Events, ModalController, Refresher, PickerOptions, DateTime,AlertController} from 'ionic-angular'
+import {NavParams, Events, ModalController, Refresher, PickerOptions, DateTime,AlertController,PopoverController} from 'ionic-angular'
 import {AuthService} from "../../../util/auth.service";
 import {Operation} from "../../../bean/operation";
 import {DetailService} from "./detail.service";
@@ -22,7 +22,8 @@ export class DetailPage{
     private toolService:ToolService,
     private events:Events,
     private modalCtrl:ModalController,
-    private alertCtrl:AlertController
+    private alertCtrl:AlertController,
+    private popCtrl:PopoverController
   ){}
 
   private userid:string;
@@ -130,7 +131,7 @@ export class DetailPage{
   private infoModal;
   private openModal(){
     let id=this.navParams.data.id;
-    this.infoModal=this.modalCtrl.create(DetailModalPage,{id:id});
+    this.infoModal=this.popCtrl.create(DetailModalPage,{id:id});
     this.infoModal.present();
   }
   ngOnDestroy() {
