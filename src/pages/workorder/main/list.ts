@@ -226,7 +226,7 @@ export class ListPage{
         }
         operations.push(operation);
       }
-      let groupObj=new Order(d.id,d.no,d.incoming_time,'',d.custom_phone,d.corporation,'',operations,[]);
+      let groupObj=new Order(d.id,d.no,d.incoming_time,'','',d.custom_phone,d.corporation,'',operations,[]);
       //添加到signStatusArray中
       let signStatus={id:d.id,show:false};
       this.signStatusArray.push(signStatus);

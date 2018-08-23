@@ -12,6 +12,7 @@ import {EquipType} from "../../../bean/equipType";
 import {PublicDataService} from "../../../util/data/public-data.service";
 import {ResponseData} from "../../../bean/responseData";
 import {WorkOrder} from "../../../bean/workOrder";
+import {AuthService} from "../../../util/auth.service";
 
 @Component({
   selector:'add-op-op',
@@ -23,7 +24,8 @@ export class AddOpPage{
     private title:Title,
     private addService:AddService,
     private toolService:ToolService,
-    private publicDataService:PublicDataService
+    private publicDataService:PublicDataService,
+    private authService:AuthService
   ){
 
   }
@@ -67,8 +69,7 @@ export class AddOpPage{
     this.slide.slidePrev();
   }
 
-  private operation:WorkOrder=new WorkOrder(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
-  private isSavingOperation:boolean=false;
+  private operation:WorkOrder=new WorkOrder(null,null,null,null,false,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
   setAction(){
     this.slide.lockSwipeToNext(false);
     this.slide.slideNext();
@@ -77,19 +78,48 @@ export class AddOpPage{
     this.operation.incoming_date_timestamp=moment(this.todayString).valueOf();
     this.operation.incoming_date=moment(this.todayString).toDate();
     this.operation.businessContent=this.business;
+    this.operation.showArriveDate=false;
+    this.operation.showFinishDate=false;
+    this.operation.create_time=moment(this.todayString).toDate().getTime();
+
     console.log(this.operation);
-    this.isSavingOperation=true;
-    this.addService.create(this.operation).then(
+  }
+
+  private isLoadingSave:boolean=false;
+  save(){
+    this.isLoadingSave=true;
+    this.authService.getUserInfo().then(
       data=>{
-        let result=this.toolService.apiResult(data)
-        if(result){
-          console.log(result);
+        let result=this.toolService.apiResult(data);
+        if(result) {
+          let userid = result.data.id;
+          this.operation.worker=userid;
+          this.operation.call_date=this.operation.incoming_date;
+          this.operation.call_date_timestamp=this.operation.incoming_date_timestamp;
+          this.operation.showWorker=true;
+
+          this.addService.createOperation(this.operation).then(
+            data=>{
+              this.isLoadingSave=false;
+              let result=this.toolService.apiResult(data);
+              if(result){
+                console.log(result);
+              }
+            },
+            error=>{
+              this.isLoadingSave=false;
+              this.toolService.apiException(error)
+            }
+          )
         }
       },
       error=>{
+        this.isLoadingSave=false;
         this.toolService.apiException(error)
-      }
-    )
+      })
+
+
+
   }
 
   private todayString=moment().format();
@@ -142,7 +172,7 @@ export class AddOpPage{
     })
   }
 
-  private order:Order={};
+  private order:Order=new Order(null,null,null,null,null,null,null,null,null,null);
   private orders:Order[]=[];
   private getData(){
     let stamp=moment(this.todayString).valueOf();
@@ -182,6 +212,48 @@ export class AddOpPage{
   okOrderCreateTime(e){
     this.getData();
   }
+
+  start_click(){
+
+  }
+
+  finish_click(){
+
+  }
+
+  okStartTime(e){
+    let startDate=new Date(e);
+    let stamp=startDate.getTime();
+    //怪异的操作，为了弥补修改插件造成的问题，没找到好的方案
+    //为了让他默认是东8区的时间，就在插件的取得默认值的方法上，加了8小时，于是当start_time是空的时候，这里要相应的减8小时
+    if(this.operation.showArriveDate==false){
+      stamp=stamp-8*60*60*1000;
+      startDate=new Date(stamp);
+    }
+    this.operation.showArriveDate=true;
+    this.operation.arrive_date=moment(startDate).format();
+    this.operation.arrive_date_timestamp=stamp;
+
+    console.log(this.operation);
+
+  }
+
+  okFinishTime(e){
+    let finishDate=new Date(e);
+    let stamp=finishDate.getTime();
+    //怪异的操作，为了弥补修改插件造成的问题，没找到好的方案
+    //为了让他默认是东8区的时间，就在插件的取得默认值的方法上，加了8小时，于是当start_time是空的时候，这里要相应的减8小时
+    if(this.operation.showFinishDate==false){
+      stamp=stamp-8*60*60*1000;
+      finishDate=new Date(stamp);
+    }
+    this.operation.showFinishDate=true;
+    this.operation.finish_date=moment(finishDate).format();
+    this.operation.finish_date_timestamp=stamp;
+    this.operation.isCompleteOperation=true;
+    console.log(this.operation);
+  }
+
 
   private type:EquipType;
   private types:EquipType[]=[];

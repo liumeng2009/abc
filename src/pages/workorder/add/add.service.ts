@@ -18,11 +18,11 @@ export class AddService {
   }
 
   private saveUrl=new OptConfig().serverPath+'/api/order/saveOrder'
-  private saveOpUrl=new OptConfig().serverPath+'/api/operation/save'
+  private saveOpUrl=new OptConfig().serverPath+'/api/order/saveOperation'
   private orderListUrl=new OptConfig().serverPath+'/api/order/list'
 
   //建立订单和工单
-  createOperation(order:Order): Promise<ResponseData> {
+  createOrderOperation(order:Order): Promise<ResponseData> {
     let token=this.cookieService.get('optAppToken');
     let headers= new Headers({'Content-Type': 'application/json','authorization':token});
     return this.http
@@ -57,11 +57,11 @@ export class AddService {
       .catch(this.handleError)
   }
 
-  create(operation:WorkOrder): Promise<ResponseData> {
-    let token=this.cookieService.get('optToken');
+  createOperation(operation:WorkOrder): Promise<ResponseData> {
+    let token=this.cookieService.get('optAppToken');
     let headers= new Headers({'Content-Type': 'application/json','authorization':token});
     return this.http
-      .post(this.saveOpUrl, operation, {headers: headers})
+      .post(this.saveOpUrl+'?device=webapp', operation, {headers: headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError);

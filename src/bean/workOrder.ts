@@ -17,6 +17,7 @@ export class WorkOrder {
 
     public important:boolean,
 
+    //工单建立时间
     public create_time:number,
 
     //响应时间

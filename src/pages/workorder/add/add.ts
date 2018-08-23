@@ -43,7 +43,7 @@ export class AddPage {
   @ViewChild('slide') slide:Slides;
   private todayString=moment().format();
   private create_time_run;
-  private order:Order=new Order(null,null,null,"","",null,'',[],[]);
+  private order:Order=new Order(null,null,null,'',"","",null,'',[],[]);
   private editArea={
     position:'relative',
     top:'0px'
@@ -232,7 +232,7 @@ export class AddPage {
     this.slide.lockSwipeToPrev(false);
     this.slide.slidePrev();
   }
-  private workerOrders:WorkOrder[]=[new WorkOrder(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)];
+  private workerOrders:WorkOrder[]=[new WorkOrder(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)];
   private user:User
   private isLoadingWorkerId:boolean=false
   setAction(){
@@ -252,7 +252,7 @@ export class AddPage {
           this.workerOrders.splice(0,this.workerOrders.length);
           for(let need of this.needs){
             for(let i=0;i<need.no;i++){
-              let workerOrder=new WorkOrder(null,null,incoming_time.getTime(),incoming_time,false,null,null,null,null,this.user.id,need.type,need.equipment,need.op,true,false,false,true,null,incoming_time.getTime()+1000,incoming_time,false,false,null)
+              let workerOrder=new WorkOrder(null,null,incoming_time.getTime(),incoming_time,false,incoming_time.getTime(),null,null,null,null,this.user.id,need.type,need.equipment,need.op,true,false,false,true,null,incoming_time.getTime()+1000,incoming_time,false,false,null)
               this.workerOrders.push(workerOrder);
             }
           }
@@ -678,7 +678,7 @@ export class AddPage {
     this.order.custom_position='';
     console.log(this.order);
 
-    this.addService.createOperation(this.order).then(
+    this.addService.createOrderOperation(this.order).then(
       data=>{
         let result=this.toolService.apiResult(data);
         if(result){

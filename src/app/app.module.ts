@@ -163,7 +163,7 @@ export class AppModule {
   _default.hour=_default.hour+8;
   if(_default.hour>23){
     _default.day=_default.day+1;
-    _default.hour=_default-24;
+    _default.hour=_default.hour-24;
   }
   return _default;
 };*/

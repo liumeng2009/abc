@@ -122,6 +122,30 @@
       </ion-footer>
     </ion-slide>
     <ion-slide>
+      <ion-list>
+        <ion-item>
+          <ion-label style="color:#999">开始时间：</ion-label>
+          <ion-datetime #start cancelText="取消" doneText="确定"  placeholder="未开始"
+                        displayFormat="DD日 HH:mm" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
+                        [(ngModel)]="operation.arrive_date"
+                        (click)="start_click($event)"
+                        (ngModelChange)="okStartTime($event)"
+          ></ion-datetime>
+        </ion-item>
+        <ion-item *ngIf="operation.showArriveDate">
+          <ion-label style="color:#999">完成时间：</ion-label>
+          <ion-datetime #start cancelText="取消" doneText="确定"  placeholder="未开始"
+                        displayFormat="DD日 HH:mm" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
+                        [(ngModel)]="operation.finish_date"
+                        (click)="finish_click()"
+                        (ngModelChange)="okFinishTime($event)"
+          ></ion-datetime>
+        </ion-item>
+        <ion-item *ngIf="operation.showArriveDate&&operation.showFinishDate">
+          <ion-label style="color:#999">工单完成？</ion-label>
+          <ion-toggle  [(ngModel)]="operation.isCompleteOperation"></ion-toggle>
+        </ion-item>
+      </ion-list>
       <ion-footer>
         <ion-toolbar class="trans">
           <ion-buttons start style="position: absolute" >
