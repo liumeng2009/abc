@@ -3,14 +3,6 @@
     <ion-title>
       {{title.getTitle()}}
     </ion-title>
-    <ion-buttons end>
-      <button ion-button (click)="addBusiness()"  *ngIf="showAddBusinessButton">
-        新增业务
-      </button>
-      <button ion-button icon-only (click)="showHelp($event)"  *ngIf="showAddActionButton">
-        <ion-icon name="help-circle"></ion-icon>
-      </button>
-    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -22,27 +14,35 @@
           <ion-label>选择订单：</ion-label>
           <ion-datetime displayFormat="MM-DD" pickerFormat="YYYY-MM-DD"
                         [(ngModel)]="todayString"
-                        (ngModelChange)="okCreateTime()"
+                        (ngModelChange)="okOrderCreateTime()"
                         cancelText="取消"
                         doneText="确定"
           >
           </ion-datetime>
         </ion-item>
-        <ion-item>
+        <ion-item  *ngIf="orders.length==0">
           <ion-label></ion-label>
-          <ion-select [(ngModel)]="order" [selectedText]="order?.no"  okText="确定" cancelText="取消">
-            <ion-option [value]="o" *ngFor="let o of orders">{{o.no}}</ion-option>
+          <ion-label style="text-align: right" color="danger">当天没有订单可选择</ion-label>
+        </ion-item>
+        <ion-item *ngIf="orders.length>0">
+          <ion-label></ion-label>
+          <ion-select [(ngModel)]="order" selectedText="{{order?.no}}号订单"  okText="确定" cancelText="取消">
+            <ion-option [value]="o" *ngFor="let o of orders">{{o.no}}号订单</ion-option>
           </ion-select>
         </ion-item>
-        <ion-item>
+        <ion-item  *ngIf="orders.length>0">
+          <ion-label></ion-label>
+          <ion-label  style="text-align: right">{{order?.incoming_time_show}}</ion-label>
+        </ion-item>
+        <ion-item  *ngIf="orders.length>0">
           <ion-label></ion-label>
           <ion-label  style="text-align: right">{{order?.corporation?.name}}</ion-label>
         </ion-item>
-        <ion-item>
+        <ion-item  *ngIf="orders.length>0">
           <ion-label></ion-label>
           <ion-label style="text-align: right">{{order?.custom_phone}}</ion-label>
         </ion-item>
-        <ion-item>
+        <ion-item  *ngIf="orders.length>0">
           <ion-label></ion-label>
           <ion-label style="text-align: right">{{order?.custom_name}}</ion-label>
         </ion-item>
@@ -61,10 +61,24 @@
     <ion-slide>
       <ion-list>
         <ion-item>
+          <ion-label style="color:#999">工单建立时间：</ion-label>
+          <ion-datetime displayFormat="MM-DD HH:mm:ss" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
+                        [(ngModel)]="todayString"
+                        (ngModelChange)="okCreateTime()"
+                        cancelText="取消"
+                        doneText="确定"
+          >
+          </ion-datetime>
+        </ion-item>
+        <ion-item>
+          <ion-label style="color:#999">是否加急：</ion-label>
+          <ion-toggle [(ngModel)]="operation.important"></ion-toggle>
+        </ion-item>
+        <ion-item>
           <ion-label  style="display: flex;justify-content: space-between;">业务类型
             <ion-spinner name="bubbles" color="primary" *ngIf="isLoadingAddType"></ion-spinner>
           </ion-label>
-          <ion-select #editSelectType [(ngModel)]="type" [selectedText]="type?.name" (ngModelChange)="editTypeOk($event)" okText="确定" cancelText="取消">
+          <ion-select #selectType [(ngModel)]="type" [selectedText]="type?.name" (ngModelChange)="editTypeOk($event)" okText="确定" cancelText="取消">
             <ion-option [value]="g" *ngFor="let g of types">{{g.name}}</ion-option>
           </ion-select>
         </ion-item>
@@ -72,7 +86,7 @@
           <ion-label  style="display: flex;justify-content: space-between;">设备名
             <ion-spinner name="bubbles" color="primary" *ngIf="isLoadingAddEquipment"></ion-spinner>
           </ion-label>
-          <ion-select #editSelectEquipment [(ngModel)]="equipment"  [selectedText]="equipment?.name" (ngModelChange)="editEquipmentOk($event)"  okText="确定" cancelText="取消">
+          <ion-select #selectEquipment [(ngModel)]="equipment"  [selectedText]="equipment?.name" (ngModelChange)="editEquipmentOk($event)"  okText="确定" cancelText="取消">
             <ion-option [value]="c" *ngFor="let c of equipments">{{c.name}}</ion-option>
           </ion-select>
         </ion-item>
@@ -80,9 +94,13 @@
           <ion-label  style="display: flex;justify-content: space-between;">操作名
             <ion-spinner name="bubbles" color="primary" *ngIf="isLoadingAddOp"></ion-spinner>
           </ion-label>
-          <ion-select #editSelectBusiness [(ngModel)]="business" [selectedText]="business?.equipOp?.name"  okText="确定" cancelText="取消">
+          <ion-select #selectBusiness [(ngModel)]="business" [selectedText]="business?.equipOp?.name"  okText="确定" cancelText="取消">
             <ion-option [value]="bc" *ngFor="let bc of businessContents">{{bc?.equipOp?.name}}{{bc?.isAdvanced?'（系统级）':'（桌面级）'}}</ion-option>
           </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label style="color:#999">备注：</ion-label>
+          <ion-textarea autosize [(ngModel)]="operation.remark"></ion-textarea>
         </ion-item>
       </ion-list>
       <ion-footer>

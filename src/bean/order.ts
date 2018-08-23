@@ -6,6 +6,7 @@ export class Order {
     public id:string,
     public no:string,
     public incoming_time: number,
+    public incoming_time_show:string,
     public custom_name:string,
     public custom_phone:string,
     public corporation:Corporation,

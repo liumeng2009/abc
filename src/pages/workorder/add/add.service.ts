@@ -9,6 +9,7 @@ import {ResponseData} from '../../../bean/responseData';
 
 import {OptConfig} from '../../../config/config'
 import {Order} from "../../../bean/order";
+import {WorkOrder} from "../../../bean/workOrder";
 
 @Injectable()
 export class AddService {
@@ -17,6 +18,7 @@ export class AddService {
   }
 
   private saveUrl=new OptConfig().serverPath+'/api/order/saveOrder'
+  private saveOpUrl=new OptConfig().serverPath+'/api/operation/save'
   private orderListUrl=new OptConfig().serverPath+'/api/order/list'
 
   //建立订单和工单
@@ -53,6 +55,16 @@ export class AddService {
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
+  }
+
+  create(operation:WorkOrder): Promise<ResponseData> {
+    let token=this.cookieService.get('optToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http
+      .post(this.saveOpUrl, operation, {headers: headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
   }
 
   private extractData(res:Response){

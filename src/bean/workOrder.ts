@@ -10,12 +10,14 @@ export class WorkOrder {
 
     public no:string,
 
-    //建立时间
+    //订单建立时间
     public incoming_date_timestamp:number,
 
     public incoming_date:Date,
 
     public important:boolean,
+
+    public create_time:number,
 
     //响应时间
     public arrive_date_timestamp:number,
@@ -34,7 +36,7 @@ export class WorkOrder {
 
     public equipment:Equipment,
 
-    public op:BusinessContent,
+    public businessContent:BusinessContent,
 
     public checked:boolean,
 
@@ -53,7 +55,9 @@ export class WorkOrder {
 
     public isCompleteOperation:boolean,
 
-    public select:boolean
+    public select:boolean,
+
+    public order:string
 
   ) {  }
 }

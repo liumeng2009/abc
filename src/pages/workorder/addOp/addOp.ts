@@ -11,6 +11,7 @@ import {Equipment} from "../../../bean/equipment";
 import {EquipType} from "../../../bean/equipType";
 import {PublicDataService} from "../../../util/data/public-data.service";
 import {ResponseData} from "../../../bean/responseData";
+import {WorkOrder} from "../../../bean/workOrder";
 
 @Component({
   selector:'add-op-op',
@@ -27,21 +28,17 @@ export class AddOpPage{
 
   }
   @ViewChild('slide') slide:Slides;
-  private showAddBusinessButton:boolean=false;
   slideChanged(e){
     this.slide.lockSwipeToNext(true);
     this.slide.lockSwipeToPrev(true);
     let index=this.slide.getActiveIndex();
     if(index==0){
-      this.showAddBusinessButton=false;
       this.title.setTitle('新增工单-选择所属订单');
     }
     else if(index==1){
-      this.showAddBusinessButton=true;
-      this.title.setTitle('新增工单-设置工单内容'); 
+      this.title.setTitle('新增工单-设置工单内容');
     }
     else if(index==2){
-      this.showAddBusinessButton=false;
       this.title.setTitle('新增工单-设置处理进程');
     }
   }
@@ -53,13 +50,12 @@ export class AddOpPage{
     return true;
   }
   canGoAction(){
-/*    if(this.needs.length>0){
+    if(this.business){
       return true
     }
     else{
       return false;
-    }*/
-
+    }
   }
 
   setBusiness(){
@@ -71,38 +67,34 @@ export class AddOpPage{
     this.slide.slidePrev();
   }
 
-  private todayString=moment().format();
-  ionViewWillEnter() {
-    this.title.setTitle('新增工单-选择订单');
-    this.getData();
-
-  }
-
-  private order:Order;
-  private orders:Order[]=[];
-  private getData(){
-    let stamp=moment(this.todayString).valueOf();
-    this.addService.getOrderList(null,stamp).then(
+  private operation:WorkOrder=new WorkOrder(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+  private isSavingOperation:boolean=false;
+  setAction(){
+    this.slide.lockSwipeToNext(false);
+    this.slide.slideNext();
+    //添加工单
+    this.operation.order=this.order.id;
+    this.operation.incoming_date_timestamp=moment(this.todayString).valueOf();
+    this.operation.incoming_date=moment(this.todayString).toDate();
+    this.operation.businessContent=this.business;
+    console.log(this.operation);
+    this.isSavingOperation=true;
+    this.addService.create(this.operation).then(
       data=>{
-        console.log(data);
-        let result=this.toolService.apiResult(data);
+        let result=this.toolService.apiResult(data)
         if(result){
-          this.orders=[...result.data]
-          console.log(this.orders);
-          if(this.order){
-
-          }
-          else{
-            if(this.orders.length>0)
-              this.order=this.orders[0]
-          }
+          console.log(result);
         }
       },
       error=>{
         this.toolService.apiException(error)
       }
     )
+  }
 
+  private todayString=moment().format();
+  ngOnInit() {
+    this.title.setTitle('新增工单-选择订单');
     this.getType().then((data:ResponseData)=>{
       this.types=[...data.data]
       if(this.type){
@@ -142,8 +134,52 @@ export class AddOpPage{
     });
   }
 
+  private create_time_run;
+  ionViewWillEnter(){
+    this.getData();
+    this.create_time_run=Observable.interval(1000).subscribe(()=>{
+      this.todayString=moment().format();
+    })
+  }
+
+  private order:Order={};
+  private orders:Order[]=[];
+  private getData(){
+    let stamp=moment(this.todayString).valueOf();
+    this.addService.getOrderList(null,stamp).then(
+      data=>{
+        console.log(data);
+        let result=this.toolService.apiResult(data);
+        if(result){
+          this.orders=[...result.data]
+          console.log(this.orders);
+          for(let o of this.orders){
+            o.incoming_time_show=moment(o.incoming_time).format('MM-DD HH:mm:ss')
+          }
+          this.order=null;
+          if(this.order){
+
+          }
+          else{
+            if(this.orders.length>0)
+              this.order=this.orders[0]
+          }
+        }
+      },
+      error=>{
+        this.toolService.apiException(error)
+      }
+    )
+  }
+
+
   okCreateTime(e){
-    this.order=null;
+    //this.getData();
+    if(this.create_time_run)
+      this.create_time_run.unsubscribe()
+  }
+
+  okOrderCreateTime(e){
     this.getData();
   }
 

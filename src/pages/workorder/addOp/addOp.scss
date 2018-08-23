@@ -18,4 +18,7 @@ add-op-op {
   .datetime-text{
     color:color($colors, primary);
   }
+  ion-select{
+    max-width:85%
+  }
 }
