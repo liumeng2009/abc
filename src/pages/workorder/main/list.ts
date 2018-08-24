@@ -298,6 +298,7 @@ export class ListPage{
         refresher.complete();
         let result=this.toolService.apiResult(data);
         if(result){
+          this.getOpCount();
           this.formatServerData(result.data);
         }
       }).catch((e)=>{

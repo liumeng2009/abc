@@ -51,7 +51,7 @@ export class DetailService {
     let headers=new Headers({'Content-Type': 'application/json','authorization':token})
     console.log(params);
     return this.http
-      .post(this.editActionUrl, params, {headers: headers})
+      .post(this.editActionUrl+'?device=webapp', params, {headers: headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError);

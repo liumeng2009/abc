@@ -1,5 +1,5 @@
 import {Component,ViewChild} from '@angular/core'
-import {Slides} from 'ionic-angular'
+import {Slides,NavController,DateTime} from 'ionic-angular'
 import {Title} from '@angular/platform-browser'
 import * as moment from 'moment'
 import {Observable} from 'rxjs'
@@ -13,6 +13,8 @@ import {PublicDataService} from "../../../util/data/public-data.service";
 import {ResponseData} from "../../../bean/responseData";
 import {WorkOrder} from "../../../bean/workOrder";
 import {AuthService} from "../../../util/auth.service";
+import {ListPage} from "../main/list";
+import {TabsPage} from "../../tabs/tab";
 
 @Component({
   selector:'add-op-op',
@@ -25,7 +27,8 @@ export class AddOpPage{
     private addService:AddService,
     private toolService:ToolService,
     private publicDataService:PublicDataService,
-    private authService:AuthService
+    private authService:AuthService,
+    private navCtrl:NavController
   ){
 
   }
@@ -77,7 +80,7 @@ export class AddOpPage{
     this.operation.order=this.order.id;
     this.operation.incoming_date_timestamp=moment(this.todayString).valueOf();
     this.operation.incoming_date=moment(this.todayString).toDate();
-    this.operation.businessContent=this.business;
+    this.operation.op=this.business;
     this.operation.showArriveDate=false;
     this.operation.showFinishDate=false;
     this.operation.create_time=moment(this.todayString).toDate().getTime();
@@ -103,7 +106,10 @@ export class AddOpPage{
               this.isLoadingSave=false;
               let result=this.toolService.apiResult(data);
               if(result){
-                console.log(result);
+                if(result.status==0){
+                  this.toolService.toast(result.message)
+                  this.navCtrl.pop()
+                }
               }
             },
             error=>{
@@ -213,12 +219,47 @@ export class AddOpPage{
     this.getData();
   }
 
-  start_click(){
 
+  @ViewChild('start') startSelect:DateTime
+  start_click(){
+    let t=this;
+    if(this.operation.arrive_date_timestamp){
+      let button={
+        text:'删除开始时间',
+        role:'delete',
+        handler:function(){
+          if(t.operation.finish_date_timestamp){
+            t.toolService.toast('请先删除工作的结束时间，再进行尝试！')
+          }
+          else{
+            //删除开始时间
+            t.operation.arrive_date=null;
+            t.operation.arrive_date_timestamp=null;
+            t.operation.showArriveDate=false;
+          }
+        }
+      }
+      this.startSelect._picker.addButton(button);
+    }
   }
 
-  finish_click(){
 
+  @ViewChild('end') endSelect:DateTime
+  end_click(){
+    let t=this;
+    if(this.operation.finish_date_timestamp){
+      let button={
+        text:'删除结束时间',
+        role:'delete',
+        handler:function(){
+          t.operation.finish_date_timestamp=null;
+          t.operation.finish_date=null;
+          t.operation.showFinishDate=false;
+        }
+      }
+
+      this.endSelect._picker.addButton(button);
+    }
   }
 
   okStartTime(e){

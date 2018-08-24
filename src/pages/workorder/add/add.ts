@@ -683,7 +683,7 @@ export class AddPage {
         let result=this.toolService.apiResult(data);
         if(result){
           this.toolService.toast(result.message);
-          this.navCtrl.push(ListPage);
+          this.navCtrl.pop();
           this.cookieService.remove('OpAppNeed')
         }
         this.isLoadingSave=false;

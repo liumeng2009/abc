@@ -37,7 +37,7 @@ export class WorkOrder {
 
     public equipment:Equipment,
 
-    public businessContent:BusinessContent,
+    public op:BusinessContent,
 
     public checked:boolean,
 

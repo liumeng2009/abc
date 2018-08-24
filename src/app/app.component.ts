@@ -1,5 +1,5 @@
 import { Component,ViewChild } from '@angular/core';
-import { Platform,Events,Nav,MenuController,PopoverController } from 'ionic-angular';
+import { Platform,Events,Nav,MenuController,PopoverController,AlertController  } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {CookieService} from "angular2-cookie/core";
@@ -34,7 +34,8 @@ export class MyApp {
     public toolService:ToolService,
     private cookieService:CookieService,
     private menuCtrl:MenuController,
-    private publicDataService:PublicDataService
+    private publicDataService:PublicDataService,
+    private alertCtrl:AlertController
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -141,12 +142,33 @@ export class MyApp {
   }
 
   exit(){
-    this.user=null;
-    this.cookieService.remove('optAppToken');
-    this.nav.setRoot('Login', {}).then(()=>{}).catch((err: any) => {
-      console.log(`Didn't set nav root: ${err}`);
+    let t=this;
+    const confirm = this.alertCtrl.create({
+      title: '确定?',
+      message: '您确定要退出账户吗?',
+      buttons: [
+        {
+          text: '取消',
+          handler: () => {
+
+          }
+        },
+        {
+          text: '退出',
+          handler: () => {
+            t.user=null;
+            t.cookieService.remove('optAppToken');
+            t.nav.setRoot('Login', {}).then(()=>{}).catch((err: any) => {
+              console.log(`Didn't set nav root: ${err}`);
+            });
+            t.menuCtrl.close();
+          }
+        }
+      ]
     });
-    this.menuCtrl.close();
+    confirm.present();
+
+
   }
 }
 
