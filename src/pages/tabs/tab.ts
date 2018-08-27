@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { ListPage } from '../workorder/main/list';
 import { WeChatPage } from '../wechat/wechat';
 import { SettingPage } from '../settings/setting';
-import {NavParams} from "ionic-angular/index";
+import {NavParams} from "ionic-angular";
 import {ToolService} from "../../util/tool.service";
 
 @Component({
@@ -16,15 +16,15 @@ export class TabsPage {
   tab3Root = SettingPage;
 
   constructor(
-    private navParams:NavParams,
-    private toolService:ToolService
+    //private navParams:NavParams,
+    //private toolService:ToolService
   ) {
 
   }
 
   ngOnInit(){
-    let name=this.navParams.get('ev');
+/*    let name=this.navParams.get('ev');
     if(name&&name!='')
-      this.toolService.toast(name+',欢迎您！')
+      this.toolService.toast(name+',欢迎您！')*/
   }
 }

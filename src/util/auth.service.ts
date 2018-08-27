@@ -33,23 +33,6 @@ export class AuthService {
       .catch(this.handleError)
   }
 
-  checkLogin(){
-    return new Promise((resolve,reject)=>{
-      this.getUserInfo().then(
-        data=>{
-          console.log(data);
-          let result=this.toolService.apiResult(data);
-          if(result){
-            resolve(data);
-          }
-        },
-        error=>{
-          reject({message:error});
-        }
-      )
-    })
-  }
-
 
   private extractData(res:Response){
     let body=res.json();

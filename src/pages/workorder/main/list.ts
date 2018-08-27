@@ -63,12 +63,20 @@ export class ListPage{
     },0)
   }
   ionViewWillEnter(){
-
     this.authService.getUserInfo().then(
       data=>{
         let result=this.toolService.apiResult(data)
         if(result){
           this.user={...result.data}
+          let userRemember=this.rememberService.getUser();
+
+          if(userRemember!=null){
+
+          }
+          else{
+            this.toolService.toast('登录成功');
+          }
+          this.rememberService.setUser(this.user);
           this.init();
         }
       },
