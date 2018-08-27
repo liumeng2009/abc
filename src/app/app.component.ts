@@ -13,6 +13,8 @@ import {ToolService} from "../util/tool.service";
 import {OptConfig} from "../config/config";
 import {NetExceptionPage} from "../pages/login/NetException";
 import {PublicDataService} from "../util/data/public-data.service";
+import {ChartPage} from "../pages/chart/chart";
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -130,7 +132,12 @@ export class MyApp {
   }
 
   goData(){
-
+    //this.navCtrl.push(ChartPage);
+    this.nav.setRoot('Chart', {}).then(()=>{
+      this.menuCtrl.close();
+    }).catch((err: any) => {
+      console.log(`Didn't set nav root: ${err}`);
+    });
   }
 
   goSettings(){

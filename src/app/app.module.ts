@@ -42,8 +42,8 @@ import {WebSocketService} from "../util/WebSocketService";
 import {AddPage} from "../pages/workorder/add/add";
 import {ActionHelpPage} from "../pages/workorder/add/actionHelp";
 import {AddService} from "../pages/workorder/add/add.service";
-import {NetExceptionPage} from "../pages/login/NetException";
 import {AddOpPage} from "../pages/workorder/addOp/addOp";
+import {ChartPage} from "../pages/chart/chart";
 
 @NgModule({
   declarations: [
@@ -72,7 +72,7 @@ import {AddOpPage} from "../pages/workorder/addOp/addOp";
     AddOpPage,
     ActionHelpPage,
 
-    NetExceptionPage,
+    ChartPage,
 
     Autosize
   ],
@@ -90,7 +90,8 @@ import {AddOpPage} from "../pages/workorder/addOp/addOp";
         {component:SettingPage,name:'Setting',segment:'setting'},
         {component:LoginPage,name:'Login',segment:'login'},
         {component:AddPage,name:'Add',segment:'add',defaultHistory:[ListPage]},
-        {component:AddOpPage,name:'AddOp',segment:'addop',defaultHistory:[ListPage]}
+        {component:AddOpPage,name:'AddOp',segment:'addop',defaultHistory:[ListPage]},
+        {component:ChartPage,name:'Chart',segment:'chart'}
       ]
     }),
     IonicStorageModule.forRoot(),
@@ -122,7 +123,8 @@ import {AddOpPage} from "../pages/workorder/addOp/addOp";
     AddPage,
     AddOpPage,
     ActionHelpPage,
-    NetExceptionPage
+
+    ChartPage
   ],
   providers: [
     StatusBar,
@@ -142,6 +144,7 @@ import {AddOpPage} from "../pages/workorder/addOp/addOp";
 
     AuthService,
     ToolService
+
   ]
 })
 export class AppModule {
