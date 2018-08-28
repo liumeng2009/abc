@@ -26,7 +26,7 @@ export class DetailPage{
     private modalCtrl:ModalController,
     private alertCtrl:AlertController,
     private popCtrl:PopoverController,
-    private remmemberService:RememberService
+    private rememberService:RememberService
   ){}
 
   private user:User;
@@ -38,36 +38,16 @@ export class DetailPage{
     let id=this.navParams.data.id;
     let no=this.navParams.data.no;
     this.operation_no=no;
-    console.log(id);
 
-    this.authService.getUserInfo().then(
-      data=>{
-        let result=this.toolService.apiResult(data)
-        if(result){
-          this.user={...result.data};
-          let userRemember=this.rememberService.getUser();
-
-          if(userRemember){
-
-          }
-          else{
-            this.toolService.toast('登录成功');
-          }
-          this.rememberService.setUser(this.user);
-
-          this.getData(id).then((data:ResponseData)=>{
-            this.operation={...data.data};
-            console.log(this.operation)
-            this.formatData();
-          }).catch((e)=>{
-            this.toolService.toast(e)
-          });
-
-        }
-      },
-      error=>{
-        this.toolService.apiException(error);
+    this.authService.checkAuth('normal').then(()=>{
+      this.getData(id).then((data:ResponseData)=>{
+        this.operation={...data.data};
+        console.log(this.operation)
+        this.formatData();
+      }).catch((e)=>{
+        this.toolService.toast(e)
       });
+    }).catch(()=>{})
   }
 
   @ViewChild('refresher') refresher:Refresher
@@ -77,7 +57,6 @@ export class DetailPage{
         data=>{
           let result=this.toolService.apiResult(data);
           if(result&&result.status==0){
-            //this.operation={...data.data};
             resolve(data)
           }
           else{

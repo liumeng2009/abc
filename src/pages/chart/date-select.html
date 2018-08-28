@@ -1,0 +1,17 @@
+<ion-list>
+  <ion-item>
+    <ion-label>开始时间：</ion-label>
+    <ion-datetime></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label>结束时间：</ion-label>
+    <ion-datetime></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <button ion-button color="secondary" default>本月</button>
+    <button ion-button color="secondary" default>本年度</button>
+  </ion-item>
+  <ion-item>
+    <button ion-button (click)="search()" default>查询</button>
+  </ion-item>
+</ion-list>

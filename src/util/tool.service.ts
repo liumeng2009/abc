@@ -25,7 +25,7 @@ export class ToolService{
   apiException(error:any){
     if(error.message){
       if(error.message=='0 -  {"isTrusted":true}'){
-        this.toast('网络错误，请重新尝试操作！')
+        this.toastLongTime('网络错误，请重新尝试操作，您也可以重新刷新页面！')
       }
       else{
         this.toast(error.message);
@@ -33,7 +33,7 @@ export class ToolService{
     }
     else{
       if(error=='0 -  {"isTrusted":true}'){
-        this.toast('网络错误，请重新尝试操作！')
+        this.toastLongTime('网络错误，请重新尝试操作，您也可以重新刷新页面！')
       }
       else{
         this.toast(error);
@@ -45,6 +45,16 @@ export class ToolService{
     const toast = this.toastCtrl.create({
       message:msg,
       duration: 3000,
+      position:'bottom',
+      showCloseButton: true,
+      closeButtonText: '关闭'
+    });
+    toast.present();
+  }
+
+  toastLongTime(msg){
+    const toast = this.toastCtrl.create({
+      message:msg,
       position:'bottom',
       showCloseButton: true,
       closeButtonText: '关闭'

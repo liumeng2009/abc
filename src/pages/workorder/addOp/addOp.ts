@@ -1,5 +1,5 @@
 import {Component,ViewChild} from '@angular/core'
-import {Slides,NavController,DateTime} from 'ionic-angular'
+import {Slides, NavController, DateTime} from 'ionic-angular'
 import {Title} from '@angular/platform-browser'
 import * as moment from 'moment'
 import {Observable} from 'rxjs'
@@ -13,8 +13,7 @@ import {PublicDataService} from "../../../util/data/public-data.service";
 import {ResponseData} from "../../../bean/responseData";
 import {WorkOrder} from "../../../bean/workOrder";
 import {AuthService} from "../../../util/auth.service";
-import {ListPage} from "../main/list";
-import {TabsPage} from "../../tabs/tab";
+import {User} from "../../../bean/user";
 
 @Component({
   selector:'add-op-op',
@@ -130,7 +129,23 @@ export class AddOpPage{
 
   private todayString=moment().format();
   ngOnInit() {
+    //this.title.setTitle('新增工单-选择订单');
+
+  }
+
+  private create_time_run;
+  private user:User;
+  ionViewWillEnter(){
     this.title.setTitle('新增工单-选择订单');
+    this.authService.checkAuth('normal').then(()=>{
+      this.init();
+    }).catch(()=>{})
+    this.create_time_run=Observable.interval(1000).subscribe(()=>{
+      this.todayString=moment().format();
+    })
+  }
+
+  init(){
     this.getType().then((data:ResponseData)=>{
       this.types=[...data.data]
       if(this.type){
@@ -168,14 +183,7 @@ export class AddOpPage{
     }).catch((e)=>{
       this.toolService.apiException(e);
     });
-  }
-
-  private create_time_run;
-  ionViewWillEnter(){
     this.getData();
-    this.create_time_run=Observable.interval(1000).subscribe(()=>{
-      this.todayString=moment().format();
-    })
   }
 
   private order:Order=new Order(null,null,null,null,null,null,null,null,null,null);

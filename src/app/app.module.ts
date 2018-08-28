@@ -45,6 +45,7 @@ import {AddService} from "../pages/workorder/add/add.service";
 import {AddOpPage} from "../pages/workorder/addOp/addOp";
 import {ChartPage} from "../pages/chart/chart";
 import {PersonalBasicPage} from "../pages/chart/personal-basic";
+import {DateSelectComponent} from "../pages/chart/date-select";
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import {PersonalBasicPage} from "../pages/chart/personal-basic";
     AddOpPage,
     ActionHelpPage,
 
+    DateSelectComponent,
     ChartPage,
     PersonalBasicPage,
 
@@ -91,8 +93,8 @@ import {PersonalBasicPage} from "../pages/chart/personal-basic";
         {component:WeChatPage,name:'WeChat',segment:'wechat'},
         {component:SettingPage,name:'Setting',segment:'setting'},
         {component:LoginPage,name:'Login',segment:'login'},
-        {component:AddPage,name:'Add',segment:'add',defaultHistory:[TabsPage]},
-        {component:AddOpPage,name:'AddOp',segment:'addop',defaultHistory:[TabsPage]},
+        {component:AddPage,name:'Add',segment:'add',defaultHistory:[ListPage]},
+        {component:AddOpPage,name:'AddOp',segment:'addop',defaultHistory:[ListPage]},
         {component:ChartPage,name:'Chart',segment:'chart'},
         {component:PersonalBasicPage,name:'PerBasic',segment:'chart/perbasic',defaultHistory:[ChartPage]}
       ]
@@ -126,7 +128,7 @@ import {PersonalBasicPage} from "../pages/chart/personal-basic";
     AddPage,
     AddOpPage,
     ActionHelpPage,
-
+    DateSelectComponent,
     ChartPage,
     PersonalBasicPage
   ],

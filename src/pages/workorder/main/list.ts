@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, Refresher, Events, ModalController,ActionSheetController,Platform} from 'ionic-angular'
+import {NavController, Refresher, Events, ModalController,ActionSheetController,Platform,LoadingController} from 'ionic-angular'
 import {Title} from '@angular/platform-browser';
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
@@ -35,7 +35,8 @@ export class ListPage{
     private rememberService:RememberService,
     private authService:AuthService,
     private actionSheetCtrl:ActionSheetController,
-    private platform:Platform
+    private platform:Platform,
+    private loadingCtrl:LoadingController
   ){
 
   }
@@ -63,7 +64,11 @@ export class ListPage{
     },0)
   }
   ionViewWillEnter(){
-    this.authService.getUserInfo().then(
+    this.authService.checkAuth('narmal').then(()=>{
+      this.init();
+    }).catch(()=>{})
+
+/*    this.authService.getUserInfo().then(
       data=>{
         let result=this.toolService.apiResult(data)
         if(result){
@@ -77,30 +82,24 @@ export class ListPage{
             this.toolService.toast('登录成功');
           }
           this.rememberService.setUser(this.user);
-          this.init();
+
         }
       },
       error=>{
         this.toolService.apiException(error);
       }
 
-    )
-
-
-
+    )*/
   }
 
   init(){
-    this.isLoadingList=true;
     this.getOpCount();
     this.getData(this.user.id).then((data:ResponseData)=>{
-      this.isLoadingList=false;
       let result=this.toolService.apiResult(data);
       if(result){
         this.formatServerData(result.data);
       }
     }).catch((e)=>{
-      this.isLoadingList=false;
       this.toolService.apiException(e)
     })
   }

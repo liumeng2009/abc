@@ -2,9 +2,10 @@ import {Component,ViewChild,ElementRef} from '@angular/core'
 import {Title} from '@angular/platform-browser'
 import {AuthService} from "../../util/auth.service";
 import {ToolService} from "../../util/tool.service";
-import {RememberService} from "../../util/remember.service";
 import {User} from "../../bean/user";
-var echarts = require('echarts');
+import * as echarts from 'echarts'
+import {PopoverController} from "ionic-angular";
+import {DateSelectComponent} from "./date-select";
 
 @Component({
   selector:'personal-basic-page',
@@ -16,7 +17,7 @@ export class PersonalBasicPage{
     private title:Title,
     private authService:AuthService,
     private toolService:ToolService,
-    private rememberService:RememberService
+    private popoverCtrl:PopoverController
   ){
 
   }
@@ -26,35 +27,9 @@ export class PersonalBasicPage{
   @ViewChild('chart2') chart2:ElementRef;
   ionViewWillEnter(){
     this.title.setTitle('个人基本数据统计');
-    this.user=this.rememberService.getUser();
-    if(this.user){
+    this.authService.checkAuth('simple').then(()=>{
       this.getData();
-    }
-    else{
-      this.authService.getUserInfo().then(
-        data=>{
-          let result=this.toolService.apiResult(data)
-          if(result){
-            this.user={...result.data};
-            let userRemember=this.rememberService.getUser();
-
-            if(userRemember){
-
-            }
-            else{
-              this.toolService.toast('登录成功');
-            }
-            this.rememberService.setUser(this.user);
-
-            this.getData();
-
-          }
-        },
-        error=>{
-          this.toolService.apiException(error);
-        }
-      )
-    }
+    }).catch(()=>{})
   }
 
   getData(){
@@ -90,6 +65,11 @@ export class PersonalBasicPage{
         data: [5]
       }]
     });
+  }
+
+  search(){
+    let popover = this.popoverCtrl.create(DateSelectComponent);
+    popover.present();
   }
 
 }

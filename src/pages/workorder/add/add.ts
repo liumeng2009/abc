@@ -1,6 +1,6 @@
 import {Component,ViewChild} from '@angular/core';
 import {Title} from '@angular/platform-browser'
-import { Slides,Scroll,PopoverController,Popover,NavController } from 'ionic-angular';
+import {Slides, Scroll, PopoverController, Popover, NavController} from 'ionic-angular';
 import {Corporation} from "../../../bean/Corporation";
 import {Group} from "../../../bean/Group";
 import {PublicDataService} from "../../../util/data/public-data.service";
@@ -19,7 +19,6 @@ import {WorkOrder} from "../../../bean/workOrder";
 import {User} from "../../../bean/user";
 import {ActionHelpPage} from "./actionHelp";
 import {AddService} from "./add.service";
-import {ListPage} from "../main/list";
 
 @Component({
   templateUrl:'add.html',
@@ -59,6 +58,13 @@ export class AddPage {
     })
     this.slide.lockSwipeToNext(true);
     this.slide.lockSwipeToPrev(true);
+
+    this.authService.checkAuth('normal').then(()=>{
+      this.init();
+    }).catch(()=>{})
+  }
+
+  init(){
     this.getGroups().then(()=>{
       this.getCorporation().then((data:ResponseData)=>{
         this.corporations=[...data.data];
@@ -121,7 +127,6 @@ export class AddPage {
       catch(e){}
 
     }
-
   }
 
   @ViewChild('scrollRight') scrollRight:Scroll

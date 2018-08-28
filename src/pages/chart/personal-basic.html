@@ -8,20 +8,10 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item>
-      <ion-label>开始时间：</ion-label>
-      <ion-datetime></ion-datetime>
-    </ion-item>
-    <ion-item>
-      <ion-label>结束时间：</ion-label>
-      <ion-datetime></ion-datetime>
-    </ion-item>
-    <ion-item>
-
-    </ion-item>
-    <ion-item>
-      <button ion-button>查询</button>
-    </ion-item>
+    <button ion-item color="light" icon-start (click)="search()" class="bluefontbutton">
+      <ion-icon name="search" color="primary"></ion-icon>
+        2018-08-01到2018-08-31的统计
+    </button>
   </ion-list>
 
 
