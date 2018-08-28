@@ -12,6 +12,7 @@ import {RememberService} from "../util/remember.service";
 import {ToolService} from "../util/tool.service";
 import {OptConfig} from "../config/config";
 import {PublicDataService} from "../util/data/public-data.service";
+import {ChartPage} from "../pages/chart/chart";
 
 @Component({
   templateUrl: 'app.html'
@@ -130,8 +131,10 @@ export class MyApp {
   }
 
   goData(){
-    this.nav.setRoot('Chart', {}).then(()=>{
-      this.menuCtrl.close();
+    this.menuCtrl.close();
+    //this.nav.push(ChartPage);
+    this.nav.setRoot('Chart', {},{}).then(()=>{
+
     }).catch((err: any) => {
       console.log(`Didn't set nav root: ${err}`);
     });

@@ -44,6 +44,7 @@ import {ActionHelpPage} from "../pages/workorder/add/actionHelp";
 import {AddService} from "../pages/workorder/add/add.service";
 import {AddOpPage} from "../pages/workorder/addOp/addOp";
 import {ChartPage} from "../pages/chart/chart";
+import {PersonalBasicPage} from "../pages/chart/personal-basic";
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import {ChartPage} from "../pages/chart/chart";
     ActionHelpPage,
 
     ChartPage,
+    PersonalBasicPage,
 
     Autosize
   ],
@@ -85,13 +87,14 @@ import {ChartPage} from "../pages/chart/chart";
       links:[
         {component:TabsPage,name:'TabsPage',segment:'main'},
         {component:ListPage,name:'List',segment:'list'},
-        {component:DetailPage,name:'Detail',segment:'detail/:id',defaultHistory:[ListPage]},
+        {component:DetailPage,name:'Detail',segment:'detail/:id',defaultHistory:[TabsPage]},
         {component:WeChatPage,name:'WeChat',segment:'wechat'},
         {component:SettingPage,name:'Setting',segment:'setting'},
         {component:LoginPage,name:'Login',segment:'login'},
-        {component:AddPage,name:'Add',segment:'add',defaultHistory:[ListPage]},
-        {component:AddOpPage,name:'AddOp',segment:'addop',defaultHistory:[ListPage]},
-        {component:ChartPage,name:'Chart',segment:'chart'}
+        {component:AddPage,name:'Add',segment:'add',defaultHistory:[TabsPage]},
+        {component:AddOpPage,name:'AddOp',segment:'addop',defaultHistory:[TabsPage]},
+        {component:ChartPage,name:'Chart',segment:'chart'},
+        {component:PersonalBasicPage,name:'PerBasic',segment:'chart/perbasic',defaultHistory:[ChartPage]}
       ]
     }),
     IonicStorageModule.forRoot(),
@@ -124,7 +127,8 @@ import {ChartPage} from "../pages/chart/chart";
     AddOpPage,
     ActionHelpPage,
 
-    ChartPage
+    ChartPage,
+    PersonalBasicPage
   ],
   providers: [
     StatusBar,

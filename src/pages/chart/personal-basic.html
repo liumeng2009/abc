@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{title.getTitle()}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label>开始时间：</ion-label>
+      <ion-datetime></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>结束时间：</ion-label>
+      <ion-datetime></ion-datetime>
+    </ion-item>
+    <ion-item>
+
+    </ion-item>
+    <ion-item>
+      <button ion-button>查询</button>
+    </ion-item>
+  </ion-list>
+
+
+  <canvas #chart style="width:100%"></canvas>
+  <div padding>
+
+  </div>
+  <canvas #chart2 style="width:100%"></canvas>
+</ion-content>

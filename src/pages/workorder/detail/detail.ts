@@ -7,6 +7,8 @@ import {ToolService} from "../../../util/tool.service";
 import {DetailModalPage} from "./detail-modal";
 import {ResponseData} from "../../../bean/responseData";
 import * as moment from 'moment'
+import {User} from "../../../bean/user";
+import {RememberService} from "../../../util/remember.service";
 
 
 @Component({
@@ -23,10 +25,11 @@ export class DetailPage{
     private events:Events,
     private modalCtrl:ModalController,
     private alertCtrl:AlertController,
-    private popCtrl:PopoverController
+    private popCtrl:PopoverController,
+    private remmemberService:RememberService
   ){}
 
-  private userid:string;
+  private user:User;
   private onlyMe:boolean=false;
   private operation:Operation;
   private operation_no:string;
@@ -36,23 +39,35 @@ export class DetailPage{
     let no=this.navParams.data.no;
     this.operation_no=no;
     console.log(id);
-    this.authService.checkLogin().then((data:ResponseData)=>{
-      this.userid=data.data.id;
-      this.getData(id).then((data:ResponseData)=>{
-        this.operation={...data.data};
-        console.log(this.operation)
-        this.formatData();
-      }).catch((e)=>{
-        this.toolService.toast(e)
+
+    this.authService.getUserInfo().then(
+      data=>{
+        let result=this.toolService.apiResult(data)
+        if(result){
+          this.user={...result.data};
+          let userRemember=this.rememberService.getUser();
+
+          if(userRemember){
+
+          }
+          else{
+            this.toolService.toast('登录成功');
+          }
+          this.rememberService.setUser(this.user);
+
+          this.getData(id).then((data:ResponseData)=>{
+            this.operation={...data.data};
+            console.log(this.operation)
+            this.formatData();
+          }).catch((e)=>{
+            this.toolService.toast(e)
+          });
+
+        }
+      },
+      error=>{
+        this.toolService.apiException(error);
       });
-    }).catch((e)=>{
-      this.toolService.toast(e.message);
-      if(e.action&&e.action=='login'){
-        setTimeout(()=>{
-          this.events.publish('user:logout');
-        },0)
-      }
-    })
   }
 
   @ViewChild('refresher') refresher:Refresher
@@ -91,7 +106,7 @@ export class DetailPage{
     if(this.operation.actions){
       for(let action of this.operation.actions){
         if(action.user){
-          if(action.user.id==this.userid){
+          if(action.user.id==this.user.id){
             action.enable=true;
           }
         }
@@ -258,7 +273,7 @@ export class DetailPage{
       this.detailService.saveAction({
         operationId:operationId,
         id:actionId,
-        workerId:this.userid,
+        workerId:this.user.id,
         create_stamp:create_stamp,
         call_stamp:call_stamp,
         showArriveDate:showArriveDate,

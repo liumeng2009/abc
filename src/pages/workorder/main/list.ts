@@ -70,7 +70,7 @@ export class ListPage{
           this.user={...result.data}
           let userRemember=this.rememberService.getUser();
 
-          if(userRemember!=null){
+          if(userRemember){
 
           }
           else{
