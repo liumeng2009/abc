@@ -1,5 +1,5 @@
 import {Component} from '@angular/core'
-import {Events} from 'ionic-angular'
+import {Events, NavParams, ViewController} from 'ionic-angular'
 import * as moment from 'moment'
 import {SearchDate} from "../../bean/searchDate";
 
@@ -10,7 +10,9 @@ import {SearchDate} from "../../bean/searchDate";
 
 export class DateSelectComponent{
   constructor(
-    private events:Events
+    private events:Events,
+    private viewCtrl:ViewController,
+    private navParams:NavParams
   ){
 
   }
@@ -19,12 +21,18 @@ export class DateSelectComponent{
   private endString=moment().endOf('month').format()
 
 
+  ngOnInit(){
+    let startParams=this.navParams.data.start;
+    let endParams=this.navParams.data.end;
+    this.startString=moment(startParams).format();
+    this.endString=moment(endParams).format();
+  }
+
   search(){
-    //console.log(this.startString);
-    //console.log(this.endString);
     //console.log(moment(this.startString).toDate().getTime());
-    let searchDate=new SearchDate(moment(this.startString).toDate().getTime(),moment(this.endString).toDate().getTime())
+    let searchDate=new SearchDate(moment(this.startString).valueOf(),moment(this.endString).valueOf())
     this.events.publish('data:search',searchDate)
+    this.viewCtrl.dismiss();
   }
 
   setMonth(){

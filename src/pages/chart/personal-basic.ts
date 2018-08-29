@@ -40,7 +40,6 @@ export class PersonalBasicPage{
     //默认本月
     let startStamp=moment().startOf('month').valueOf();
     let endStamp=moment().endOf('month').valueOf();
-    console.log(startStamp+' '+endStamp);
 
     this.authService.checkAuth('simple').then((user:User)=>{
       this.user=user;
@@ -49,10 +48,14 @@ export class PersonalBasicPage{
     }).catch(()=>{})
   }
 
+  private start:number=moment().startOf('month').valueOf();
+  private end:number=moment().endOf('month').valueOf();
   addAppEventListener(){
     this.events.subscribe('data:search',(searchDate:SearchDate)=>{
-      console.log(searchDate);
       this.getData(searchDate.start,searchDate.end)
+      this.searchText=this.getSearchText(searchDate.start,searchDate.end)
+      this.start=searchDate.start;
+      this.end=searchDate.end;
     })
   }
 
@@ -62,8 +65,9 @@ export class PersonalBasicPage{
       title: {
         text: '个人工单数',
         textStyle:{
-          fontSize:16
-        }
+          fontSize:14
+        },
+        padding:10
       },
       series: [{
         type: 'pie',
@@ -82,8 +86,9 @@ export class PersonalBasicPage{
       title: {
         text: '个人工时数',
         textStyle:{
-          fontSize:16
-        }
+          fontSize:14
+        },
+        padding:10
       },
       series: [{
         type: 'pie',
@@ -98,11 +103,12 @@ export class PersonalBasicPage{
   }
 
   getData(start:number,end:number){
+    this.chartObj1.showLoading('default',{text:'加载中...'});
     this.chartService.workerOpCount(this.user.id,start,end).then(
       data=>{
         let result=this.toolService.apiResult(data)
         if(result){
-          console.log(result);
+          this.chartObj1.hideLoading();
           this.chartObj1.setOption({
             series: [{
               data: [
@@ -113,14 +119,16 @@ export class PersonalBasicPage{
         }
       },
       error=>{
+        this.chartObj1.hideLoading();
         this.toolService.apiException(error)
       }
     )
+    this.chartObj2.showLoading('default',{text:'加载中...'});
     this.chartService.workerOpStamp(this.user.id,start,end).then(
       data=>{
         let result=this.toolService.apiResult(data)
         if(result){
-          console.log(result.data);
+          this.chartObj2.hideLoading();
           this.chartObj2.setOption({
             series: [{
               data: [
@@ -131,13 +139,17 @@ export class PersonalBasicPage{
         }
       },
       error=>{
+        this.chartObj2.hideLoading();
         this.toolService.apiException(error)
       }
     )
   }
 
   search(){
-    let popover = this.popoverCtrl.create(DateSelectComponent);
+    let popover = this.popoverCtrl.create(DateSelectComponent,{
+      start:this.start,
+      end:this.end
+    });
     popover.present();
   }
 
@@ -145,18 +157,22 @@ export class PersonalBasicPage{
   private getSearchText(start,end){
     let monthstart=moment().startOf('month').valueOf();
     let monthend=moment().endOf('month').valueOf();
-    if(monthstart==start&&monthend==end){
-      this.searchText='本月'
+    if(monthstart==start&&monthend==(end+999)){
+      return '本月'
     }
     let yearstart=moment().startOf('year').valueOf();
     let yearend=moment().endOf('year').valueOf();
-    if(yearstart==start&&monthend==yearend){
-      this.searchText='本年度'
+    if(yearstart==start&&yearend==(end+999)){
+      return '本年度'
     }
 
     let startString=moment(start).format('YYYY-MM-DD')
     let endString=moment(end).format('YYYY-MM-DD')
     return startString+'到'+endString
 
+  }
+
+  refresh(){
+    this.getData(this.start,this.end)
   }
 }

@@ -12,7 +12,6 @@ import {RememberService} from "../util/remember.service";
 import {ToolService} from "../util/tool.service";
 import {OptConfig} from "../config/config";
 import {PublicDataService} from "../util/data/public-data.service";
-import {ChartPage} from "../pages/chart/chart";
 
 @Component({
   templateUrl: 'app.html'
@@ -118,7 +117,6 @@ export class MyApp {
   getOpStamp(userid){
       this.publicDataService.getWorkerOpStamp(userid).then(
         data=>{
-          console.log(data)
           if(data.status==0){
             this.opStamp=data.data;
           }

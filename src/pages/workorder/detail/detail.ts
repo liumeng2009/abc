@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {NavParams, Events, ModalController, Refresher, PickerOptions, DateTime,AlertController,PopoverController} from 'ionic-angular'
+import {NavParams, Events, ModalController, Refresher, DateTime,AlertController,PopoverController} from 'ionic-angular'
 import {AuthService} from "../../../util/auth.service";
 import {Operation} from "../../../bean/operation";
 import {DetailService} from "./detail.service";
@@ -8,7 +8,6 @@ import {DetailModalPage} from "./detail-modal";
 import {ResponseData} from "../../../bean/responseData";
 import * as moment from 'moment'
 import {User} from "../../../bean/user";
-import {RememberService} from "../../../util/remember.service";
 
 
 @Component({
@@ -25,8 +24,7 @@ export class DetailPage{
     private events:Events,
     private modalCtrl:ModalController,
     private alertCtrl:AlertController,
-    private popCtrl:PopoverController,
-    private rememberService:RememberService
+    private popCtrl:PopoverController
   ){}
 
   private user:User;

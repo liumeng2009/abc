@@ -41,7 +41,6 @@ export class AuthService {
     return new Promise((resolve, reject)=>{
       this.user=this.rememberService.getUser();
       if(this.user&&authtype=='simple'){
-        console.log('身份通过');
         resolve(this.user)
       }
       else{
@@ -69,7 +68,6 @@ export class AuthService {
                 this.toolService.toast('登录成功');
               }
               this.rememberService.setUser(this.user);
-              console.log('身份通过');
               resolve(this.user);
 
             }

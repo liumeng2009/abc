@@ -14,7 +14,6 @@ export class ChartService{
   private workerOpStampUrl=new OptConfig().serverPath+'/api/operation/workerOpStamp'
 
   workerOpCount(userid:string,start:number,end:number):Promise<ResponseData>{
-    console.log(this.workerOpCountUrl+'?userid='+userid+'&start='+start+'&end='+end);
     return this.http.get(this.workerOpCountUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers: this.headers})
       .toPromise()
       .then(this.extractData)

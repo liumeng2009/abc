@@ -53,6 +53,7 @@ export class LoginPage{
             this.navCtrl.push(TabsPage,{ev:data.data.name});
             //发出事件，这时候app.component的一些UI应该发生变化了
             this.event.publish('user:login',this.user)
+            this.toolService.toast('登录成功！')
           }
         },
         error=>{
