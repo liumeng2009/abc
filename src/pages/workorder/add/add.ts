@@ -59,7 +59,8 @@ export class AddPage {
     this.slide.lockSwipeToNext(true);
     this.slide.lockSwipeToPrev(true);
 
-    this.authService.checkAuth('normal').then(()=>{
+    this.authService.checkAuth('normal').then((user:User)=>{
+      this.user=user;
       this.init();
     }).catch(()=>{})
   }

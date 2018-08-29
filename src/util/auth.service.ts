@@ -42,7 +42,7 @@ export class AuthService {
       this.user=this.rememberService.getUser();
       if(this.user&&authtype=='simple'){
         console.log('身份通过');
-        resolve()
+        resolve(this.user)
       }
       else{
         let loading;
@@ -70,7 +70,7 @@ export class AuthService {
               }
               this.rememberService.setUser(this.user);
               console.log('身份通过');
-              resolve();
+              resolve(this.user);
 
             }
           },

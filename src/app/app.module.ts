@@ -46,6 +46,7 @@ import {AddOpPage} from "../pages/workorder/addOp/addOp";
 import {ChartPage} from "../pages/chart/chart";
 import {PersonalBasicPage} from "../pages/chart/personal-basic";
 import {DateSelectComponent} from "../pages/chart/date-select";
+import {ChartService} from "../pages/chart/chart.service";
 
 @NgModule({
   declarations: [
@@ -147,6 +148,7 @@ import {DateSelectComponent} from "../pages/chart/date-select";
     QrService,
     WebSocketService,
     AddService,
+    ChartService,
 
     AuthService,
     ToolService

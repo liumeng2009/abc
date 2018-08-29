@@ -64,7 +64,8 @@ export class ListPage{
     },0)
   }
   ionViewWillEnter(){
-    this.authService.checkAuth('narmal').then(()=>{
+    this.authService.checkAuth('narmal').then((user:User)=>{
+      this.user=user;
       this.init();
     }).catch(()=>{})
 

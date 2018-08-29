@@ -137,7 +137,8 @@ export class AddOpPage{
   private user:User;
   ionViewWillEnter(){
     this.title.setTitle('新增工单-选择订单');
-    this.authService.checkAuth('normal').then(()=>{
+    this.authService.checkAuth('normal').then((user:User)=>{
+      this.user=user;
       this.init();
     }).catch(()=>{})
     this.create_time_run=Observable.interval(1000).subscribe(()=>{

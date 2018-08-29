@@ -39,7 +39,8 @@ export class DetailPage{
     let no=this.navParams.data.no;
     this.operation_no=no;
 
-    this.authService.checkAuth('normal').then(()=>{
+    this.authService.checkAuth('normal').then((user:User)=>{
+      this.user=user;
       this.getData(id).then((data:ResponseData)=>{
         this.operation={...data.data};
         console.log(this.operation)
