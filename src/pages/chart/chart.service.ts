@@ -12,6 +12,7 @@ export class ChartService{
   private headers = new Headers({'Content-Type': 'application/json'});
   private workerOpCountUrl=new OptConfig().serverPath+'/api/operation/workerOpCount'
   private workerOpStampUrl=new OptConfig().serverPath+'/api/operation/workerOpStamp'
+  private workerEquipmentUrl=new OptConfig().serverPath+'/api/operation/workerBusinessEquipment'
 
   workerOpCount(userid:string,start:number,end:number):Promise<ResponseData>{
     return this.http.get(this.workerOpCountUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers: this.headers})
@@ -21,6 +22,12 @@ export class ChartService{
   }
   workerOpStamp(userid:string,start:number,end:number):Promise<ResponseData>{
     return this.http.get(this.workerOpStampUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers: this.headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+  workerEquipment(userid:string,start:number,end:number):Promise<ResponseData>{
+    return this.http.get(this.workerEquipmentUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers: this.headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

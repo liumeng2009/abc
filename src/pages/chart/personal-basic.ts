@@ -103,6 +103,7 @@ export class PersonalBasicPage{
   }
 
   getData(start:number,end:number){
+    if(this.chartObj1)
     this.chartObj1.showLoading('default',{text:'加载中...'});
     this.chartService.workerOpCount(this.user.id,start,end).then(
       data=>{
@@ -123,6 +124,7 @@ export class PersonalBasicPage{
         this.toolService.apiException(error)
       }
     )
+    if(this.chartObj2)
     this.chartObj2.showLoading('default',{text:'加载中...'});
     this.chartService.workerOpStamp(this.user.id,start,end).then(
       data=>{
@@ -173,6 +175,7 @@ export class PersonalBasicPage{
   }
 
   refresh(){
-    this.getData(this.start,this.end)
+    if(this.user)
+      this.getData(this.start,this.end)
   }
 }

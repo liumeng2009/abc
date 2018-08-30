@@ -18,7 +18,15 @@ export class ToolService{
       return data;
     }
     else{
-      this.toast(data.message)
+      if(data.message){
+        if(data.message.indexOf('connect ECONNREFUSED')>-1)
+          this.toastLongTime(data.message)
+        else
+          this.toast(data.message)
+      }
+      else{
+        this.toast('内部错误')
+      }
     }
   }
 
