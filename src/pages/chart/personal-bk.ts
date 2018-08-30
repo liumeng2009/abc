@@ -33,7 +33,7 @@ export class PersonalBkPage{
 
   ionViewWillEnter(){
     this.title.setTitle('个人业务类别统计');
-    this.calHeight();
+    this.calHeight(false);
     this.addAppEventListener();
     //默认本月
     let startStamp=moment().startOf('month').valueOf();
@@ -50,10 +50,10 @@ export class PersonalBkPage{
   @ViewChild('head') head:ElementRef;
   @ViewChild('list') list:ElementRef;
   private canvasStyle={
-    width:'100%',
+    width:'0px',
     height:'0px'
   }
-  calHeight(){
+  calHeight(bigData){
     let hAll=window.document.body.clientHeight;
     let wAll=window.document.body.clientWidth;
 
@@ -62,7 +62,11 @@ export class PersonalBkPage{
 
     let h=hAll-headH-listH;
     console.log(h);
-    this.canvasStyle.height=(h-50)+'px'
+    if(bigData)
+      this.canvasStyle.height=(h-100)*2+'px'
+    else
+      this.canvasStyle.height=(h-100)+'px'
+    this.canvasStyle.width=(wAll-32)+'px'
   }
 
   private start:number=moment().startOf('month').valueOf();
@@ -80,10 +84,11 @@ export class PersonalBkPage{
     this.chartObj1=echarts.init(this.chart.nativeElement);
     this.chartObj1.setOption({
       grid:{
-        x:0,
-        y:0,
-        x2:0,
-        y2:0,
+        show:true,
+        top:10,
+        bottom:20,
+        left:60,
+        right:0,
       },
       xAxis: {
         type: 'value',
@@ -93,13 +98,12 @@ export class PersonalBkPage{
       },
       series: [{
         type: 'bar',
-        barCategoryGap:'60%',
-        data: []
-/*        label:{
+        barCategoryGap:'20%',
+        data: [],
+        label:{
           show:true,
-          color:'#000',
-          formatter: '{b}:{@[0]}个'
-        }*/
+          formatter: '{@[0]}'
+        }
       }]
     });
   }
@@ -113,11 +117,27 @@ export class PersonalBkPage{
         let result=this.toolService.apiResult(data)
         if(result){
           this.chartObj1.hideLoading();
+
+          let yArray:string[]=[];
+          for(let d of result.data){
+            yArray.push(d.name);
+          }
+          if(result.data.length>20)
+            this.calHeight(true)
+          else
+            this.calHeight(false)
           this.chartObj1.setOption({
+            yAxis:{
+              data:yArray
+            },
             series: [{
               data: result.data
             }]
           })
+          setTimeout(()=>{
+            this.chartObj1.resize();
+          },0)
+
         }
       },
       error=>{
