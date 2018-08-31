@@ -48,6 +48,8 @@ import {PersonalBasicPage} from "../pages/chart/personal-basic";
 import {DateSelectComponent} from "../pages/chart/date-select";
 import {ChartService} from "../pages/chart/chart.service";
 import {PersonalBkPage} from "../pages/chart/personal-bk";
+import {PersonalAdvancePage} from "../pages/chart/personal-advance";
+import {AllBasicPage} from "../pages/chart/all-basic";
 
 @NgModule({
   declarations: [
@@ -80,6 +82,8 @@ import {PersonalBkPage} from "../pages/chart/personal-bk";
     ChartPage,
     PersonalBasicPage,
     PersonalBkPage,
+    PersonalAdvancePage,
+    AllBasicPage,
 
     Autosize
   ],
@@ -100,7 +104,9 @@ import {PersonalBkPage} from "../pages/chart/personal-bk";
         {component:AddOpPage,name:'AddOp',segment:'addop',defaultHistory:[ListPage]},
         {component:ChartPage,name:'Chart',segment:'chart'},
         {component:PersonalBasicPage,name:'PerBasic',segment:'chart/perbasic',defaultHistory:[ChartPage]},
-        {component:PersonalBkPage,name:'PerBK',segment:'chart/perbk',defaultHistory:[ChartPage]}
+        {component:PersonalBkPage,name:'PerBK',segment:'chart/perbk',defaultHistory:[ChartPage]},
+        {component:PersonalAdvancePage,name:'PerAD',segment:'chart/perad',defaultHistory:[ChartPage]},
+        {component:AllBasicPage,name:'AllBasic',segment:'chart/allbasic',defaultHistory:[ChartPage]}
       ]
     }),
     IonicStorageModule.forRoot(),
@@ -135,7 +141,9 @@ import {PersonalBkPage} from "../pages/chart/personal-bk";
     DateSelectComponent,
     ChartPage,
     PersonalBasicPage,
-    PersonalBkPage
+    PersonalBkPage,
+    PersonalAdvancePage,
+    AllBasicPage
   ],
   providers: [
     StatusBar,

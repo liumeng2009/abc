@@ -87,14 +87,17 @@ export class PersonalBkPage{
         show:true,
         top:10,
         bottom:20,
-        left:60,
+        left:70,
         right:0,
       },
       xAxis: {
         type: 'value',
       },
       yAxis:{
-        type:'category'
+        type:'category',
+        axisLabel:{
+          interval:0
+        }
       },
       series: [{
         type: 'bar',
@@ -102,7 +105,10 @@ export class PersonalBkPage{
         data: [],
         label:{
           show:true,
-          formatter: '{@[0]}'
+          position:['100%', '50%'],
+          verticalAlign:'middle',
+          color:'#000',
+          formatter: '{@[0]}个'
         }
       }]
     });

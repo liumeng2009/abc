@@ -18,13 +18,14 @@
     </ion-list-header>
     <button ion-item [navPush]="personalBasicPage">个人基本统计</button>
     <button ion-item [navPush]="personalBKPage">个人业务类别统计</button>
+    <button ion-item [navPush]="personalAdvancePage">个人业务大类别统计</button>
   </ion-list>
 
   <ion-list>
     <ion-list-header>
       全部数据
     </ion-list-header>
-    <button ion-item>全部工单的基本统计</button>
+    <button ion-item [navPush]="allBasicPage">全部工单的基本统计</button>
     <button ion-item>全部工单的业务类别统计</button>
     <button ion-item>全部工单的处理地点统计</button>
   </ion-list>

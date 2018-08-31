@@ -5,6 +5,8 @@ import {TabsPage} from "../tabs/tab";
 import {AuthService} from "../../util/auth.service";
 import {PersonalBasicPage} from "./personal-basic";
 import {PersonalBkPage} from "./personal-bk";
+import {PersonalAdvancePage} from "./personal-advance";
+import {AllBasicPage} from "./all-basic";
 
 @Component({
   selector:'chart-page',
@@ -33,4 +35,7 @@ export class ChartPage{
 
   private personalBasicPage=PersonalBasicPage
   private personalBKPage=PersonalBkPage
+  private personalAdvancePage=PersonalAdvancePage
+
+  private allBasicPage=AllBasicPage
 }

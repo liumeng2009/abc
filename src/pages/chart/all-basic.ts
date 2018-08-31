@@ -11,11 +11,11 @@ import {SearchDate} from "../../bean/searchDate";
 import {ChartService} from "./chart.service";
 
 @Component({
-  selector:'personal-basic-page',
-  templateUrl:'personal-basic.html'
+  selector:'all-basic-page',
+  templateUrl:'all-basic.html'
 })
 
-export class PersonalBasicPage{
+export class AllBasicPage{
   constructor(
     private title:Title,
     private authService:AuthService,
@@ -35,7 +35,7 @@ export class PersonalBasicPage{
   private chartObj2;
 
   ionViewWillEnter(){
-    this.title.setTitle('个人基本数据统计');
+    this.title.setTitle('全部基本数据统计');
     this.addAppEventListener();
     //默认本月
     let startStamp=moment().startOf('month').valueOf();
@@ -116,8 +116,8 @@ export class PersonalBasicPage{
 
   getData(start:number,end:number){
     if(this.chartObj1)
-    this.chartObj1.showLoading('default',{text:'加载中...'});
-    this.chartService.workerOpCount(this.user.id,start,end).then(
+      this.chartObj1.showLoading('default',{text:'加载中...'});
+    this.chartService.allOpCount(start,end).then(
       data=>{
         let result=this.toolService.apiResult(data)
         if(result){
@@ -137,7 +137,7 @@ export class PersonalBasicPage{
       }
     )
     if(this.chartObj2)
-    this.chartObj2.showLoading('default',{text:'加载中...'});
+      this.chartObj2.showLoading('default',{text:'加载中...'});
     this.chartService.workerOpStamp(this.user.id,start,end).then(
       data=>{
         let result=this.toolService.apiResult(data)

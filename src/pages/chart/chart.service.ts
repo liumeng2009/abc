@@ -5,29 +5,54 @@ import 'rxjs/add/operator/toPromise';
 import {User} from "../../bean/user";
 import {ResponseData} from "../../bean/responseData";
 import {OptConfig} from "../../config/config";
+import {CookieService} from "angular2-cookie/core";
 
 @Injectable()
 export class ChartService{
-  constructor(private http:Http){}
-  private headers = new Headers({'Content-Type': 'application/json'});
+  constructor(private http:Http, private cookieService: CookieService){}
   private workerOpCountUrl=new OptConfig().serverPath+'/api/operation/workerOpCount'
   private workerOpStampUrl=new OptConfig().serverPath+'/api/operation/workerOpStamp'
   private workerEquipmentUrl=new OptConfig().serverPath+'/api/operation/workerBusinessEquipment'
+  private workerAdvanceUrl=new OptConfig().serverPath+'/api/operation/workerBusinessAdvance'
+  private allOpCountUrl=new OptConfig().serverPath+'/api/operation/allOpCount'
 
   workerOpCount(userid:string,start:number,end:number):Promise<ResponseData>{
-    return this.http.get(this.workerOpCountUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers: this.headers})
+    let token=this.cookieService.get('optAppToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http.get(this.workerOpCountUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers: headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
   }
   workerOpStamp(userid:string,start:number,end:number):Promise<ResponseData>{
-    return this.http.get(this.workerOpStampUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers: this.headers})
+    let token=this.cookieService.get('optAppToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http.get(this.workerOpStampUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers: headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
   }
   workerEquipment(userid:string,start:number,end:number):Promise<ResponseData>{
-    return this.http.get(this.workerEquipmentUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers: this.headers})
+    let token=this.cookieService.get('optAppToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http.get(this.workerEquipmentUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers:headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+  workerAdvance(userid:string,start:number,end:number):Promise<ResponseData>{
+    console.log(this.workerAdvanceUrl+'?userid='+userid+'&start='+start+'&end='+end);
+    let token=this.cookieService.get('optAppToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http.get(this.workerAdvanceUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers:headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+  allOpCount(start:number,end:number):Promise<ResponseData>{
+    let token=this.cookieService.get('optAppToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http.get(this.allOpCountUrl+'?start='+start+'&end='+end,{headers: headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
