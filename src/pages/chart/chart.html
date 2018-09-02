@@ -25,9 +25,10 @@
     <ion-list-header>
       全部数据
     </ion-list-header>
-    <button ion-item [navPush]="allBasicPage">全部工单的基本统计</button>
-    <button ion-item>全部工单的业务类别统计</button>
-    <button ion-item>全部工单的处理地点统计</button>
+    <button ion-item [navPush]="allBasicPage">工单数量统计</button>
+    <button ion-item [navPush]="allBasicStampPage">人员工时统计</button>
+    <button ion-item [navPush]="allBkPage">工单的业务类别统计</button>
+    <button ion-item [navPush]="allAddressPage">工单的处理地点统计</button>
   </ion-list>
 
 </ion-content>

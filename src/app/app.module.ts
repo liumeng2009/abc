@@ -16,6 +16,7 @@ import {DetailModalPage} from "../pages/workorder/detail/detail-modal"
 import {LoginPage} from '../pages/login/login'
 import {WeChatPage} from '../pages/wechat/wechat';
 import {SettingPage} from '../pages/settings/setting'
+import {AboutPage} from "../pages/about/about";
 import {PublicDataService} from '../util/data/public-data.service';
 import {ListService} from '../pages/workorder/main/list.service'
 import {LoginService} from '../pages/login/login.service'
@@ -50,6 +51,14 @@ import {ChartService} from "../pages/chart/chart.service";
 import {PersonalBkPage} from "../pages/chart/personal-bk";
 import {PersonalAdvancePage} from "../pages/chart/personal-advance";
 import {AllBasicPage} from "../pages/chart/all-basic";
+import {AllBasicStampPage} from "../pages/chart/all-basic-stamp";
+import {AllBkPage} from "../pages/chart/all-bk";
+import {AllAddressPage} from "../pages/chart/all-address";
+import {EditSettingNamePage} from "../pages/settings/edit/edit-name";
+import {EditSettingAvatarPage} from "../pages/settings/edit/edit-avatar";
+import {EditSettingPasswordPage} from "../pages/settings/edit/edit-password";
+import {SettingService} from "../pages/settings/setting.service";
+
 
 @NgModule({
   declarations: [
@@ -73,6 +82,7 @@ import {AllBasicPage} from "../pages/chart/all-basic";
     LoginPage,
     WeChatPage,
     SettingPage,
+    AboutPage,
 
     AddPage,
     AddOpPage,
@@ -84,6 +94,13 @@ import {AllBasicPage} from "../pages/chart/all-basic";
     PersonalBkPage,
     PersonalAdvancePage,
     AllBasicPage,
+    AllBasicStampPage,
+    AllBkPage,
+    AllAddressPage,
+
+    EditSettingNamePage,
+    EditSettingAvatarPage,
+    EditSettingPasswordPage,
 
     Autosize
   ],
@@ -98,6 +115,7 @@ import {AllBasicPage} from "../pages/chart/all-basic";
         {component:ListPage,name:'List',segment:'list'},
         {component:DetailPage,name:'Detail',segment:'detail/:id',defaultHistory:[TabsPage]},
         {component:WeChatPage,name:'WeChat',segment:'wechat'},
+        {component:AboutPage,name:'About',segment:'about'},
         {component:SettingPage,name:'Setting',segment:'setting'},
         {component:LoginPage,name:'Login',segment:'login'},
         {component:AddPage,name:'Add',segment:'add',defaultHistory:[ListPage]},
@@ -106,7 +124,10 @@ import {AllBasicPage} from "../pages/chart/all-basic";
         {component:PersonalBasicPage,name:'PerBasic',segment:'chart/perbasic',defaultHistory:[ChartPage]},
         {component:PersonalBkPage,name:'PerBK',segment:'chart/perbk',defaultHistory:[ChartPage]},
         {component:PersonalAdvancePage,name:'PerAD',segment:'chart/perad',defaultHistory:[ChartPage]},
-        {component:AllBasicPage,name:'AllBasic',segment:'chart/allbasic',defaultHistory:[ChartPage]}
+        {component:AllBasicPage,name:'AllBasic',segment:'chart/allbasic',defaultHistory:[ChartPage]},
+        {component:AllBasicStampPage,name:'AllBasicStamp',segment:'chart/allstamp',defaultHistory:[ChartPage]},
+        {component:AllBkPage,name:'AllBK',segment:'chart/allbk',defaultHistory:[ChartPage]},
+        {component:AllAddressPage,name:'AllAddress',segment:'chart/alladdress',defaultHistory:[ChartPage]}
       ]
     }),
     IonicStorageModule.forRoot(),
@@ -134,6 +155,7 @@ import {AllBasicPage} from "../pages/chart/all-basic";
     LoginPage,
     WeChatPage,
     SettingPage,
+    AboutPage,
 
     AddPage,
     AddOpPage,
@@ -143,7 +165,14 @@ import {AllBasicPage} from "../pages/chart/all-basic";
     PersonalBasicPage,
     PersonalBkPage,
     PersonalAdvancePage,
-    AllBasicPage
+    AllBasicPage,
+    AllBasicStampPage,
+    AllBkPage,
+    AllAddressPage,
+
+    EditSettingNamePage,
+    EditSettingAvatarPage,
+    EditSettingPasswordPage
   ],
   providers: [
     StatusBar,
@@ -163,7 +192,9 @@ import {AllBasicPage} from "../pages/chart/all-basic";
     ChartService,
 
     AuthService,
-    ToolService
+    ToolService,
+
+    SettingService
 
   ]
 })

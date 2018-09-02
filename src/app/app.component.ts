@@ -54,6 +54,10 @@ export class MyApp {
         this.getUserInfo();
       })
 
+      this.events.subscribe('userinfo:updated',()=>{
+        this.getUserInfo();
+      })
+
       this.getUserInfo();
 
       this.webSocketService.createObservableSocket().subscribe(
@@ -139,11 +143,23 @@ export class MyApp {
   }
 
   goSettings(){
+    this.menuCtrl.close();
+    //this.nav.push(ChartPage);
+    this.nav.setRoot('Setting', {},{}).then(()=>{
 
+    }).catch((err: any) => {
+      console.log(`Didn't set nav root: ${err}`);
+    });
   }
 
   goAbout(){
+    this.menuCtrl.close();
+    //this.nav.push(ChartPage);
+    this.nav.setRoot('About', {},{}).then(()=>{
 
+    }).catch((err: any) => {
+      console.log(`Didn't set nav root: ${err}`);
+    });
   }
 
   exit(){
@@ -172,8 +188,6 @@ export class MyApp {
       ]
     });
     confirm.present();
-
-
   }
 }
 

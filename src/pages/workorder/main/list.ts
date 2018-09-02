@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, Refresher, Events, ModalController,ActionSheetController,Platform,LoadingController} from 'ionic-angular'
+import {NavController, Refresher, Events, ModalController,ActionSheetController,Platform} from 'ionic-angular'
 import {Title} from '@angular/platform-browser';
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
@@ -35,8 +35,7 @@ export class ListPage{
     private rememberService:RememberService,
     private authService:AuthService,
     private actionSheetCtrl:ActionSheetController,
-    private platform:Platform,
-    private loadingCtrl:LoadingController
+    private platform:Platform
   ){
 
   }
@@ -68,29 +67,6 @@ export class ListPage{
       this.user=user;
       this.init();
     }).catch(()=>{})
-
-/*    this.authService.getUserInfo().then(
-      data=>{
-        let result=this.toolService.apiResult(data)
-        if(result){
-          this.user={...result.data}
-          let userRemember=this.rememberService.getUser();
-
-          if(userRemember){
-
-          }
-          else{
-            this.toolService.toast('登录成功');
-          }
-          this.rememberService.setUser(this.user);
-
-        }
-      },
-      error=>{
-        this.toolService.apiException(error);
-      }
-
-    )*/
   }
 
   init(){
@@ -466,10 +442,6 @@ export class ListPage{
   }
 
   goAdd(){
-    //this.navCtrl.push(AddPage)
-/*    let pop=this.popCtrl.create(AddSelectPage)
-    pop.present();*/
-
     let actionSheet = this.actionSheetCtrl.create({
       title: '新增类型',
       cssClass: 'action-sheets-basic-page',

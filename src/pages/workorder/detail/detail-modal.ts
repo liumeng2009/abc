@@ -27,7 +27,8 @@ export class DetailModalPage{
     private events:Events,
     private viewCtrl:ViewController,
     private popupCtrl:PopoverController,
-    private modalCtrl:ModalController
+    private modalCtrl:ModalController,
+    private authService:AuthService
   ){
     this.listenToEvents();
   }
@@ -35,8 +36,10 @@ export class DetailModalPage{
   private operation:Operation;
   ionViewWillEnter(){
     let id=this.navParams.get('id');
-    this.getData(id).then(()=>{}).catch(()=>{});
-    this.getSign(id).then(()=>{}).catch(()=>{});
+    this.authService.checkAuth('simple').then(()=>{
+      this.getData(id).then(()=>{}).catch(()=>{});
+      this.getSign(id).then(()=>{}).catch(()=>{});
+    }).catch(()=>{})
   }
 
 

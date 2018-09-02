@@ -35,7 +35,7 @@ export class LoginPage{
     this.rememberService.setUser(null);
   }
 
-  private user:User=new User('','','',null,null,null);
+  private user:User=new User('','','',null,null,null,'');
   private isLoading:boolean=false;
   login(){
     if(!this.isLoading){

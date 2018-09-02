@@ -5,6 +5,7 @@ export class User {
     public password: string,
     public role:any,
     public avatar:string,
-    public avatarUseImg:string
+    public avatarUseImg:string,
+    public phone:string
   ) {  }
 }

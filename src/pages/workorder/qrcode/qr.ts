@@ -82,6 +82,4 @@ export class QrPage {
     this.events.publish('list sign:updated');
     this.viewCtrl.dismiss();
   }
-
-
 }

@@ -1,13 +1,14 @@
 import {Component} from '@angular/core'
-import {IonicPage} from "ionic-angular";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   templateUrl:'./wechat.html',
   selector:'wechat'
 })
 export class WeChatPage {
-  constructor() {
-
+  constructor(
+    private title:Title
+  ) {
+    this.title.setTitle('即时通讯模块');
   }
-  private welcome='即时通讯模块'
 }

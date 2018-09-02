@@ -15,6 +15,9 @@ export class ChartService{
   private workerEquipmentUrl=new OptConfig().serverPath+'/api/operation/workerBusinessEquipment'
   private workerAdvanceUrl=new OptConfig().serverPath+'/api/operation/workerBusinessAdvance'
   private allOpCountUrl=new OptConfig().serverPath+'/api/operation/allOpCount'
+  private allOpStampUrl=new OptConfig().serverPath+'/api/operation/allOpStamp'
+  private allEquipmentUrl=new OptConfig().serverPath+'/api/operation/allBusinessEquipment'
+  private allOpCorporationUrl=new OptConfig().serverPath+'/api/operation/allOpCorporation'
 
   workerOpCount(userid:string,start:number,end:number):Promise<ResponseData>{
     let token=this.cookieService.get('optAppToken');
@@ -53,6 +56,31 @@ export class ChartService{
     let token=this.cookieService.get('optAppToken');
     let headers= new Headers({'Content-Type': 'application/json','authorization':token});
     return this.http.get(this.allOpCountUrl+'?start='+start+'&end='+end,{headers: headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+  allOpStamp(start:number,end:number):Promise<ResponseData>{
+    let token=this.cookieService.get('optAppToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http.get(this.allOpStampUrl+'?start='+start+'&end='+end,{headers: headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+  allEquipment(start:number,end:number):Promise<ResponseData>{
+    let token=this.cookieService.get('optAppToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http.get(this.allEquipmentUrl+'?start='+start+'&end='+end,{headers:headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+
+  allOpCorporation(start:number,end:number):Promise<ResponseData>{
+    let token=this.cookieService.get('optAppToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http.get(this.allOpCorporationUrl+'?start='+start+'&end='+end,{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)

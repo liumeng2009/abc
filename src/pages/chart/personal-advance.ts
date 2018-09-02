@@ -61,7 +61,6 @@ export class PersonalAdvancePage{
     let listH=this.list.nativeElement.clientHeight;
 
     let h=hAll-headH-listH;
-    console.log(h);
     if(bigData)
       this.canvasStyle.height=(h-100)*2+'px'
     else
@@ -81,7 +80,7 @@ export class PersonalAdvancePage{
   }
 
   initChart(){
-    this.chartObj1=echarts.init(this.chart.nativeElement);
+    this.chartObj1=echarts.init(this.chart.nativeElement,'light');
     this.chartObj1.setOption({
       grid:{
         show:true,
@@ -93,12 +92,14 @@ export class PersonalAdvancePage{
       series: [{
         type: 'pie',
         data: [],
+        radius : '55%',
+        center: ['50%', '50%'],
         label:{
           show:true,
           position:'outside',
           verticalAlign:'middle',
           color:'#000',
-          formatter: '{b}:{@[0]}个'
+          formatter: '{b}:{@[0]}'
         }
       }]
     });
@@ -108,7 +109,6 @@ export class PersonalAdvancePage{
       this.chartObj1.showLoading('default',{text:'加载中...'});
     this.chartService.workerAdvance(this.user.id,start,end).then(
       data=>{
-        console.log(data);
         this.chartObj1.hideLoading();
         let result=this.toolService.apiResult(data)
         if(result){

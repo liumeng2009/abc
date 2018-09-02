@@ -7,6 +7,9 @@ import {PersonalBasicPage} from "./personal-basic";
 import {PersonalBkPage} from "./personal-bk";
 import {PersonalAdvancePage} from "./personal-advance";
 import {AllBasicPage} from "./all-basic";
+import {AllBasicStampPage} from "./all-basic-stamp";
+import {AllBkPage} from "./all-bk";
+import {AllAddressPage} from "./all-address";
 
 @Component({
   selector:'chart-page',
@@ -21,9 +24,13 @@ export class ChartPage{
   ){
 
   }
-
+  ionViewDidEnter(){
+    setTimeout(()=>{
+      this.title.setTitle('数据统计')
+    },0)
+  }
   ionViewWillEnter(){
-    this.title.setTitle('数据统计')
+
     this.authService.checkAuth('normal').then(()=>{
 
     }).catch(()=>{})
@@ -38,4 +45,7 @@ export class ChartPage{
   private personalAdvancePage=PersonalAdvancePage
 
   private allBasicPage=AllBasicPage
+  private allBasicStampPage=AllBasicStampPage
+  private allBkPage=AllBkPage
+  private allAddressPage=AllAddressPage
 }

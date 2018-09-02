@@ -29,14 +29,13 @@ export class AllBasicPage{
 
   private user:User;
   @ViewChild('chart') chart:ElementRef;
-  @ViewChild('chart2') chart2:ElementRef;
 
   private chartObj1;
-  private chartObj2;
 
   ionViewWillEnter(){
-    this.title.setTitle('全部基本数据统计');
+    this.title.setTitle('工单数统计');
     this.addAppEventListener();
+    this.calHeight(false)
     //默认本月
     let startStamp=moment().startOf('month').valueOf();
     let endStamp=moment().endOf('month').valueOf();
@@ -58,15 +57,33 @@ export class AllBasicPage{
       this.end=searchDate.end;
     })
   }
+  @ViewChild('head') head:ElementRef;
+  @ViewChild('list') list:ElementRef;
+  private canvasStyle={
+    width:'0px',
+    height:'0px'
+  }
+  calHeight(bigData){
+    let hAll=window.document.body.clientHeight;
+    let wAll=window.document.body.clientWidth;
+
+    let headH=this.head.nativeElement.clientHeight;
+    let listH=this.list.nativeElement.clientHeight;
+
+    let h=hAll-headH-listH;
+    if(bigData)
+      this.canvasStyle.height=(h-100)*2+'px'
+    else
+      this.canvasStyle.height=(h-100)+'px'
+    this.canvasStyle.width=(wAll-32)+'px'
+  }
 
   initChart(){
-    this.chartObj1=echarts.init(this.chart.nativeElement);
+    this.chartObj1=echarts.init(this.chart.nativeElement,'light');
     this.chartObj1.setOption({
       title: {
-        text: '个人工单数',
-        textStyle:{
-          fontSize:14
-        }
+        text: '全部工单数',
+        subtext:'单位：个'
       },
       grid:{
         show:true,
@@ -77,38 +94,13 @@ export class AllBasicPage{
       },
       series: [{
         type: 'pie',
-        data: [0],
+        data: [],
         center: ['50%', '50%'],
+        radius : '55%',
         label:{
           show:true,
           color:'#000',
-          formatter: '{@[0]}个'
-        }
-      }]
-    });
-
-    this.chartObj2=echarts.init(this.chart2.nativeElement);
-    this.chartObj2.setOption({
-      title: {
-        text: '个人工时数',
-        textStyle:{
-          fontSize:14
-        }
-      },
-      grid:{
-        show:true,
-        top:0,
-        left:0,
-        right:0,
-        bottom:0
-      },
-      series: [{
-        type: 'pie',
-        data: [0],
-        label:{
-          show:true,
-          color:'#000',
-          formatter: '{@[0]}分钟'
+          formatter: '{b}:{@[0]}'
         }
       }]
     });
@@ -119,41 +111,22 @@ export class AllBasicPage{
       this.chartObj1.showLoading('default',{text:'加载中...'});
     this.chartService.allOpCount(start,end).then(
       data=>{
+        console.log(data);
         let result=this.toolService.apiResult(data)
         if(result){
           this.chartObj1.hideLoading();
           this.chartObj1.setOption({
             series: [{
-              data: [
-                result.data
-              ]
+              data: result.data.length==0?[{name:'工单',value:0}]:result.data
             }]
           })
+          setTimeout(()=>{
+            this.chartObj1.resize();
+          },0)
         }
       },
       error=>{
         this.chartObj1.hideLoading();
-        this.toolService.apiException(error)
-      }
-    )
-    if(this.chartObj2)
-      this.chartObj2.showLoading('default',{text:'加载中...'});
-    this.chartService.workerOpStamp(this.user.id,start,end).then(
-      data=>{
-        let result=this.toolService.apiResult(data)
-        if(result){
-          this.chartObj2.hideLoading();
-          this.chartObj2.setOption({
-            series: [{
-              data: [
-                result.data
-              ]
-            }]
-          })
-        }
-      },
-      error=>{
-        this.chartObj2.hideLoading();
         this.toolService.apiException(error)
       }
     )

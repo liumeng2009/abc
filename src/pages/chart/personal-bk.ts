@@ -61,7 +61,6 @@ export class PersonalBkPage{
     let listH=this.list.nativeElement.clientHeight;
 
     let h=hAll-headH-listH;
-    console.log(h);
     if(bigData)
       this.canvasStyle.height=(h-100)*2+'px'
     else
@@ -81,14 +80,14 @@ export class PersonalBkPage{
   }
 
   initChart(){
-    this.chartObj1=echarts.init(this.chart.nativeElement);
+    this.chartObj1=echarts.init(this.chart.nativeElement,'light');
     this.chartObj1.setOption({
       grid:{
         show:true,
         top:10,
         bottom:20,
         left:70,
-        right:0,
+        right:10,
       },
       xAxis: {
         type: 'value',
@@ -118,7 +117,6 @@ export class PersonalBkPage{
       this.chartObj1.showLoading('default',{text:'加载中...'});
     this.chartService.workerEquipment(this.user.id,start,end).then(
       data=>{
-        console.log(data);
         this.chartObj1.hideLoading();
         let result=this.toolService.apiResult(data)
         if(result){
@@ -127,6 +125,9 @@ export class PersonalBkPage{
           let yArray:string[]=[];
           for(let d of result.data){
             yArray.push(d.name);
+          }
+          if(result.data.length==0){
+            yArray.push('工单数')
           }
           if(result.data.length>20)
             this.calHeight(true)
@@ -137,7 +138,7 @@ export class PersonalBkPage{
               data:yArray
             },
             series: [{
-              data: result.data
+              data:result.data.length==0?[{name:'工单',value:0}]:result.data
             }]
           })
           setTimeout(()=>{

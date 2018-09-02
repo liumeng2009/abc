@@ -1,21 +1,21 @@
-import {Component,ViewChild,ElementRef} from '@angular/core'
-import {Title} from '@angular/platform-browser'
+import {Component, ElementRef, ViewChild} from '@angular/core'
+import {Title} from "@angular/platform-browser";
 import {AuthService} from "../../util/auth.service";
 import {ToolService} from "../../util/tool.service";
+import {Events, PopoverController} from "ionic-angular";
+import {ChartService} from "./chart.service";
 import {User} from "../../bean/user";
 import * as echarts from 'echarts'
-import * as moment from 'moment'
-import {PopoverController,Events} from "ionic-angular";
-import {DateSelectComponent} from "./date-select";
+import * as moment from "moment";
 import {SearchDate} from "../../bean/searchDate";
-import {ChartService} from "./chart.service";
+import {DateSelectComponent} from "./date-select";
 
 @Component({
-  selector:'personal-basic-page',
-  templateUrl:'personal-basic.html'
+  selector:'all-bk-page',
+  templateUrl:'all-bk.html'
 })
 
-export class PersonalBasicPage{
+export class AllBkPage{
   constructor(
     private title:Title,
     private authService:AuthService,
@@ -26,18 +26,15 @@ export class PersonalBasicPage{
   ){
 
   }
-
   private user:User;
   @ViewChild('chart') chart:ElementRef;
-  @ViewChild('chart2') chart2:ElementRef;
 
   private chartObj1;
-  private chartObj2;
 
   ionViewWillEnter(){
-    this.title.setTitle('个人基本数据统计');
+    this.title.setTitle('全部工单的业务类别统计');
+    this.calHeight(false);
     this.addAppEventListener();
-    this.calHeight(false)
     //默认本月
     let startStamp=moment().startOf('month').valueOf();
     let endStamp=moment().endOf('month').valueOf();
@@ -48,6 +45,7 @@ export class PersonalBasicPage{
       this.getData(startStamp,endStamp);
     }).catch(()=>{})
   }
+
 
   @ViewChild('head') head:ElementRef;
   @ViewChild('list') list:ElementRef;
@@ -64,9 +62,9 @@ export class PersonalBasicPage{
 
     let h=hAll-headH-listH;
     if(bigData)
-      this.canvasStyle.height=(h-100)+'px'
+      this.canvasStyle.height=(h-100)*2+'px'
     else
-      this.canvasStyle.height=(h-100)/2+'px'
+      this.canvasStyle.height=(h-100)+'px'
     this.canvasStyle.width=(wAll-32)+'px'
   }
 
@@ -84,74 +82,70 @@ export class PersonalBasicPage{
   initChart(){
     this.chartObj1=echarts.init(this.chart.nativeElement,'light');
     this.chartObj1.setOption({
-      title: {
-        text: '个人工单数',
-        subtext:'单位：个'
-      },
       grid:{
         show:true,
-        top:0,
-        left:0,
-        right:0,
-        bottom:0
+        top:10,
+        bottom:20,
+        left:70,
+        right:10,
       },
-      series: [{
-        type: 'pie',
-        data: [0],
-        center: ['50%', '50%'],
-        label:{
-          show:true,
-          color:'#000',
-          formatter: '{@[0]}'
+      xAxis: {
+        type: 'value',
+      },
+      yAxis:{
+        type:'category',
+        axisLabel:{
+          interval:0
         }
-      }]
-    });
-
-    this.chartObj2=echarts.init(this.chart2.nativeElement,'light');
-    this.chartObj2.setOption({
-      title: {
-        text: '个人工时数',
-        subtext:'单位：分钟'
-      },
-      grid:{
-        show:true,
-        top:0,
-        left:0,
-        right:0,
-        bottom:0
       },
       series: [{
-        type: 'pie',
-        center: ['50%', '50%'],
-        data: [0],
+        type: 'bar',
+        barCategoryGap:'20%',
+        data: [],
         label:{
           show:true,
+          position:['100%', '50%'],
+          verticalAlign:'middle',
           color:'#000',
-          formatter: '{@[0]}'
+          formatter: '{@[0]}个'
         }
       }]
     });
   }
-
   getData(start:number,end:number){
     if(this.chartObj1)
-    this.chartObj1.showLoading('default',{text:'加载中...'});
-    this.chartService.workerOpCount(this.user.id,start,end).then(
+      this.chartObj1.showLoading('default',{text:'加载中...'});
+    this.chartService.allEquipment(start,end).then(
       data=>{
         console.log(data)
+        this.chartObj1.hideLoading();
         let result=this.toolService.apiResult(data)
         if(result){
           this.chartObj1.hideLoading();
+
+          let yArray:string[]=[];
+          for(let d of result.data){
+            yArray.push(d.name);
+          }
+          if(result.data.length==0){
+            yArray.push('工单数')
+          }
+          if(result.data.length>20)
+            this.calHeight(true)
+          else
+            this.calHeight(false)
           this.chartObj1.setOption({
+            yAxis:{
+              data:yArray
+            },
             series: [{
-              data: [
-                result.data
-              ]
+              data: result.data.length==0?[{name:'工单',value:0}]:result.data
             }]
           })
           setTimeout(()=>{
             this.chartObj1.resize();
           },0)
+
         }
       },
       error=>{
@@ -159,41 +153,7 @@ export class PersonalBasicPage{
         this.toolService.apiException(error)
       }
     )
-    if(this.chartObj2)
-    this.chartObj2.showLoading('default',{text:'加载中...'});
-    this.chartService.workerOpStamp(this.user.id,start,end).then(
-      data=>{
-        let result=this.toolService.apiResult(data)
-        if(result){
-
-          this.chartObj2.hideLoading();
-          this.chartObj2.setOption({
-            series: [{
-              data: [
-                result.data==null?0:result.data
-              ]
-            }]
-          })
-          setTimeout(()=>{
-            this.chartObj2.resize();
-          },0)
-        }
-      },
-      error=>{
-        this.chartObj2.hideLoading();
-        this.toolService.apiException(error)
-      }
-    )
   }
-
-  search(){
-    let popover = this.popoverCtrl.create(DateSelectComponent,{
-      start:this.start,
-      end:this.end
-    });
-    popover.present();
-  }
-
   private searchText='本月';
   private getSearchText(start,end){
     let monthstart=moment().startOf('month').valueOf();
@@ -216,5 +176,12 @@ export class PersonalBasicPage{
   refresh(){
     if(this.user)
       this.getData(this.start,this.end)
+  }
+  search(){
+    let popover = this.popoverCtrl.create(DateSelectComponent,{
+      start:this.start,
+      end:this.end
+    });
+    popover.present();
   }
 }
