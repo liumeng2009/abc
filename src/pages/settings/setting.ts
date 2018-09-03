@@ -33,16 +33,13 @@ export class SettingPage {
     this.addEventListener();
     this.authService.checkAuth('normal').then((user:User)=>{
       this.user=user;
-      console.log(this.user);
     }).catch(()=>{})
   }
 
   addEventListener(){
     this.events.subscribe('userinfo:updated',()=>{
-      console.log('update');
       this.authService.checkAuth('normal').then((user:User)=>{
         this.user=user;
-        console.log(this.user);
       }).catch(()=>{})
     })
   }
@@ -79,6 +76,11 @@ export class SettingPage {
       inputValue:this.user.name
     });
     this.popover.present();
+  }
+
+  ionViewWillLeave(){
+    if(this.popover)
+      this.popover.dismiss();
   }
 
 }

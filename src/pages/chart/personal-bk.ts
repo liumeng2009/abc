@@ -87,7 +87,7 @@ export class PersonalBkPage{
         top:10,
         bottom:20,
         left:70,
-        right:10,
+        right:20,
       },
       xAxis: {
         type: 'value',
@@ -100,6 +100,7 @@ export class PersonalBkPage{
       },
       series: [{
         type: 'bar',
+        barWidth:20,
         barCategoryGap:'20%',
         data: [],
         label:{

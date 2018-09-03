@@ -18,6 +18,7 @@ export class SettingService {
   private editOperationUrl=new OptConfig().serverPath+'/api/user/editSimple'
   private sysAvatarListUrl=new OptConfig().serverPath+'/api/user/sysAvatar/list'
   private setSysAvatarUrl=new OptConfig().serverPath+'/api/user/sysAvatar/set'
+  private editPasswordUrl=new OptConfig().serverPath+'/api/user/editPassword'
 
 
   editOperation(params:any): Promise<ResponseData> {
@@ -45,6 +46,16 @@ export class SettingService {
     let headers= new Headers({'Content-Type': 'application/json','authorization':token});
     return this.http
       .post(this.setSysAvatarUrl+'?device=webapp', {img:img}, {headers: headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
+  }
+
+  editPassword(password_old,password,password_comp):Promise<ResponseData>{
+    let token=this.cookieService.get('optAppToken');
+    let headers= new Headers({'Content-Type': 'application/json','authorization':token});
+    return this.http
+      .post(this.editPasswordUrl+'?device=webapp', {password_old:password_old,password:password,password_comp:password_comp}, {headers: headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError);

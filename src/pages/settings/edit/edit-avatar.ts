@@ -38,7 +38,6 @@ export class EditSettingAvatarPage{
       data=>{
         let result=this.toolService.apiResult(data);
         if(result){
-          console.log(result);
           if(result.data.length>0)
             this.imgArray=[...result.data[0].imgs]
         }
