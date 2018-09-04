@@ -113,7 +113,7 @@ import {SettingService} from "../pages/settings/setting.service";
       links:[
         {component:TabsPage,name:'TabsPage',segment:'main'},
         {component:ListPage,name:'List',segment:'list'},
-        {component:DetailPage,name:'Detail',segment:'detail/:id',defaultHistory:[TabsPage]},
+        {component:DetailPage,name:'Detail',segment:'detail/:id',defaultHistory:[ListPage]},
         {component:WeChatPage,name:'WeChat',segment:'wechat'},
         {component:AboutPage,name:'About',segment:'about'},
         {component:SettingPage,name:'Setting',segment:'setting'},

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild,ElementRef} from '@angular/core';
 import {NavParams,ViewController,Events} from 'ionic-angular'
 import {ToolService} from "../../../util/tool.service";
 import {QrService} from "./qr.service";
@@ -25,7 +25,17 @@ export class QrPage {
   }
 
   private qrcode:string;
+  private imgWidth:number=60;
+  private contentHeight={
+    height:'0px'
+  };
+  @ViewChild('card') card:ElementRef
   ionViewWillEnter() {
+
+    let width=this.card.nativeElement.clientWidth;
+    this.imgWidth=width-32;
+    this.contentHeight.height=(width+75)+'px'
+
     let ops = this.navParams.get('opList');
     this.qrService.getQr({ids:ops}).then(
       data=>{

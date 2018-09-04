@@ -1,5 +1,13 @@
 import {Component} from '@angular/core';
-import {NavController, Refresher, Events, ModalController,ActionSheetController,Platform} from 'ionic-angular'
+import {
+  NavController,
+  Refresher,
+  Events,
+  ModalController,
+  ActionSheetController,
+  Platform,
+  PopoverController
+} from 'ionic-angular'
 import {Title} from '@angular/platform-browser';
 import {ListService} from "./list.service";
 import {ToolService} from "../../../util/tool.service";
@@ -35,7 +43,8 @@ export class ListPage{
     private rememberService:RememberService,
     private authService:AuthService,
     private actionSheetCtrl:ActionSheetController,
-    private platform:Platform
+    private platform:Platform,
+    private popoverCtrl:PopoverController
   ){
 
   }
@@ -66,6 +75,9 @@ export class ListPage{
     this.authService.checkAuth('narmal').then((user:User)=>{
       this.user=user;
       this.init();
+      for(let sa of this.signStatusArray){
+        sa.show=false;
+      }
     }).catch(()=>{})
   }
 
@@ -350,7 +362,7 @@ export class ListPage{
     })
   }
 
-  private infoModal;
+  private infoPop;
   private signStatusArray=[];
   sign(orderId){
 
@@ -431,10 +443,12 @@ export class ListPage{
   saveSign(){
     console.log(this.operationIdArray);
     if(this.operationIdArray.length>0){
-      this.infoModal=this.modalCtrl.create(QrPage,{
+      this.infoPop=this.popoverCtrl.create(QrPage,{
         opList:this.operationIdArray
+      },{
+        cssClass:'pop'
       });
-      this.infoModal.present();
+      this.infoPop.present();
     }
     else{
       this.toolService.toast('请至少选择一个工单！')

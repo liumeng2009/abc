@@ -1,20 +1,20 @@
-<ion-header #head>
+<!--<ion-header #head>
   <ion-navbar>
     <ion-buttons end>
       <button ion-button (click)="dismiss()">关闭</button>
     </ion-buttons>
   </ion-navbar>
-</ion-header>
+</ion-header>-->
 <ion-content>
   <ion-refresher #refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-card>
-    <ion-card-header>
-      请扫描二维码以添加用户签名
-    </ion-card-header>
+  <h6 padding>
+    请扫描二维码以添加用户签名
+  </h6>
+  <ion-card #card>
     <ion-card-content>
-      <img [src]="qrcode">
+      <ion-img [src]="qrcode" [width]="imgWidth" [height]="imgWidth" ></ion-img>
     </ion-card-content>
   </ion-card>
 

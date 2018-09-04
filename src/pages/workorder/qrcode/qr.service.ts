@@ -20,7 +20,7 @@ export class QrService {
     let token = this.cookieService.get('optAppToken');
     let headers=new Headers({'Content-Type': 'application/json','authorization':token})
     let url=this.url;
-    return this.http.post(url,ids,{headers:headers})
+    return this.http.post(url+'?device=webapp',ids,{headers:headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
