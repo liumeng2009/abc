@@ -16,6 +16,7 @@ export class DetailService {
   }
 
   private operationDetailUrl=new OptConfig().serverPath+'/api/operation/'
+  private operationDeleteUrl=new OptConfig().serverPath+'/api/operation/delete/'
   private operationDetailActionUrl=new OptConfig().serverPath+'/api/operation/getaction/'
   private editOperationUrl=new OptConfig().serverPath+'/api/operation/editSimple'
   private editActionUrl=new OptConfig().serverPath+'/api/action/edit'
@@ -55,6 +56,15 @@ export class DetailService {
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError);
+  }
+
+  deleteOperation(opId:string): Promise<ResponseData> {
+    let token = this.cookieService.get('optAppToken');
+    let headers=new Headers({'Content-Type': 'application/json','authorization':token})
+    return this.http.get(this.operationDeleteUrl+opId+'?device=webapp',{headers: headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
   }
 
   private extractData(res:Response){

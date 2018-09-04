@@ -1,6 +1,6 @@
 import {Component,ViewChild} from '@angular/core';
 import {Title} from '@angular/platform-browser'
-import {Slides, Scroll, PopoverController, Popover, NavController} from 'ionic-angular';
+import {Slides, Scroll, PopoverController, Popover, NavController, AlertController} from 'ionic-angular';
 import {Corporation} from "../../../bean/Corporation";
 import {Group} from "../../../bean/Group";
 import {PublicDataService} from "../../../util/data/public-data.service";
@@ -34,7 +34,8 @@ export class AddPage {
     private cookieService:CookieService,
     private authService:AuthService,
     private popService:PopoverController,
-    private addService:AddService
+    private addService:AddService,
+    private alertCtrl:AlertController
   ) {
 
   }
@@ -242,6 +243,10 @@ export class AddPage {
   private user:User
   private isLoadingWorkerId:boolean=false
   setAction(){
+    if(this.needs.length<1){
+      this.toolService.toast('您需要至少新增一项业务！');
+      return;
+    }
     this.isLoadingWorkerId=true;
     this.authService.getUserInfo().then(
       data=>{
@@ -702,5 +707,55 @@ export class AddPage {
 
   }
 
+  deleteOp(workorder){
+    if(this.workerOrders.length==1){
+      this.toolService.toast('需要至少存在一个工单！');
+      return;
+    }
+
+
+    let t=this;
+    const confirm = this.alertCtrl.create({
+      title: '确定?',
+      message: '您确定要删除这个工单吗?',
+      buttons: [
+        {
+          text: '取消',
+          handler: () => {
+
+          }
+        },
+        {
+          text: '删除',
+          handler: () => {
+            let index=0;
+            for(let wo of t.workerOrders){
+              if(wo==workorder){
+                break;
+              }
+              index++;
+            }
+            t.workerOrders.splice(index,1);
+            if(t.workerOrders.length>0){
+              t.workerOrders[0].select=true;
+              t.selectedIndex=0;
+            }
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
+  deleteNeedList(need){
+    let index=0;
+    for(let nd of this.needs){
+      if(nd==need){
+        break;
+      }
+      index++;
+    }
+    this.needs.splice(index,1);
+  }
 
 }

@@ -1,5 +1,14 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {NavParams, Events, ModalController, Refresher, DateTime,AlertController,PopoverController} from 'ionic-angular'
+import {
+  NavParams,
+  Events,
+  ModalController,
+  Refresher,
+  DateTime,
+  AlertController,
+  PopoverController,
+  NavController
+} from 'ionic-angular'
 import {AuthService} from "../../../util/auth.service";
 import {Operation} from "../../../bean/operation";
 import {DetailService} from "./detail.service";
@@ -8,6 +17,7 @@ import {DetailModalPage} from "./detail-modal";
 import {ResponseData} from "../../../bean/responseData";
 import * as moment from 'moment'
 import {User} from "../../../bean/user";
+import {Title} from "@angular/platform-browser";
 
 
 @Component({
@@ -24,7 +34,9 @@ export class DetailPage{
     private events:Events,
     private modalCtrl:ModalController,
     private alertCtrl:AlertController,
-    private popCtrl:PopoverController
+    private popCtrl:PopoverController,
+    private title:Title,
+    private navCtrl:NavController
   ){}
 
   private user:User;
@@ -33,20 +45,30 @@ export class DetailPage{
   private operation_no:string;
   @ViewChild('startTime') startTimeSelect:ElementRef;
   ionViewWillEnter(){
+    this.title.setTitle('工单详情');
+
     let id=this.navParams.data.id;
     let no=this.navParams.data.no;
     this.operation_no=no;
+
+    this.addEventsListener();
 
     this.authService.checkAuth('normal').then((user:User)=>{
       this.user=user;
       this.getData(id).then((data:ResponseData)=>{
         this.operation={...data.data};
-        console.log(this.operation)
         this.formatData();
       }).catch((e)=>{
-        this.toolService.toast(e)
+
       });
     }).catch(()=>{})
+  }
+
+  addEventsListener(){
+    this.events.subscribe('op:deleted',()=>{
+      console.log('回退');
+      this.navCtrl.pop();
+    })
   }
 
   @ViewChild('refresher') refresher:Refresher
@@ -55,15 +77,16 @@ export class DetailPage{
       this.detailService.getOperationAction(id).then(
         data=>{
           let result=this.toolService.apiResult(data);
-          if(result&&result.status==0){
+          if(result){
             resolve(data)
           }
           else{
-            reject(result.message)
+            reject()
           }
         },
         error=>{
-          reject(error)
+          this.toolService.apiException(error)
+          reject();
         }
       )
     })

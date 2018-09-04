@@ -225,6 +225,9 @@
                   <ion-label style="color:#999">工单完成？</ion-label>
                   <ion-toggle  [(ngModel)]="workerOrders[selectedIndex].isCompleteOperation"></ion-toggle>
                 </ion-item>
+                <ion-item>
+                  <button ion-button block color="danger" default (click)="deleteOp(workerOrders[selectedIndex])" >删除此工单</button>
+                </ion-item>
               </ion-list>
             </ion-col>
           </ion-row>

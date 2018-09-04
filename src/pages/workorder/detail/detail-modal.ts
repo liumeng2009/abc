@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavParams,Events,ViewController,PopoverController} from 'ionic-angular'
+import {NavParams, Events, ViewController, PopoverController, AlertController} from 'ionic-angular'
 import {AuthService} from "../../../util/auth.service";
 import {Operation} from "../../../bean/operation";
 import {DetailService} from "./detail.service";
@@ -28,13 +28,15 @@ export class DetailModalPage{
     private viewCtrl:ViewController,
     private popupCtrl:PopoverController,
     private modalCtrl:ModalController,
-    private authService:AuthService
+    private authService:AuthService,
+    private alertCtrl:AlertController
   ){
     this.listenToEvents();
   }
 
   private operation:Operation;
-  ionViewWillEnter(){
+  ngOnInit(){
+    console.log('modal enter');
     let id=this.navParams.get('id');
     this.authService.checkAuth('simple').then(()=>{
       this.getData(id).then(()=>{}).catch(()=>{});
@@ -169,6 +171,8 @@ export class DetailModalPage{
   ngOnDestroy() {
     if(this.popover)
       this.popover.dismiss();
+    if(this.confirm)
+      this.confirm.dismiss();
   }
 
   private infoModal;
@@ -178,6 +182,42 @@ export class DetailModalPage{
       opList:[id]
     });
     this.infoModal.present();
+  }
+
+  private confirm;
+  deleteOp(opid){
+    let t=this;
+    t.confirm = this.alertCtrl.create({
+      title: '确定?',
+      message: '您确定要删除这个工单吗?',
+      buttons: [
+        {
+          text: '取消',
+          handler: () => {
+
+          }
+        },
+        {
+          text: '删除',
+          handler: () => {
+            t.detailService.deleteOperation(opid).then(
+              data=>{
+                let result=this.toolService.apiResult(data);
+                if(result){
+                  this.toolService.toast(result.message);
+                  this.events.publish('op:deleted')
+
+                }
+              },
+              error=>{
+                this.toolService.apiException(error)
+              }
+            )
+          }
+        }
+      ]
+    });
+    t.confirm.present();
   }
 
 }
