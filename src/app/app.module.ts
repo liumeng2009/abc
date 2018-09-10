@@ -106,7 +106,8 @@ import {SettingService} from "../pages/settings/setting.service";
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp,{
-      tabsHideOnSubPages:true
+      tabsHideOnSubPages:true,
+      backButtonText:'后退'
     },{
       links:[
         {component:TabsPage,name:'TabsPage',segment:'main'},

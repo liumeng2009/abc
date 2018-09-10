@@ -78,7 +78,9 @@ export class ListPage{
       for(let sa of this.signStatusArray){
         sa.show=false;
       }
-    }).catch(()=>{})
+    }).catch(()=>{
+
+    })
   }
 
   init(){
@@ -340,6 +342,10 @@ export class ListPage{
   }
 
   statusChanged(e){
+    if(!this.user){
+      this.toolService.toast('请您先登录！')
+      return;
+    }
     this.groups.splice(0,this.groups.length);
     this.getOpCount();
     this.getData(this.user.id).then((data:ResponseData)=>{

@@ -247,7 +247,6 @@ export class DetailPage{
   }
 
   completeChange(e,actionId){
-    alert('complete input changed'+e)
     let actionOp;
     if(this.operation.actions){
       for(let action of this.operation.actions){
@@ -271,7 +270,7 @@ export class DetailPage{
   }
 
   checkboxChanged(){
-    alert('checkbox event')
+
   }
 
   editAction(operationId,actionId,create_stamp,call_stamp,showArriveDate,start_stamp,showFinishDate,end_stamp,isCompleteOperation){

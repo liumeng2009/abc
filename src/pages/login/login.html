@@ -12,13 +12,10 @@
 
   </ion-list>
 
-  <ion-list>
-    <ion-item (click)="login()">
-      <button ion-button default  color="primary" block [disabled]="isLoading">
-        <ion-spinner *ngIf="isLoading" item-start name="ios" color="light"></ion-spinner>
-        <label>登录</label>
-      </button>
-
-    </ion-item>
-  </ion-list>
+  <div padding>
+    <button ion-button default (click)="login()" color="primary" block [disabled]="isLoading">
+      <ion-spinner *ngIf="isLoading" item-start name="ios" color="light"></ion-spinner>
+      <label>登录</label>
+    </button>
+  </div>
 </ion-content>
