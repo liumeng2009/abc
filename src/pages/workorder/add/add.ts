@@ -1,6 +1,6 @@
 import {Component,ViewChild} from '@angular/core';
 import {Title} from '@angular/platform-browser'
-import {Slides, Scroll, PopoverController, Popover, NavController, AlertController} from 'ionic-angular';
+import {Slides, Scroll, PopoverController, Popover, NavController, AlertController, DateTime} from 'ionic-angular';
 import {Corporation} from "../../../bean/Corporation";
 import {Group} from "../../../bean/Group";
 import {PublicDataService} from "../../../util/data/public-data.service";
@@ -281,9 +281,28 @@ export class AddPage {
     )
 
   }
+  @ViewChild('start') startSelect:DateTime
+  start_click(e,workorder:WorkOrder,index){
+    let t=this;
 
-  start_click(){
-
+    if(workorder.arrive_date_timestamp){
+      let button={
+        text:'删除开始时间',
+        role:'delete',
+        handler:function(){
+          if(workorder.finish_date_timestamp){
+            t.toolService.toast('请先删除工作的结束时间，再进行尝试！')
+          }
+          else{
+            //删除开始时间
+            workorder.showArriveDate=false;
+            workorder.arrive_date=null;
+            workorder.arrive_date_timestamp=null;
+          }
+        }
+      }
+      this.startSelect._picker.addButton(button);
+    }
   }
 
   finish_click(){

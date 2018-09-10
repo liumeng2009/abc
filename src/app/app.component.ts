@@ -44,8 +44,12 @@ export class MyApp {
       splashScreen.hide();
 
       this.events.subscribe('user:logout',()=>{
-        this.nav.setRoot('Login', {}).then(()=>{}).catch((err: any) => {
+
+        this.nav.setRoot('Login', {}).then(()=>{
+          this.user=null;
+        }).catch((err: any) => {
           console.log(`Didn't set nav root: ${err}`);
+
         });
       })
 

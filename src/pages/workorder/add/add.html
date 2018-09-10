@@ -208,7 +208,7 @@
                   <ion-datetime #start cancelText="取消" doneText="确定"  placeholder="未开始"
                                 displayFormat="DD日 HH:mm" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
                                 [(ngModel)]="workerOrders[selectedIndex].arrive_date"
-                                (click)="start_click($event,workerOrders[selectedIndex])"
+                                (click)="start_click($event,workerOrders[selectedIndex],selectedIndex)"
                                 (ngModelChange)="okStartTime($event,workerOrders[selectedIndex])"
                   ></ion-datetime>
                 </ion-item>
