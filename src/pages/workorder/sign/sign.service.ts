@@ -13,19 +13,26 @@ export class SignService {
   constructor(private http: Http,private cookieService:CookieService) {
 
   }
-
-  private saveUrl=new OptConfig().serverPath+'/api/sign/save'
+  private headers = new Headers({'Content-Type': 'application/json'});
+  private saveUrl=new OptConfig().serverPath+'/api/sign/clientsave'
   private getUrl=new OptConfig().serverPath+'/api/sign/'
+  private clientSignUrl=new OptConfig().serverPath+'/api/sign/clientSign'
 
-  saveSign(sign:any): Promise<ResponseData> {
-    let token = this.cookieService.get('optAppToken');
-    let headers=new Headers({'Content-Type': 'application/json','authorization':token})
-    let url=this.saveUrl;
-    return this.http.post(url,sign,{headers:headers})
+  saveSigns(ids:string[],sign:string,signid:string,clientInfo:string):Promise<ResponseData>{
+    return this.http.post(this.saveUrl,{signid:signid,sign:sign,ids:ids,clientinfo:clientInfo},{headers: this.headers})
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError)
   }
+
+  getClientInfo(signid:string):Promise<ResponseData>{
+    return this.http.post(this.clientSignUrl,{signid:signid},{headers: this.headers})
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError)
+  }
+
+
   getSign(opid): Promise<ResponseData> {
     let token = this.cookieService.get('optAppToken');
     let headers=new Headers({'Content-Type': 'application/json','authorization':token})

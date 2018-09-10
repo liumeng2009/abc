@@ -1,10 +1,10 @@
-<!--<ion-header #head>
+<ion-header #head>
   <ion-navbar>
     <ion-buttons end>
       <button ion-button (click)="dismiss()">关闭</button>
     </ion-buttons>
   </ion-navbar>
-</ion-header>-->
+</ion-header>
 <ion-content>
   <ion-refresher #refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
@@ -17,5 +17,8 @@
       <ion-img [src]="qrcode" [width]="imgWidth" [height]="imgWidth" ></ion-img>
     </ion-card-content>
   </ion-card>
+  <div padding>
+    <button ion-button default block color="danger" (click)="goSignSelf()">客户网络不通畅？</button>
+  </div>
 
 </ion-content>

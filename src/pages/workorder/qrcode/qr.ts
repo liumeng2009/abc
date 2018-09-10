@@ -1,8 +1,9 @@
 import {Component, ViewChild,ElementRef} from '@angular/core';
-import {NavParams,ViewController,Events} from 'ionic-angular'
+import {NavParams, ViewController, Events, ModalController} from 'ionic-angular'
 import {ToolService} from "../../../util/tool.service";
 import {QrService} from "./qr.service";
 import {RememberService} from "../../../util/remember.service";
+import {SignPage} from "../sign/sign";
 
 
 @Component({
@@ -19,7 +20,8 @@ export class QrPage {
               private toolService: ToolService,
               private qrService:QrService,
               private events:Events,
-              private rememberService:RememberService
+              private rememberService:RememberService,
+              private modalCtrl:ModalController
   ) {
 
   }
@@ -92,4 +94,15 @@ export class QrPage {
     this.events.publish('list sign:updated');
     this.viewCtrl.dismiss();
   }
+
+  private infoModal;
+  goSignSelf(){
+    let ops = this.navParams.get('opList');
+    this.infoModal=this.modalCtrl.create(SignPage,{
+      opList:ops,
+      signId:this.rememberService.getSignId()
+    })
+    this.infoModal.present();
+  }
+
 }

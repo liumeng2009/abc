@@ -36,7 +36,6 @@ import { Autosize} from '../util/autosize';
 import {SignPage} from "../pages/workorder/sign/sign";
 import {RememberService} from "../util/remember.service";
 import {SignService} from "../pages/workorder/sign/sign.service";
-import {SignsPage} from "../pages/workorder/sign/signs";
 import {QrService} from "../pages/workorder/qrcode/qr.service";
 import {QrPage} from "../pages/workorder/qrcode/qr";
 import {WebSocketService} from "../util/WebSocketService";
@@ -76,7 +75,6 @@ import {SettingService} from "../pages/settings/setting.service";
     EditMarkPage,
 
     SignPage,
-    SignsPage,
     QrPage,
 
     LoginPage,
@@ -149,7 +147,6 @@ import {SettingService} from "../pages/settings/setting.service";
     EditMarkPage,
 
     SignPage,
-    SignsPage,
     QrPage,
 
     LoginPage,

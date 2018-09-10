@@ -4,6 +4,8 @@ import {NavController,NavParams,ViewController} from 'ionic-angular'
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import {SignService} from "./sign.service";
 import {ToolService} from "../../../util/tool.service";
+import {RememberService} from "../../../util/remember.service";
+import {Client} from "../../../bean/client";
 
 
 @Component({
@@ -30,22 +32,20 @@ export class SignPage {
   @ViewChild('head') head:ElementRef;
   @ViewChild('foot') foot:ElementRef;
   ngAfterViewInit() {
-    let ops=this.navParams.get('opList');
-    console.log(ops);
+    let signId=this.navParams.get('signId');;
     this.calSignWH();
     this.signaturePad.clear();
-    if(ops.length==1){
-      this.getSign(ops[0]);
-    }
+    this.getSign(signId);
     //this.signaturePad.fromDataURL(data,{width:this.signaturePadOptions.canvasWidth,height:this.signaturePadOptions.canvasHeight});
   }
-
+  private client:Client;
   getSign(id){
-    this.signService.getSign(id).then(
+    this.signService.getClientInfo(id).then(
       data=>{
         let result=this.toolService.apiResult(data);
-        if(result&&result.status==0){
-            this.signaturePad.fromDataURL(result.data,{width:this.signaturePadOptions.canvasWidth,height:this.signaturePadOptions.canvasHeight})
+        if(result){
+          this.client={...result.data}
+          this.signaturePad.fromDataURL(this.client.signString,{width:this.signaturePadOptions.canvasWidth,height:this.signaturePadOptions.canvasHeight})
         }
         else{
           this.toolService.toast(data.message);
@@ -99,10 +99,8 @@ export class SignPage {
 
   save(){
     let ops=this.navParams.get('opList');
-    this.signService.saveSign({
-      ids:ops,
-      sign:this.signaturePad.toDataURL()
-    }).then(
+    let signId=this.navParams.get('signId');
+    this.signService.saveSigns(ops,this.signaturePad.toDataURL(),signId,'worker').then(
       data=>{
         let result=this.toolService.apiResult(data);
         this.toolService.toast(result.message);
@@ -115,11 +113,9 @@ export class SignPage {
   }
 
   reload(){
-    let ops=this.navParams.get('opList');
+    let signId=this.navParams.get('signId');
     this.signaturePad.clear();
-    if(ops.length==1){
-      this.getSign(ops[0]);
-    }
+    this.getSign(signId);
   }
 
 

@@ -5,7 +5,7 @@ import {ToolService} from "../../util/tool.service";
 import {User} from "../../bean/user";
 import * as echarts from 'echarts'
 import * as moment from 'moment'
-import {PopoverController,Events} from "ionic-angular";
+import {PopoverController,Events,Content} from "ionic-angular";
 import {DateSelectComponent} from "./date-select";
 import {SearchDate} from "../../bean/searchDate";
 import {ChartService} from "./chart.service";
@@ -59,13 +59,14 @@ export class AllBasicPage{
   }
   @ViewChild('head') head:ElementRef;
   @ViewChild('list') list:ElementRef;
+  @ViewChild('content') content:Content;
   private canvasStyle={
     width:'0px',
     height:'0px'
   }
   calHeight(bigData){
     let hAll=window.document.body.clientHeight;
-    let wAll=window.document.body.clientWidth;
+    let wAll=this.content.contentWidth;
 
     let headH=this.head.nativeElement.clientHeight;
     let listH=this.list.nativeElement.clientHeight;
@@ -107,6 +108,7 @@ export class AllBasicPage{
   }
 
   getData(start:number,end:number){
+    this.calHeight(false);
     if(this.chartObj1)
       this.chartObj1.showLoading('default',{text:'加载中...'});
     this.chartService.allOpCount(start,end).then(

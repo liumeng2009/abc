@@ -362,7 +362,7 @@ export class ListPage{
     })
   }
 
-  private infoPop;
+  private infoModal;
   private signStatusArray=[];
   sign(orderId){
 
@@ -441,14 +441,11 @@ export class ListPage{
 
   private operationIdArray:string[]=[];
   saveSign(){
-    console.log(this.operationIdArray);
     if(this.operationIdArray.length>0){
-      this.infoPop=this.popoverCtrl.create(QrPage,{
+      this.infoModal=this.modalCtrl.create(QrPage,{
         opList:this.operationIdArray
-      },{
-        cssClass:'pop'
       });
-      this.infoPop.present();
+      this.infoModal.present();
     }
     else{
       this.toolService.toast('请至少选择一个工单！')

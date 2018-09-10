@@ -2,7 +2,7 @@ import {Component, ElementRef, ViewChild} from '@angular/core'
 import {Title} from "@angular/platform-browser";
 import {AuthService} from "../../util/auth.service";
 import {ToolService} from "../../util/tool.service";
-import {Events, PopoverController} from "ionic-angular";
+import {Content, Events, PopoverController} from "ionic-angular";
 import {ChartService} from "./chart.service";
 import {User} from "../../bean/user";
 import * as echarts from 'echarts'
@@ -49,13 +49,14 @@ export class AllBkPage{
 
   @ViewChild('head') head:ElementRef;
   @ViewChild('list') list:ElementRef;
+  @ViewChild('content') content:Content;
   private canvasStyle={
     width:'0px',
     height:'0px'
   }
   calHeight(bigData){
     let hAll=window.document.body.clientHeight;
-    let wAll=window.document.body.clientWidth;
+    let wAll=this.content.contentWidth;
 
     let headH=this.head.nativeElement.clientHeight;
     let listH=this.list.nativeElement.clientHeight;
