@@ -78,7 +78,7 @@
           <ion-label  style="display: flex;justify-content: space-between;">业务类型
             <ion-spinner name="bubbles" color="primary" *ngIf="isLoadingAddType"></ion-spinner>
           </ion-label>
-          <ion-select #selectType [(ngModel)]="type" [selectedText]="type?.name" (ngModelChange)="editTypeOk($event)" okText="确定" cancelText="取消">
+          <ion-select #selectType [(ngModel)]="type" [selectedText]="type?.name" (ngModelChange)="typeOk($event)" okText="确定" cancelText="取消">
             <ion-option [value]="g" *ngFor="let g of types">{{g.name}}</ion-option>
           </ion-select>
         </ion-item>
@@ -86,7 +86,7 @@
           <ion-label  style="display: flex;justify-content: space-between;">设备名
             <ion-spinner name="bubbles" color="primary" *ngIf="isLoadingAddEquipment"></ion-spinner>
           </ion-label>
-          <ion-select #selectEquipment [(ngModel)]="equipment"  [selectedText]="equipment?.name" (ngModelChange)="editEquipmentOk($event)"  okText="确定" cancelText="取消">
+          <ion-select #selectEquipment [(ngModel)]="equipment"  [selectedText]="equipment?.name" (ngModelChange)="equipmentOk($event)"  okText="确定" cancelText="取消">
             <ion-option [value]="c" *ngFor="let c of equipments">{{c.name}}</ion-option>
           </ion-select>
         </ion-item>
