@@ -62,11 +62,16 @@ export class MyApp {
         this.getUserInfo();
       })
 
+      this.events.subscribe('op:updated',()=>{
+        //console.log('更新数据');
+        this.getUserWorkData(this.user.id)
+      })
+
       this.getUserInfo();
 
       this.webSocketService.createObservableSocket().subscribe(
         data=>{
-          console.log(data);
+          //console.log(data);
           let dataJson=JSON.parse(data);
           //console.log(dataJson);
           if(dataJson.action){
@@ -105,8 +110,10 @@ export class MyApp {
   private opCount=0;
   private opStamp=0;
   getUserWorkData(userid){
-    this.getOpCount(userid)
-    this.getOpStamp(userid)
+    if(userid){
+      this.getOpCount(userid)
+      this.getOpStamp(userid)
+    }
   }
 
   getOpCount(userid){

@@ -36,7 +36,7 @@ export class DetailModalPage{
 
   private operation:Operation;
   ngOnInit(){
-    console.log('modal enter');
+    //console.log('modal enter');
     let id=this.navParams.get('id');
     this.authService.checkAuth('simple').then(()=>{
       this.getData(id).then(()=>{}).catch(()=>{});
@@ -50,7 +50,7 @@ export class DetailModalPage{
     return new Promise((resolve, reject)=>{
       this.detailService.getOperation(id).then(
         data=>{
-          console.log(data);
+          //console.log(data);
           if(data.status==0){
             this.operation={...data.data};
             resolve();
@@ -73,7 +73,7 @@ export class DetailModalPage{
     return new Promise((resolve, reject)=>{
       this.signService.getSign(id).then(
         data=>{
-          console.log(data);
+          //console.log(data);
           let result=this.toolService.apiResult(data);
           if(result&&result.status==0){
             this.sign=result.data;

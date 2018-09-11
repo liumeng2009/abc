@@ -66,7 +66,7 @@ export class DetailPage{
 
   addEventsListener(){
     this.events.subscribe('op:deleted',()=>{
-      console.log('回退');
+      //console.log('回退');
       this.navCtrl.pop();
     })
   }
@@ -160,7 +160,7 @@ export class DetailPage{
     this.getData(id).then((data:ResponseData)=>{
       e.complete();
       this.operation={...data.data};
-      console.log(this.operation)
+      //console.log(this.operation)
       this.formatData();
     }).catch((e)=>{
       e.complete();
@@ -217,7 +217,10 @@ export class DetailPage{
             {
               text: '完成',
               handler: () => {
-                this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,endDate.getTime(),true).then(()=>{}).catch(()=>{});
+                this.editAction(this.operation.id,actionId,this.operation.create_time,actionOp.call_time,true,actionOp.start_time,true,endDate.getTime(),true).then(()=>{
+                  this.events.publish('op:updated')
+                }).catch(()=>{});
+
               }
             },
             {

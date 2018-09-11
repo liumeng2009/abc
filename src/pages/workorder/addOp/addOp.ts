@@ -1,5 +1,5 @@
 import {Component,ViewChild} from '@angular/core'
-import {Slides, NavController, DateTime} from 'ionic-angular'
+import {Slides, NavController, DateTime, Events} from 'ionic-angular'
 import {Title} from '@angular/platform-browser'
 import * as moment from 'moment'
 import {Observable} from 'rxjs'
@@ -27,7 +27,8 @@ export class AddOpPage{
     private toolService:ToolService,
     private publicDataService:PublicDataService,
     private authService:AuthService,
-    private navCtrl:NavController
+    private navCtrl:NavController,
+    private events:Events
   ){
 
   }
@@ -84,7 +85,7 @@ export class AddOpPage{
     this.operation.showFinishDate=false;
     this.operation.create_time=moment(this.todayString).toDate().getTime();
 
-    console.log(this.operation);
+    //console.log(this.operation);
   }
 
   private isLoadingSave:boolean=false;
@@ -107,6 +108,7 @@ export class AddOpPage{
               if(result){
                 if(result.status==0){
                   this.toolService.toast(result.message)
+                  this.events.publish('op:updated')
                   this.navCtrl.pop()
                 }
               }
@@ -166,7 +168,7 @@ export class AddOpPage{
             this.equipment=this.equipments[0]
         }
         this.getBusiness(this.type.code,this.equipment.name).then((data:ResponseData)=>{
-          console.log(data);
+          //console.log(data);
           this.businessContents=[...data.data]
           if(this.business){
 
@@ -193,11 +195,11 @@ export class AddOpPage{
     let stamp=moment(this.todayString).valueOf();
     this.addService.getOrderList(null,stamp).then(
       data=>{
-        console.log(data);
+        //console.log(data);
         let result=this.toolService.apiResult(data);
         if(result){
           this.orders=[...result.data]
-          console.log(this.orders);
+          //console.log(this.orders);
           for(let o of this.orders){
             o.incoming_time_show=moment(o.incoming_time).format('MM-DD HH:mm:ss')
           }
@@ -284,7 +286,7 @@ export class AddOpPage{
     this.operation.arrive_date=moment(startDate).format();
     this.operation.arrive_date_timestamp=stamp;
 
-    console.log(this.operation);
+    //console.log(this.operation);
 
   }
 
@@ -301,7 +303,7 @@ export class AddOpPage{
     this.operation.finish_date=moment(finishDate).format();
     this.operation.finish_date_timestamp=stamp;
     this.operation.isCompleteOperation=true;
-    console.log(this.operation);
+    //console.log(this.operation);
   }
 
 
@@ -378,7 +380,7 @@ export class AddOpPage{
   }
 
   typeOk(){
-    console.log(this.types);
+    //console.log(this.types);
     this.equipments.splice(0,this.equipments.length);
     this.getEquipment(this.type.code).then((data:ResponseData)=>{
       this.equipments=[...data.data]

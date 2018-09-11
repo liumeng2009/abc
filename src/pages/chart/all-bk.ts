@@ -119,7 +119,7 @@ export class AllBkPage{
       this.chartObj1.showLoading('default',{text:'加载中...'});
     this.chartService.allEquipment(start,end).then(
       data=>{
-        console.log(data)
+        //console.log(data)
         this.chartObj1.hideLoading();
         let result=this.toolService.apiResult(data)
         if(result){

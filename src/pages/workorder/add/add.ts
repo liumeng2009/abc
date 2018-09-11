@@ -1,6 +1,15 @@
 import {Component,ViewChild} from '@angular/core';
 import {Title} from '@angular/platform-browser'
-import {Slides, Scroll, PopoverController, Popover, NavController, AlertController, DateTime} from 'ionic-angular';
+import {
+  Slides,
+  Scroll,
+  PopoverController,
+  Popover,
+  NavController,
+  AlertController,
+  DateTime,
+  Events
+} from 'ionic-angular';
 import {Corporation} from "../../../bean/Corporation";
 import {Group} from "../../../bean/Group";
 import {PublicDataService} from "../../../util/data/public-data.service";
@@ -35,7 +44,8 @@ export class AddPage {
     private authService:AuthService,
     private popService:PopoverController,
     private addService:AddService,
-    private alertCtrl:AlertController
+    private alertCtrl:AlertController,
+    private events:Events
   ) {
 
   }
@@ -101,7 +111,7 @@ export class AddPage {
             this.equipment=this.equipments[0]
         }
         this.getBusiness(this.type.code,this.equipment.name).then((data:ResponseData)=>{
-          console.log(data);
+          //console.log(data);
           this.businessContents=[...data.data]
           if(this.business){
 
@@ -258,8 +268,8 @@ export class AddPage {
           this.slide.slideNext();
           //将needs数组转化成新数组，新数组action页面使用
           let incoming_time=new Date(this.todayString)
-          console.log(incoming_time);
-          console.log(this.todayString);
+          //console.log(incoming_time);
+          //console.log(this.todayString);
           this.workerOrders.splice(0,this.workerOrders.length);
           for(let need of this.needs){
             for(let i=0;i<need.no;i++){
@@ -270,7 +280,7 @@ export class AddPage {
           if(this.workerOrders.length>0)
             this.workerOrders[0].select=true;
 
-          console.log(this.workerOrders);
+          //console.log(this.workerOrders);
 
         }
       },
@@ -282,7 +292,7 @@ export class AddPage {
 
   }
   @ViewChild('start') startSelect:DateTime
-  start_click(e,workorder:WorkOrder,index){
+  start_click(e,workorder:WorkOrder){
     let t=this;
 
     if(workorder.arrive_date_timestamp){
@@ -304,9 +314,23 @@ export class AddPage {
       this.startSelect._picker.addButton(button);
     }
   }
+  @ViewChild('finish') finishSelect:DateTime
+  finish_click(e,workorder:WorkOrder){
+    let t=this;
 
-  finish_click(){
-
+    if(workorder.finish_date_timestamp){
+      let button={
+        text:'删除结束时间',
+        role:'delete',
+        handler:function(){
+          //删除开始时间
+          workorder.showFinishDate=false;
+          workorder.finish_date=null;
+          workorder.finish_date_timestamp=null;
+        }
+      }
+      this.finishSelect._picker.addButton(button);
+    }
   }
 
   okStartTime(e,workerOrder:WorkOrder){
@@ -322,7 +346,7 @@ export class AddPage {
     workerOrder.arrive_date=moment(startDate).format();
     workerOrder.arrive_date_timestamp=stamp;
 
-    console.log(workerOrder);
+    //console.log(workerOrder);
 
   }
 
@@ -339,7 +363,7 @@ export class AddPage {
     workerOrder.finish_date=moment(finishDate).format();
     workerOrder.finish_date_timestamp=stamp;
     workerOrder.isCompleteOperation=true;
-    console.log(workerOrder);
+    //console.log(workerOrder);
   }
 
   private selectedIndex=0;
@@ -360,7 +384,7 @@ export class AddPage {
     this.slide.lockSwipeToNext(true);
     this.slide.lockSwipeToPrev(true);
     let index=this.slide.getActiveIndex();
-    console.log('触发了：'+index)
+    //console.log('触发了：'+index)
     if(index==0){
       this.showAddBusinessButton=false;
       this.showAddActionButton=false;
@@ -464,7 +488,7 @@ export class AddPage {
   }
 
   typeOk(){
-    console.log(this.types);
+    //console.log(this.types);
     this.equipments.splice(0,this.equipments.length);
     this.getEquipment(this.type.code).then((data:ResponseData)=>{
       this.equipments=[...data.data]
@@ -533,7 +557,7 @@ export class AddPage {
     else{
       this.needs.push(need)
     }
-    console.log(this.needs);
+    //console.log(this.needs);
     this.rememberNeeds();
     this.showAddList=false;
   }
@@ -595,7 +619,7 @@ export class AddPage {
       np.edit=false;
     }
     need.edit=true;
-    console.log(need);
+    //console.log(need);
     this.editType=null;
     this.editEquipment=null;
     this.editBusinessContent=null;
@@ -628,14 +652,14 @@ export class AddPage {
               this.editBusinessContent=ebc;
             }
           }
-          console.log(this.editTypes)
-          console.log(this.editEquipments)
-          console.log(this.editBusinessContents)
-          console.log(this.editType)
-          console.log(this.editEquipment)
-          console.log(this.editBusinessContent)
+          //console.log(this.editTypes)
+          //console.log(this.editEquipments)
+          //console.log(this.editBusinessContents)
+          //console.log(this.editType)
+          //console.log(this.editEquipment)
+          //console.log(this.editBusinessContent)
 
-          console.log(this.editTypes[0]===this.editType);
+          //console.log(this.editTypes[0]===this.editType);
 
         }).catch((e)=>{
           this.toolService.toast(e);
@@ -706,7 +730,7 @@ export class AddPage {
     this.order.incoming_time=d.getTime();
     this.order.workerOrders=this.workerOrders;
     this.order.custom_position='';
-    console.log(this.order);
+    //console.log(this.order);
 
     this.addService.createOrderOperation(this.order).then(
       data=>{
@@ -715,6 +739,7 @@ export class AddPage {
           this.toolService.toast(result.message);
           this.navCtrl.pop();
           this.cookieService.remove('OpAppNeed')
+          this.events.publish('op:updated')
         }
         this.isLoadingSave=false;
       },
