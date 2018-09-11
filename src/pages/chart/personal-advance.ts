@@ -33,7 +33,6 @@ export class PersonalAdvancePage{
 
   ionViewWillEnter(){
     this.title.setTitle('个人业务大分类统计');
-    //this.calHeight(true);
     this.addAppEventListener();
     //默认本月
     let startStamp=moment().startOf('month').valueOf();
@@ -56,7 +55,7 @@ export class PersonalAdvancePage{
   }
   calHeight(bigData){
     let hAll=window.document.body.clientHeight;
-    let wAll=this.content.contentWidth;
+    let wAll=window.document.body.clientWidth;
 
     let headH=this.head.nativeElement.clientHeight;
     let listH=this.list.nativeElement.clientHeight;

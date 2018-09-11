@@ -44,7 +44,6 @@ export class ChartService{
       .catch(this.handleError)
   }
   workerAdvance(userid:string,start:number,end:number):Promise<ResponseData>{
-    console.log(this.workerAdvanceUrl+'?userid='+userid+'&start='+start+'&end='+end);
     let token=this.cookieService.get('optAppToken');
     let headers= new Headers({'Content-Type': 'application/json','authorization':token});
     return this.http.get(this.workerAdvanceUrl+'?userid='+userid+'&start='+start+'&end='+end,{headers:headers})

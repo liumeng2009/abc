@@ -35,7 +35,7 @@ export class AllBasicStampPage{
   ionViewWillEnter(){
     this.title.setTitle('工时统计');
     this.addAppEventListener();
-    this.calHeight(false)
+    //this.calHeight(false)
     //默认本月
     let startStamp=moment().startOf('month').valueOf();
     let endStamp=moment().endOf('month').valueOf();
@@ -66,7 +66,7 @@ export class AllBasicStampPage{
   }
   calHeight(bigData){
     let hAll=window.document.body.clientHeight;
-    let wAll=this.content.contentWidth;
+    let wAll=window.document.body.clientWidth;
 
     let headH=this.head.nativeElement.clientHeight;
     let listH=this.list.nativeElement.clientHeight;

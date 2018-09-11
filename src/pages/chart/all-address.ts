@@ -33,7 +33,7 @@ export class AllAddressPage{
 
   ionViewWillEnter(){
     this.title.setTitle('工作地点统计');
-    this.calHeight(false);
+    //this.calHeight(false);
     this.addAppEventListener();
     //默认本月
     let startStamp=moment().startOf('month').valueOf();
@@ -56,7 +56,7 @@ export class AllAddressPage{
   }
   calHeight(bigData){
     let hAll=window.document.body.clientHeight;
-    let wAll=this.content.contentWidth;
+    let wAll=window.document.body.clientWidth;
 
     let headH=this.head.nativeElement.clientHeight;
     let listH=this.list.nativeElement.clientHeight;

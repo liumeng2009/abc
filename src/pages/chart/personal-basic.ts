@@ -37,7 +37,7 @@ export class PersonalBasicPage{
   ionViewWillEnter(){
     this.title.setTitle('个人基本数据统计');
     this.addAppEventListener();
-    this.calHeight(false)
+    //this.calHeight(false)
     //默认本月
     let startStamp=moment().startOf('month').valueOf();
     let endStamp=moment().endOf('month').valueOf();
@@ -58,7 +58,7 @@ export class PersonalBasicPage{
   }
   calHeight(bigData){
     let hAll=window.document.body.clientHeight;
-    let wAll=this.content.contentWidth;
+    let wAll=window.document.body.clientWidth;
 
     let headH=this.head.nativeElement.clientHeight;
     let listH=this.list.nativeElement.clientHeight;
