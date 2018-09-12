@@ -43,9 +43,6 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-item *ngIf="isLoadingList" style="display: flex; align-items: center; flex-direction: column;">
-      <ion-spinner name="bubbles" color="primary"></ion-spinner>
-    </ion-item>
     <ion-item *ngIf="groups.length==0&&!isLoadingList">
       没有相关记录
     </ion-item>

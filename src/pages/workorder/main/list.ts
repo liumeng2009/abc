@@ -65,7 +65,7 @@ export class ListPage{
     this.eventListener();
   }
 
-  private isLoadingList:boolean=false;
+  //private isLoadingList:boolean=false;
   ionViewDidEnter(){
     setTimeout(()=>{
       this.title.setTitle('首页')
@@ -118,7 +118,7 @@ export class ListPage{
   private groups:Order[]=[];
   private opList:any[]=[];
   getData(userid:string){
-    this.isLoadingList=true;
+    //this.isLoadingList=true;
     return new Promise((resolve,reject)=>{
       this.opList.splice(0,this.opList.length);
       let now=new Date(this.todayString);
@@ -128,7 +128,7 @@ export class ListPage{
         case 'working':
           this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString()),userid).then(
             data=>{
-              this.isLoadingList=false;
+              //this.isLoadingList=false;
               let result=this.toolService.apiResult(data);
               if(result){
                 for(let d of result.data){
@@ -141,7 +141,7 @@ export class ListPage{
 
             },
             error=>{
-              this.isLoadingList=false;
+              //this.isLoadingList=false;
               reject(error);
             }
           );
@@ -149,7 +149,7 @@ export class ListPage{
         case 'done':
           this.listService.getDoneOpList(parseInt((date.getTime()/1000).toString()),userid).then(
             data=>{
-              this.isLoadingList=false;
+              //this.isLoadingList=false;
               let result=this.toolService.apiResult(data);
               if(result){
                 resolve(data);
@@ -157,7 +157,7 @@ export class ListPage{
 
             },
             error=>{
-              this.isLoadingList=false;
+              //this.isLoadingList=false;
               reject(error);
             }
           );
@@ -165,7 +165,7 @@ export class ListPage{
         default:
           this.listService.getWorkingOpList(parseInt((date.getTime()/1000).toString()),userid).then(
             data=>{
-              this.isLoadingList=false;
+              //this.isLoadingList=false;
               let result=this.toolService.apiResult(data);
               if(result){
                 for(let d of result.data){
@@ -177,7 +177,7 @@ export class ListPage{
 
             },
             error=>{
-              this.isLoadingList=false;
+              //this.isLoadingList=false;
               reject(error);
             }
           );
