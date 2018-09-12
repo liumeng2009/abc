@@ -43,7 +43,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-item *ngIf="groups.length==0&&!isLoadingList">
+    <ion-item *ngIf="groups.length==0">
       没有相关记录
     </ion-item>
     <ion-item-group *ngFor="let group of groups">
