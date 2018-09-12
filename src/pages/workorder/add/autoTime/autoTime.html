@@ -1,0 +1,35 @@
+<ion-content>
+  <ion-list padding>
+    <ion-item>
+      <ion-label color="danger">
+        *指定这批工单的起止时间段，自动生成各工单的处理时间（平均分配，可能和实际时间不符哦）。
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>
+        起始时间
+      </ion-label>
+      <ion-datetime displayFormat="MM-DD HH:mm:ss" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
+                    [(ngModel)]="startString"
+                    cancelText="取消"
+                    doneText="确定"
+                    (ngModelChange)="start_change($event)"
+      ></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>
+        结束时间
+      </ion-label>
+      <ion-datetime displayFormat="MM-DD HH:mm:ss" pickerFormat="YYYY-MM-DDTHH:mm:ssTZD"
+                    [(ngModel)]="endString"
+                    cancelText="取消"
+                    doneText="确定"
+                    (ngModelChange)="end_change($event)"
+      ></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <button ion-button default block (click)="save()">分配工单时间</button>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

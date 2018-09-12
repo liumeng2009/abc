@@ -57,6 +57,7 @@ import {EditSettingNamePage} from "../pages/settings/edit/edit-name";
 import {EditSettingAvatarPage} from "../pages/settings/edit/edit-avatar";
 import {EditSettingPasswordPage} from "../pages/settings/edit/edit-password";
 import {SettingService} from "../pages/settings/setting.service";
+import {AutoTimePage} from "../pages/workorder/add/autoTime/autoTime";
 
 
 @NgModule({
@@ -85,6 +86,7 @@ import {SettingService} from "../pages/settings/setting.service";
     AddPage,
     AddOpPage,
     ActionHelpPage,
+    AutoTimePage,
 
     DateSelectComponent,
     ChartPage,
@@ -158,6 +160,7 @@ import {SettingService} from "../pages/settings/setting.service";
     AddPage,
     AddOpPage,
     ActionHelpPage,
+    AutoTimePage,
     DateSelectComponent,
     ChartPage,
     PersonalBasicPage,

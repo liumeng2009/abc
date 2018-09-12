@@ -28,6 +28,7 @@ import {WorkOrder} from "../../../bean/workOrder";
 import {User} from "../../../bean/user";
 import {ActionHelpPage} from "./actionHelp";
 import {AddService} from "./add.service";
+import {AutoTimePage} from "./autoTime/autoTime";
 
 @Component({
   templateUrl:'add.html',
@@ -404,10 +405,11 @@ export class AddPage {
 
   private popover:Popover;
   private showHelp(ev){
-    this.popover=this.popService.create(ActionHelpPage)
-    this.popover.present({
-      ev:ev
-    });
+    this.popover=this.popService.create(AutoTimePage,{
+      opCount:this.workerOrders.length,
+      start:this.workerOrders[0].create_time
+    })
+    this.popover.present();
   }
 
   ionViewWillLeave(){
