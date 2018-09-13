@@ -61,6 +61,7 @@ export class AddPage {
   }
   ionViewWillEnter(){
     this.title.setTitle('新增工单-设置客户信息');
+    this.addEventListener();
     this.create_time_run=Observable.interval(1000).subscribe(()=>{
       this.todayString=moment().format();
     })
@@ -75,6 +76,31 @@ export class AddPage {
       this.user=user;
       this.init();
     }).catch(()=>{})
+  }
+
+  addEventListener(){
+    this.events.subscribe('op:cuttime',(params)=>{
+      let count=this.workerOrders.length;
+      if(count>0){
+        let startStamp=moment(params.start).valueOf();
+        startStamp=startStamp+2000;
+        let endStamp=moment(params.end).valueOf();
+        let perStamp=(endStamp-startStamp)/count;
+        let i=0
+        for(let wo of this.workerOrders){
+          wo.arrive_date_timestamp=startStamp+(perStamp*i)
+          wo.finish_date_timestamp=startStamp+(perStamp*(i+1))-1000;
+          wo.showArriveDate=true;
+          wo.showFinishDate=true;
+          wo.arrive_date=moment(wo.arrive_date_timestamp).format();
+          wo.finish_date=moment(wo.finish_date_timestamp).format();
+          wo.isCompleteOperation=true;
+          i++
+        }
+        this.toolService.toast('工单时间分配完成！');
+      }
+
+    })
   }
 
   init(){
@@ -415,6 +441,7 @@ export class AddPage {
   ionViewWillLeave(){
     if(this.popover)
       this.popover.dismiss();
+    this.events.unsubscribe('op:cuttime')
   }
 
   private type:EquipType;
@@ -732,7 +759,7 @@ export class AddPage {
     this.order.incoming_time=d.getTime();
     this.order.workerOrders=this.workerOrders;
     this.order.custom_position='';
-    //console.log(this.order);
+    console.log(this.order);
 
     this.addService.createOrderOperation(this.order).then(
       data=>{
