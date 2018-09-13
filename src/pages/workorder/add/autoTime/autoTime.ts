@@ -33,8 +33,6 @@ export class AutoTimePage{
   }
 
   save(){
-    console.log(this.startString);
-    console.log(this.endString);
 
     let startStamp=moment(this.startString).valueOf();
     let endStamp=moment(this.endString).valueOf();
