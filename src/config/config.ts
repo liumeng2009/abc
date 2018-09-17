@@ -2,8 +2,8 @@ export class OptConfig{
   //serverPath='https://192.168.8.112:3001'
   //socketPath='https://192.168.8.112:8102'
 
-  serverPath='http://192.168.8.114:3000'
-  socketPath='http://192.168.8.114:8104'
+  serverPath='http://192.168.8.111:3000'
+  socketPath='http://192.168.8.111:8104'
 
   //serverPath='http://192.168.50.183:3000'
   //socketPath='http://192.168.50.183:8104'

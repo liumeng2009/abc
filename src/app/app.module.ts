@@ -3,6 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Keyboard } from '@ionic-native/keyboard';
 import { HttpModule} from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
 import {CookieService} from 'angular2-cookie/core'
@@ -109,7 +110,8 @@ import {AutoTimePage} from "../pages/workorder/add/autoTime/autoTime";
     HttpModule,
     IonicModule.forRoot(MyApp,{
       tabsHideOnSubPages:true,
-      backButtonText:' '
+      backButtonText:' ',
+      scrollAssist: false
     },{
       links:[
         {component:TabsPage,name:'TabsPage',segment:'main'},
@@ -178,6 +180,7 @@ import {AutoTimePage} from "../pages/workorder/add/autoTime/autoTime";
   providers: [
     StatusBar,
     SplashScreen,
+    Keyboard,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CookieService,
 

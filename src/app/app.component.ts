@@ -2,6 +2,9 @@ import { Component,ViewChild } from '@angular/core';
 import { Platform,Events,Nav,MenuController,PopoverController,AlertController  } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import {Keyboard} from '@ionic-native/keyboard'
+
+
 import {CookieService} from "angular2-cookie/core";
 import {TabsPage} from '../pages/tabs/tab'
 import {AuthService} from "../util/auth.service";
@@ -27,6 +30,7 @@ export class MyApp {
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
+    public keyBoard:Keyboard,
     public events:Events,
     public authService:AuthService,
     public webSocketService:WebSocketService,
@@ -42,6 +46,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+      keyBoard.disableScroll(true);
 
       this.events.subscribe('user:logout',()=>{
 
