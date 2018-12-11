@@ -57,7 +57,7 @@ export class LoginPage{
           }
         },
         error=>{
-          this.isLoading=true;
+          this.isLoading=false;
           this.toolService.apiException(error);
         }
       )
